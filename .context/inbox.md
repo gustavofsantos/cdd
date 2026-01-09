@@ -16,3 +16,14 @@ Initialized Global Context for the `cdd` project.
 - Refactored CLI commands to use `FileSystem` interface (Dependency Injection) for better testability.
 - Defined `FileSystem` interface and `MockFileSystem` in `internal/platform`.
 - Added comprehensive unit tests for `start`, `recite`, `list`, `log`, `archive`, `dump` commands.
+
+
+## Updates from Track: semantic-versioning (Fri Jan 9 18:58:44 -03 2026)
+# Context Updates: semantic-versioning
+
+- Added `goreleaser` for automated builds and releases.
+- Configuration in `.goreleaser.yaml`.
+- Added `cdd version` command to the CLI.
+- Versions are now injected at build time via ldflags into `internal/cmd.Version`.
+- Updated GitHub Actions workflow `.github/workflows/release.yml` to use GoReleaser.
+- Added `dist/` to `.gitignore`.
