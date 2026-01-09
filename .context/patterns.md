@@ -14,3 +14,11 @@
 ### Error Handling
 - **Description:** Standard error check block.
 - **Pattern (grep):** `grep -r "if err != nil {" internal/`
+
+## Coding Patterns
+
+### Dependency Injection (FileSystem)
+- **Description:** Abstracting file system operations for testability.
+- **Interface:** `internal/platform/fs.go` defines `FileSystem`.
+- **Mock:** `internal/platform/mock_fs.go` defines `MockFileSystem`.
+- **Usage:** Pass `FileSystem` to command handlers instead of using `os` or `path/filepath` directly.
