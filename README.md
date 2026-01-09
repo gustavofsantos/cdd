@@ -17,11 +17,24 @@ The CDD Tool Suite is a CLI application designed to facilitate Context-Driven De
 - Go 1.24 or higher
 - [Glow](https://github.com/charmbracelet/glow) (optional, for `view` command)
 
+### Installation via Binary
+
+You can download the pre-compiled binary for your platform from the [Releases](https://github.com/Bitwise-Source/cdd/releases) page.
+
+**Linux / macOS:**
+
+```bash
+# Example for Linux AMD64 (adjust URL for your platform/version)
+curl -L -o cdd https://github.com/Bitwise-Source/cdd/releases/latest/download/cdd-linux-amd64
+chmod +x cdd
+sudo mv cdd /usr/local/bin/
+```
+
 ### Build from Source
 
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/Bitwise-Source/cdd.git
+cd cdd
 go build -o cdd cmd/cdd/main.go
 ```
 
