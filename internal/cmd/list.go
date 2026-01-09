@@ -1,49 +1,52 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
+	"cdd/internal/platform"
 
 	"github.com/spf13/cobra"
 )
 
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List active tracks (default) or archived tracks.",
-	Long:  `List active tracks (default) or archived tracks.`,
-	Run: func(cmd *cobra.Command, args []string) {
-		archived, _ := cmd.Flags().GetBool("archived")
+func NewListCmd(fs platform.FileSystem) *cobra.Command {
+	c := &cobra.Command{
+		Use:   "list",
+		Short: "List active tracks (default) or archived tracks.",
+		Long:  `List active tracks (default) or archived tracks.`,
+		RunE: func(cmd *cobra.Command, args []string) error {
+			archived, _ := cmd.Flags().GetBool("archived")
 
-		if archived {
-			fmt.Println("ARCHIVED TRACKS:")
-			printDirContents(".context/archive")
-		} else {
-			fmt.Println("ACTIVE TRACKS:")
-			printDirContents(".context/tracks")
-		}
-	},
+			if archived {
+				cmd.Println("ARCHIVED TRACKS:")
+				printDirContents(fs, cmd, ".context/archive")
+			} else {
+				cmd.Println("ACTIVE TRACKS:")
+				printDirContents(fs, cmd, ".context/tracks")
+			}
+			return nil
+		},
+	}
+	c.Flags().Bool("archived", false, "List archived tracks")
+	return c
 }
 
-func printDirContents(path string) {
-	entries, err := os.ReadDir(path)
+func printDirContents(fs platform.FileSystem, cmd *cobra.Command, path string) {
+	entries, err := fs.ReadDir(path)
 	if err != nil || len(entries) == 0 {
-		fmt.Println("  (None)")
+		cmd.Println("  (None)")
 		return
 	}
 
 	found := false
 	for _, entry := range entries {
 		if entry.IsDir() {
-			fmt.Printf("  - %s\n", entry.Name())
+			cmd.Printf("  - %s\n", entry.Name())
 			found = true
 		}
 	}
 	if !found {
-		fmt.Println("  (None)")
+		cmd.Println("  (None)")
 	}
 }
 
 func init() {
-	listCmd.Flags().Bool("archived", false, "List archived tracks")
-	rootCmd.AddCommand(listCmd)
+	rootCmd.AddCommand(NewListCmd(platform.NewRealFileSystem()))
 }
