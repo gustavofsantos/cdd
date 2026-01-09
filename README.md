@@ -10,65 +10,43 @@ The CDD Tool Suite is a CLI application designed to facilitate Context-Driven De
 - **Documentation Integration**: Promotes knowledge from tracks to living documentation.
 - **AI-Ready**: Designed to work seamlessly with AI agents by providing structured context.
 
-## Installation
+## Why CDD? (The Rationale)
 
-### Prerequisites
+In the rapidly evolving world of AI-assisted programming, noise is the enemy of efficiency. While modern AI models can write excellent code, they often get "lost" when navigating large, legacy, or high-entropy projects. Furthermore, the operational cost of using massive flagship models for every task can be prohibitive—especially in regions where API costs are a significant factor.
 
-- Go 1.24 or higher
-- [Glow](https://github.com/charmbracelet/glow) (optional, for `view` command)
+**Context-Driven Development (CDD)** is an attempt to solve these challenges through **Context Engineering**.
 
-### Installation via Binary
+### The Strategist and the Tactician
+CDD is built on a fundamental power dynamic: **The Engineer is the Strategist; the AI is the Tactician.** 
+- You remain in charge, commanding the changes and ensuring the strategy is sound. 
+- The AI executes the tactics, guided by a strict protocol that prevents it from drifting off-course.
 
-You can download the pre-compiled binary for your platform from the [Releases](https://github.com/gustavofsantos/cdd/releases) page.
+### Premium Value from Budget Models
+By providing a "file-based extended memory" and a rigorous step-by-step workflow, CDD enables **smaller, faster, and cheaper models** (like Gemini 1.5 Flash or Claude 3 Haiku) to perform at a level usually reserved for much larger models. It’s about process over brute force.
 
-**Linux:**
+### Lineage & Evolution
+This project carries the DNA of specifications-driven workflows like **OpenSpec**, **Conductor**, and **Manus**. It is heavily inspired by the planning and execution patterns of industry leaders like **Cursor**, **Windsurf**, **Claude Code**, and **Antigravity**, but takes a unique direction focused on extreme context isolation and cost-efficiency.
 
-```bash
-# Example for Linux AMD64
-curl -L -o cdd https://github.com/gustavofsantos/cdd/releases/latest/download/cdd-linux-amd64
-chmod +x cdd
-sudo mv cdd /usr/local/bin/
-```
+## Target Audience
 
-**macOS:**
+- **Experienced Engineers**: Those who want to leverage AI without abdicated their role as the project architect.
+- **Context-Engineers**: Developers who believe that well-structured context is the key to reliable AI outputs.
+- **Cost-Conscious Teams**: Teams looking to maximize their AI ROI by getting the most out of efficient, low-latency models.
+- **Legacy Navigators**: Anyone working in "noisy" brownfield projects where AI traditionally struggles to stay aligned.
 
-```bash
-# Example for macOS Apple Silicon
-curl -L -o cdd https://github.com/gustavofsantos/cdd/releases/latest/download/cdd-darwin-arm64
-chmod +x cdd
-sudo mv cdd /usr/local/bin/
-```
+## Getting Started
 
-**Windows (PowerShell):**
+To get started with the CDD Tool Suite, please follow the [Installation Instructions](INSTALLATION.md).
 
-```powershell
-# Example for Windows AMD64
-Invoke-WebRequest -Uri "https://github.com/gustavofsantos/cdd/releases/latest/download/cdd-windows-amd64.exe" -OutFile "cdd.exe"
-# Move to a directory in your PATH, e.g., C:\Windows\System32 or a custom tools folder
-Move-Item -Path "cdd.exe" -Destination "C:\Windows\System32\cdd.exe"
-```
-
-### Build from Source
-
-```bash
-git clone https://github.com/gustavofsantos/cdd.git
-cd cdd
-go build -o cdd cmd/cdd/main.go
-```
-
-You can then move the `cdd` binary to a directory in your system's PATH.
-
-## Usage
-
-### Initialization
-
-Initialize the CDD environment in your project root:
+After installation, initialize the CDD environment in your project root:
 
 ```bash
 cdd init
 ```
 
 This creates the `.context` directory structure and starts a `setup` track.
+
+## Usage
 
 ### Managing Tracks
 

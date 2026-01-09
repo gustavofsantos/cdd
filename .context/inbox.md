@@ -27,3 +27,11 @@ Initialized Global Context for the `cdd` project.
 - Versions are now injected at build time via ldflags into `internal/cmd.Version`.
 - Updated GitHub Actions workflow `.github/workflows/release.yml` to use GoReleaser.
 - Added `dist/` to `.gitignore`.
+
+
+## Updates from Track: update-readme (Fri Jan 9 19:16:20 -03 2026)
+- Refactored project documentation to improve "sellability" and organization.
+- Created `INSTALLATION.md` to house platform-specific setup instructions, keeping the main README clean.
+- Added a comprehensive "Why CDD?" (Rationale) section to `README.md`, detailing the Strategist/Tactician philosophy, cost-efficiency of small models, and the project's lineage from OpenSpec, Conductor, etc.
+- Added a "Target Audience" section to `README.md` to clearly define who the tool is for.
+- Cleaned up redundant instructions in `README.md` and added a proper "Getting Started" flow.
