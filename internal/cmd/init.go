@@ -13,10 +13,12 @@ import (
 
 var systemPrompt = prompts.System
 var bootstrapPrompt = prompts.Bootstrap
+var inboxPrompt = prompts.Inbox
 
 var (
 	showSystemPrompt    bool
 	showBootstrapPrompt bool
+	showInboxPrompt     bool
 )
 
 var initCmd = &cobra.Command{
@@ -26,7 +28,8 @@ var initCmd = &cobra.Command{
 
 Flags:
   --system-prompt     Output the CDD System Prompt for your AI agent.
-  --bootstrap-prompt  Output the Architect Prompt for initial setup.`,
+  --bootstrap-prompt  Output the Architect Prompt for initial setup.
+  --inbox-prompt      Output the Context Gardener Prompt for processing the inbox.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if showSystemPrompt {
 			fmt.Println(systemPrompt)
@@ -34,6 +37,10 @@ Flags:
 		}
 		if showBootstrapPrompt {
 			fmt.Println(bootstrapPrompt)
+			return
+		}
+		if showInboxPrompt {
+			fmt.Println(inboxPrompt)
 			return
 		}
 
@@ -110,5 +117,6 @@ Flags:
 func init() {
 	initCmd.Flags().BoolVar(&showSystemPrompt, "system-prompt", false, "Output the CDD System Prompt for your AI agent.")
 	initCmd.Flags().BoolVar(&showBootstrapPrompt, "bootstrap-prompt", false, "Output the Architect Prompt for initial setup.")
+	initCmd.Flags().BoolVar(&showInboxPrompt, "inbox-prompt", false, "Output the Context Gardener Prompt for processing the inbox.")
 	rootCmd.AddCommand(initCmd)
 }

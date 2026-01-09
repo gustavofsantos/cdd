@@ -42,3 +42,12 @@ Initialized Global Context for the `cdd` project.
 - Renamed prompts from `.txt` to `.md`.
 - Created a new `prompts` Go package at root to handle embedding, bypassing Go's restriction against `../` in `//go:embed` patterns.
 - Updated `internal/cmd/init.go` to use the new `prompts` package.
+
+
+## Updates from Track: inbox-prompt (Fri Jan 9 19:27:13 -03 2026)
+# Proposed Global Context Updates
+
+- Added `--inbox-prompt` flag to `cdd init` to retrieve the Context Gardener prompt.
+- Created `prompts/inbox.md` for context consolidation instructions.
+- Integrated `inbox.md` into the `prompts` Go package using `go:embed`.
+- Updated `internal/cmd/init.go` to handle the new flag without triggering full initialization.

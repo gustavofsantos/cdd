@@ -7,3 +7,6 @@ var System string
 
 //go:embed bootstrap.md
 var Bootstrap string
+
+//go:embed inbox.md
+var Inbox string
