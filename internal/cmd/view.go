@@ -3,44 +3,32 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"path/filepath"
+	"strings"
 
+	"github.com/charmbracelet/glamour"
 	"github.com/spf13/cobra"
 )
 
 var viewCmd = &cobra.Command{
 	Use:   "view [track-name]",
-	Short: "Render track details using 'glow'.",
-	Long: `Render track details using 'glow' (User Tool Only).
+	Short: "Render track details.",
+	Long: `Render track details.
 Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if _, err := exec.LookPath("glow"); err != nil {
-			fmt.Println("Error: 'glow' is not installed. Please install it: [https://github.com/charmbracelet/glow](https://github.com/charmbracelet/glow)")
-			os.Exit(1)
-		}
-
-		tmpFile := ".cdd_view_tmp.md"
-		defer os.Remove(tmpFile)
+		var contentBuilder strings.Builder
 
 		if len(args) == 0 {
 			// Dashboard Mode
-			f, err := os.Create(tmpFile)
-			if err != nil {
-				fmt.Printf("Error creating temp file: %v\n", err)
-				os.Exit(1)
-			}
-			defer f.Close()
-
-			f.WriteString("# 📂 Project Dashboard\n\n")
-			f.WriteString("## 🌍 Global Context\n")
+			contentBuilder.WriteString("# 📂 Project Dashboard\n\n")
+			contentBuilder.WriteString("## 🌍 Global Context\n")
 			if content, err := os.ReadFile(".context/product.md"); err == nil {
-				f.Write(content)
+				contentBuilder.Write(content)
 			} else {
-				f.WriteString("_No product.md found._\n")
+				contentBuilder.WriteString("_No product.md found._\n")
 			}
 
-			f.WriteString("## 📥 Context Inbox (Pending Updates)\n")
+			contentBuilder.WriteString("## 📥 Context Inbox (Pending Updates)\n")
 			if content, err := os.ReadFile(".context/inbox.md"); err == nil {
 				// tail -n 5 equivalent
 				lines := splitLines(content)
@@ -48,27 +36,27 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 					lines = lines[len(lines)-5:]
 				}
 				for _, line := range lines {
-					f.WriteString(line + "\n")
+					contentBuilder.WriteString(line + "\n")
 				}
 			} else {
-				f.WriteString("_Inbox empty._\n")
+				contentBuilder.WriteString("_Inbox empty._\n")
 			}
-			f.WriteString("\n## 🟢 Active Tracks\n")
+			contentBuilder.WriteString("\n## 🟢 Active Tracks\n")
 
 			entries, err := os.ReadDir(".context/tracks")
 			if err == nil {
 				found := false
 				for _, entry := range entries {
 					if entry.IsDir() {
-						f.WriteString(fmt.Sprintf("* **%s**\n", entry.Name()))
+						contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", entry.Name()))
 						found = true
 					}
 				}
 				if !found {
-					f.WriteString("_No active tracks._\n")
+					contentBuilder.WriteString("_No active tracks._\n")
 				}
 			} else {
-				f.WriteString("_No active tracks._\n")
+				contentBuilder.WriteString("_No active tracks._\n")
 			}
 		} else {
 			// Track Detail Mode
@@ -79,45 +67,40 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 				os.Exit(1)
 			}
 
-			f, err := os.Create(tmpFile)
-			if err != nil {
-				fmt.Printf("Error creating temp file: %v\n", err)
-				os.Exit(1)
-			}
-			defer f.Close()
+			contentBuilder.WriteString(fmt.Sprintf("# 🛤️ Track: %s\n\n", trackName))
 
-			f.WriteString(fmt.Sprintf("# 🛤️ Track: %s\n\n", trackName))
-
-			f.WriteString("## 📄 Specification\n")
+			contentBuilder.WriteString("## 📄 Specification\n")
 			if content, err := os.ReadFile(filepath.Join(trackDir, "spec.md")); err == nil {
-				f.Write(content)
+				contentBuilder.Write(content)
 			} else {
-				f.WriteString("_Missing spec.md_\n")
+				contentBuilder.WriteString("_Missing spec.md_\n")
 			}
 
-			f.WriteString("\n## 📋 Plan\n")
+			contentBuilder.WriteString("\n## 📋 Plan\n")
 			if content, err := os.ReadFile(filepath.Join(trackDir, "plan.md")); err == nil {
-				f.Write(content)
+				contentBuilder.Write(content)
 			} else {
-				f.WriteString("_Missing plan.md_\n")
+				contentBuilder.WriteString("_Missing plan.md_\n")
 			}
 
-			f.WriteString("\n## 📜 Recent Decisions\n")
+			contentBuilder.WriteString("\n## 📜 Recent Decisions\n")
 			if content, err := os.ReadFile(filepath.Join(trackDir, "decisions.md")); err == nil {
 				lines := splitLines(content)
 				if len(lines) > 5 {
 					lines = lines[len(lines)-5:]
 				}
 				for _, line := range lines {
-					f.WriteString(line + "\n")
+					contentBuilder.WriteString(line + "\n")
 				}
 			}
 		}
 
-		c := exec.Command("glow", tmpFile)
-		c.Stdout = os.Stdout
-		c.Stderr = os.Stderr
-		c.Run()
+		out, err := glamour.Render(contentBuilder.String(), "dark")
+		if err != nil {
+			fmt.Printf("Error rendering markdown: %v\n", err)
+			os.Exit(1)
+		}
+		fmt.Print(out)
 	},
 }
 
