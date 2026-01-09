@@ -99,3 +99,33 @@ func TestArchiveCmd_PendingTasks(t *testing.T) {
 		// Or we might return fmt.Errorf() which contains the message.
 	}
 }
+
+func TestArchiveCmd_InboxCleanupSuggestion(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	trackName := "large-track"
+	trackDir := ".context/tracks/" + trackName
+	inboxFile := ".context/inbox.md"
+
+	// Create a large inbox (50 lines)
+	fs.WriteFile(inboxFile, []byte(strings.Repeat("old line\n", 50)), 0644)
+
+	// Setup track files
+	fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
+	fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
+	fs.WriteFile(trackDir+"/context_updates.md", []byte("# Updates\nTrigger reminder\nMore content"), 0644)
+
+	command := cmd.NewArchiveCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+
+	command.SetArgs([]string{trackName})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "getting large") {
+		t.Errorf("expected inbox cleanup suggestion, but not found in output: %s", output)
+	}
+}

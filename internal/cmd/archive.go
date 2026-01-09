@@ -71,11 +71,14 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 						if len(lines) > 2 {
 							f, err := fs.OpenFile(inboxFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 							if err == nil {
-								defer f.Close()
 								header := fmt.Sprintf("\n\n## Updates from Track: %s (%s)\n", trackName, time.Now().Format("Mon Jan 2 15:04:05 MST 2006"))
 								f.WriteString(header)
-								f.WriteString(string(content)) // io.Writer or File interface
+								f.WriteString(string(content))
+								f.Close()
 								cmd.Printf("✅ Appended context updates to %s\n", inboxFile)
+
+								// Trigger cleanup reminder
+								CheckInboxSize(fs, cmd)
 							}
 						}
 					}

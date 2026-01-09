@@ -51,3 +51,19 @@ Initialized Global Context for the `cdd` project.
 - Created `prompts/inbox.md` for context consolidation instructions.
 - Integrated `inbox.md` into the `prompts` Go package using `go:embed`.
 - Updated `internal/cmd/init.go` to handle the new flag without triggering full initialization.
+
+
+## Updates from Track: dummy-verify (Fri Jan 9 19:31:58 -03 2026)
+# Updates
+- Line 1
+- Line 2
+- Line 3
+
+
+## Updates from Track: inbox-cleanup-reminder (Fri Jan 9 19:32:34 -03 2026)
+# Context Updates: inbox-cleanup-reminder
+
+- Implemented `CheckInboxSize` utility in `internal/cmd/util.go`.
+- Integrated the check into `cdd archive` command.
+- When `.context/inbox.md` grows beyond 50 lines, the user is now proactively reminded to use `cdd init --inbox-prompt` for context consolidation.
+- Added unit and integration tests for this behavior.
