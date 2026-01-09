@@ -1,0 +1,4 @@
+- Moved prompt files from `internal/cmd/prompts/` to a root `prompts/` directory.
+- Renamed prompts from `.txt` to `.md`.
+- Created a new `prompts` Go package at root to handle embedding, bypassing Go's restriction against `../` in `//go:embed` patterns.
+- Updated `internal/cmd/init.go` to use the new `prompts` package.

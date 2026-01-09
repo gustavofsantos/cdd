@@ -35,3 +35,10 @@ Initialized Global Context for the `cdd` project.
 - Added a comprehensive "Why CDD?" (Rationale) section to `README.md`, detailing the Strategist/Tactician philosophy, cost-efficiency of small models, and the project's lineage from OpenSpec, Conductor, etc.
 - Added a "Target Audience" section to `README.md` to clearly define who the tool is for.
 - Cleaned up redundant instructions in `README.md` and added a proper "Getting Started" flow.
+
+
+## Updates from Track: organize-prompts (Fri Jan 9 19:21:32 -03 2026)
+- Moved prompt files from `internal/cmd/prompts/` to a root `prompts/` directory.
+- Renamed prompts from `.txt` to `.md`.
+- Created a new `prompts` Go package at root to handle embedding, bypassing Go's restriction against `../` in `//go:embed` patterns.
+- Updated `internal/cmd/init.go` to use the new `prompts` package.

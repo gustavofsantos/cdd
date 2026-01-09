@@ -6,14 +6,13 @@ import (
 	"os"
 	"path/filepath"
 
+	"cdd/prompts"
+
 	"github.com/spf13/cobra"
 )
 
-//go:embed prompts/system.txt
-var systemPrompt string
-
-//go:embed prompts/bootstrap.txt
-var bootstrapPrompt string
+var systemPrompt = prompts.System
+var bootstrapPrompt = prompts.Bootstrap
 
 var (
 	showSystemPrompt    bool
