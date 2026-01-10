@@ -37,12 +37,16 @@ Move-Item -Path "cdd.exe" -Destination "C:\Windows\System32\cdd.exe"
 Remove-Item "cdd.zip"
 ```
 
-## Build from Source
+## Installation via Script (Recommended for Source)
+
+If you have Go installed, you can use the installation script:
 
 ```bash
 git clone https://github.com/gustavofsantos/cdd.git
 cd cdd
-go build -o cdd cmd/cdd/main.go
+./install.sh [/optional/target/path]
 ```
 
-You can then move the `cdd` binary to a directory in your system's PATH.
+By default, it installs to `/usr/local/bin`.
+
+## Build from Source (Manual)
