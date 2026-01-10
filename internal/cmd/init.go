@@ -70,7 +70,7 @@ Flags:
 				if err != nil {
 					fmt.Printf("Error creating file %s: %v\n", f, err)
 				} else {
-					file.Close()
+					_ = file.Close()
 				}
 			}
 		}

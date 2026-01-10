@@ -12,7 +12,7 @@ func TestReciteCmd_DisplaysPlan(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	// Setup plan
 	planContent := "# My Plan"
-	fs.WriteFile(".context/tracks/active-track/plan.md", []byte(planContent), 0644)
+	_ = fs.WriteFile(".context/tracks/active-track/plan.md", []byte(planContent), 0644)
 
 	command := cmd.NewReciteCmd(fs)
 	buf := new(bytes.Buffer)

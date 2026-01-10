@@ -15,7 +15,7 @@ func TestDumpCmd_AppendsStdinToScratchpad(t *testing.T) {
 	trackName := "current-track"
 	scratchFile := ".context/tracks/" + trackName + "/scratchpad.md"
 	initial := "# Scratchpad\n"
-	fs.WriteFile(scratchFile, []byte(initial), 0644)
+	_ = fs.WriteFile(scratchFile, []byte(initial), 0644)
 
 	command := cmd.NewDumpCmd(fs)
 	bufOut := new(bytes.Buffer)

@@ -12,6 +12,11 @@ Thank you for your interest in contributing to the CDD Tool Suite! We welcome co
 
 - Ensure you have **Go 1.24+** installed.
 - The project uses standard Go modules.
+- Run the setup script to configure your environment (installs `golangci-lint` and git hooks):
+
+```bash
+sh scripts/setup-dev.sh
+```
 
 ## Building and Testing
 

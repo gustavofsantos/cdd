@@ -15,9 +15,9 @@ func TestArchiveCmd_Success(t *testing.T) {
 	trackDir := ".context/tracks/" + trackName
 
 	// Setup track files
-	fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
-	fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Task 1\n- [x] Task 2"), 0644)
-	fs.WriteFile(trackDir+"/context_updates.md", []byte("# Updates\nSome update\nAnother line"), 0644)
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Task 1\n- [x] Task 2"), 0644)
+	_ = fs.WriteFile(trackDir+"/context_updates.md", []byte("# Updates\nSome update\nAnother line"), 0644)
 
 	// Command
 	command := cmd.NewArchiveCmd(fs)
@@ -76,8 +76,8 @@ func TestArchiveCmd_PendingTasks(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	trackName := "wip-track"
 	trackDir := ".context/tracks/" + trackName
-	fs.WriteFile(trackDir+"/spec.md", []byte(""), 0644)
-	fs.WriteFile(trackDir+"/plan.md", []byte("- [ ] Pending Task"), 0644)
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte(""), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [ ] Pending Task"), 0644)
 
 	command := cmd.NewArchiveCmd(fs)
 	buf := new(bytes.Buffer)
@@ -97,6 +97,7 @@ func TestArchiveCmd_PendingTasks(t *testing.T) {
 	if !strings.Contains(err.Error(), "Cannot archive") && !strings.Contains(output, "Cannot archive") {
 		// Cobra might capture error message in err.
 		// Or we might return fmt.Errorf() which contains the message.
+		t.Errorf("expected error message about pending tasks, got: %v", err)
 	}
 }
 
@@ -107,12 +108,12 @@ func TestArchiveCmd_InboxCleanupSuggestion(t *testing.T) {
 	inboxFile := ".context/inbox.md"
 
 	// Create a large inbox (50 lines)
-	fs.WriteFile(inboxFile, []byte(strings.Repeat("old line\n", 50)), 0644)
+	_ = fs.WriteFile(inboxFile, []byte(strings.Repeat("old line\n", 50)), 0644)
 
 	// Setup track files
-	fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
-	fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
-	fs.WriteFile(trackDir+"/context_updates.md", []byte("# Updates\nTrigger reminder\nMore content"), 0644)
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
+	_ = fs.WriteFile(trackDir+"/context_updates.md", []byte("# Updates\nTrigger reminder\nMore content"), 0644)
 
 	command := cmd.NewArchiveCmd(fs)
 	buf := new(bytes.Buffer)

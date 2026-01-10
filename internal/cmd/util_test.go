@@ -16,7 +16,7 @@ func TestCheckInboxSize_Suggestion(t *testing.T) {
 
 	// Create a file with 51 lines
 	largeContent := strings.Repeat("line\n", 50) + "last line"
-	fs.WriteFile(inboxFile, []byte(largeContent), 0644)
+	_ = fs.WriteFile(inboxFile, []byte(largeContent), 0644)
 
 	cmd := &cobra.Command{}
 	buf := new(bytes.Buffer)
@@ -39,7 +39,7 @@ func TestCheckInboxSize_NoSuggestion(t *testing.T) {
 
 	// Create a file with 10 lines
 	smallContent := strings.Repeat("line\n", 9) + "last line"
-	fs.WriteFile(inboxFile, []byte(smallContent), 0644)
+	_ = fs.WriteFile(inboxFile, []byte(smallContent), 0644)
 
 	cmd := &cobra.Command{}
 	buf := new(bytes.Buffer)

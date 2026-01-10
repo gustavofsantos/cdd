@@ -12,10 +12,10 @@ func TestListCmd_ListsActiveTracks(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	// Setup tracks
 	// MockFS relies on file presence for directories.
-	fs.WriteFile(".context/tracks/track1/spec.md", []byte(""), 0644)
-	fs.WriteFile(".context/tracks/track2/spec.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/tracks/track1/spec.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/tracks/track2/spec.md", []byte(""), 0644)
 	// Files that are not directories should be ignored?
-	fs.WriteFile(".context/tracks/README.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/tracks/README.md", []byte(""), 0644)
 
 	command := cmd.NewListCmd(fs)
 	buf := new(bytes.Buffer)
@@ -49,7 +49,7 @@ func TestListCmd_ListsActiveTracks(t *testing.T) {
 
 func TestListCmd_ListsArchivedTracks(t *testing.T) {
 	fs := platform.NewMockFileSystem()
-	fs.WriteFile(".context/archive/old-track/spec.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/archive/old-track/spec.md", []byte(""), 0644)
 
 	command := cmd.NewListCmd(fs)
 	buf := new(bytes.Buffer)

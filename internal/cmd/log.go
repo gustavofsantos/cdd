@@ -28,7 +28,7 @@ Usage: cdd log <track-name> <message>`,
 			if err != nil {
 				return fmt.Errorf("Error opening log file: %v", err)
 			}
-			defer f.Close()
+			defer func() { _ = f.Close() }()
 
 			timestamp := time.Now().Format("2006-01-02 15:04:05")
 			entry := fmt.Sprintf("[%s] %s\n", timestamp, msg)

@@ -40,10 +40,10 @@ func TestStartCmd_CreatesTrack(t *testing.T) {
 
 func TestStartCmd_TrackExists(t *testing.T) {
 	fs := platform.NewMockFileSystem()
-	fs.MkdirAll(".context/tracks/existing-track", 0755)
+	_ = fs.MkdirAll(".context/tracks/existing-track", 0755)
 	// MockFS relies on file presence to detect directories or we need to update MkdirAll.
 	// Simplest approach: create a file inside the directory.
-	fs.WriteFile(".context/tracks/existing-track/spec.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/tracks/existing-track/spec.md", []byte(""), 0644)
 
 	command := cmd.NewStartCmd(fs)
 	buf := new(bytes.Buffer)

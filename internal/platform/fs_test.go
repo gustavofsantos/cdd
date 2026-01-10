@@ -1,8 +1,9 @@
 package platform_test
 
 import (
-	"cdd/internal/platform"
 	"testing"
+
+	"cdd/internal/platform"
 )
 
 func TestMockFileSystem_WriteFile(t *testing.T) {

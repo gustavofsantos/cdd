@@ -31,11 +31,6 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 			featureDest := filepath.Join(".context/features", trackName+".md")
 			inboxFile := ".context/inbox.md"
 
-			if _, err := fs.Stat(src); !os.IsNotExist(err) && err != nil {
-				// Check logic: fs.Stat succeeds -> err=nil.
-				// fs.Stat fails -> Check if NotExist.
-				// If NotExist, error.
-			}
 			// Simplified check:
 			if _, err := fs.Stat(src); err != nil {
 				return fmt.Errorf("Error: Track '%s' not found.", trackName)
@@ -55,7 +50,9 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 			if _, err := fs.Stat(specFile); err == nil {
 				input, err := fs.ReadFile(specFile)
 				if err == nil {
-					fs.WriteFile(featureDest, input, 0644)
+					if err := fs.WriteFile(featureDest, input, 0644); err != nil {
+						return fmt.Errorf("Error promoting spec: %v", err)
+					}
 					cmd.Printf("✅ Promoted spec to Living Docs: %s\n", featureDest)
 				}
 			}
@@ -72,9 +69,17 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 							f, err := fs.OpenFile(inboxFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 							if err == nil {
 								header := fmt.Sprintf("\n\n## Updates from Track: %s (%s)\n", trackName, time.Now().Format("Mon Jan 2 15:04:05 MST 2006"))
-								f.WriteString(header)
-								f.WriteString(string(content))
-								f.Close()
+								if _, err := f.WriteString(header); err != nil {
+									_ = f.Close()
+									return fmt.Errorf("Error writing header to inbox: %v", err)
+								}
+								if _, err := f.WriteString(string(content)); err != nil {
+									_ = f.Close()
+									return fmt.Errorf("Error writing content to inbox: %v", err)
+								}
+								if err := f.Close(); err != nil {
+									return fmt.Errorf("Error closing inbox file: %v", err)
+								}
 								cmd.Printf("✅ Appended context updates to %s\n", inboxFile)
 
 								// Trigger cleanup reminder
