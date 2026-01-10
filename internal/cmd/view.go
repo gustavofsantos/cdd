@@ -69,29 +69,16 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 
 			contentBuilder.WriteString(fmt.Sprintf("# 🛤️ Track: %s\n\n", trackName))
 
-			contentBuilder.WriteString("## 📄 Specification\n")
-			if content, err := os.ReadFile(filepath.Join(trackDir, "spec.md")); err == nil {
-				contentBuilder.Write(content)
-			} else {
-				contentBuilder.WriteString("_Missing spec.md_\n")
-			}
-
-			contentBuilder.WriteString("\n## 📋 Plan\n")
+			contentBuilder.WriteString("## 📋 Next Tasks\n")
 			if content, err := os.ReadFile(filepath.Join(trackDir, "plan.md")); err == nil {
-				contentBuilder.Write(content)
+				tasks := extractNextTasks(string(content))
+				if len(tasks) > 0 {
+					contentBuilder.WriteString(tasks)
+				} else {
+					contentBuilder.WriteString("_No pending tasks._\n")
+				}
 			} else {
 				contentBuilder.WriteString("_Missing plan.md_\n")
-			}
-
-			contentBuilder.WriteString("\n## 📜 Recent Decisions\n")
-			if content, err := os.ReadFile(filepath.Join(trackDir, "decisions.md")); err == nil {
-				lines := splitLines(content)
-				if len(lines) > 5 {
-					lines = lines[len(lines)-5:]
-				}
-				for _, line := range lines {
-					contentBuilder.WriteString(line + "\n")
-				}
 			}
 		}
 
@@ -107,28 +94,24 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 func splitLines(content []byte) []string {
 	// Simple split lines, handling carriage returns
 	s := string(content)
-	var lines []string
-	for _, line := range splitLinesString(s) {
-		lines = append(lines, line)
-	}
-	return lines
+	return strings.Split(s, "\n")
 }
 
-func splitLinesString(s string) []string {
-	// A robust implementation would use bufio.Scanner
-	// For simplicity, just split by newline
-	var lines []string
-	start := 0
-	for i, c := range s {
-		if c == '\n' {
-			lines = append(lines, s[start:i])
-			start = i + 1
+func extractNextTasks(content string) string {
+	lines := strings.Split(content, "\n")
+	var tasks []string
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		// Check for unchecked task indicators
+		// Standard Markdown: - [ ], * [ ], 1. [ ]
+		if strings.Contains(trimmed, "[ ]") {
+			tasks = append(tasks, line)
 		}
 	}
-	if start < len(s) {
-		lines = append(lines, s[start:])
+	if len(tasks) == 0 {
+		return ""
 	}
-	return lines
+	return strings.Join(tasks, "\n") + "\n"
 }
 
 func init() {
