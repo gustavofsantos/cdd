@@ -24,6 +24,7 @@ type FileSystem interface {
 	ReadDir(name string) ([]os.DirEntry, error)
 	Create(name string) (File, error)
 	Remove(name string) error
+	RemoveAll(path string) error
 }
 
 // RealFileSystem implements FileSystem using the os package.
@@ -67,4 +68,8 @@ func (fs *RealFileSystem) Create(name string) (File, error) {
 
 func (fs *RealFileSystem) Remove(name string) error {
 	return os.Remove(name)
+}
+
+func (fs *RealFileSystem) RemoveAll(path string) error {
+	return os.RemoveAll(path)
 }
