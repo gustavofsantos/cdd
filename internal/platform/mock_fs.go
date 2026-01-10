@@ -124,6 +124,28 @@ func (m *MockFileSystem) Remove(name string) error {
 	return nil
 }
 
+func (m *MockFileSystem) RemoveAll(path string) error {
+	// 1. Check direct file
+	if _, ok := m.Files[path]; ok {
+		delete(m.Files, path)
+		return nil
+	}
+
+	// 2. Remove directory and contents
+	prefix := path
+	if !strings.HasSuffix(prefix, "/") {
+		prefix += "/"
+	}
+
+	// Iterate and delete
+	for k := range m.Files {
+		if strings.HasPrefix(k, prefix) {
+			delete(m.Files, k)
+		}
+	}
+	return nil
+}
+
 func (m *MockFileSystem) ReadDir(name string) ([]os.DirEntry, error) {
 	entries := []os.DirEntry{}
 	seen := make(map[string]bool)
