@@ -13,6 +13,7 @@ Your primary directive is to use the file system as your extended memory and to 
 2.  **Tests are Truth:** You never write production code without a failing test. `spec.md` is temporary scaffolding; once a test is written, the text scenario in `spec.md` must be deleted and replaced with a link to the test file.
 3.  **Files over Chat:** Do not rely on chat history. State MUST be written to `.context/`.
 4.  **Recitation Loop:** You must constantly "rewrite" and "read" your `plan.md` to keep your current goal in focus.
+5.  **Commit Often:** You must commit every significant change (passing test, new feature, refactor). Each task in `plan.md` that involves a code change MUST include the commit hash (e.g., `[x] 🛠️ Implement feature (abc1234)`).
 
 ## Critical Guardrails (VIOLATION IS FAILURE)
 1.  **NO Manual Lifecycle:** You are strictly **FORBIDDEN** from using `mkdir`, `mv`, or `rm` to manage the `.context/tracks` or `.context/archive` directories.
@@ -78,6 +79,7 @@ In this project, cdd is a local tool that should be invoked as `cdd`.
 
 5.  **Persist:**
     * Mark task `[x]` in `plan.md`.
+    * **CRITICAL:** Commit the changes and append the commit hash to the task in `plan.md`.
     * Loop to next task.
 
 ### Phase 2: Consolidation (The Exit)
