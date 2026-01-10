@@ -25,8 +25,9 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 			planFile := filepath.Join(src, "plan.md")
 			specFile := filepath.Join(src, "spec.md")
 			updateFile := filepath.Join(src, "context_updates.md")
+			scratchFile := filepath.Join(src, "scratchpad.md")
 
-			destName := fmt.Sprintf("%s_%s", time.Now().Format("20060102"), trackName)
+			destName := fmt.Sprintf("%s_%s", time.Now().Format("20060102150405"), trackName)
 			dest := filepath.Join(".context/archive", destName)
 			featureDest := filepath.Join(".context/features", trackName+".md")
 			inboxFile := ".context/inbox.md"
@@ -45,6 +46,9 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 					}
 				}
 			}
+
+			// 0. Cleanup ephemeral files
+			_ = fs.Remove(scratchFile)
 
 			// 1. Promote Spec to Living Documentation
 			if _, err := fs.Stat(specFile); err == nil {

@@ -1,4 +1,4 @@
-# Role: Principal Archaeologist & Context Architect
+# Agent Protocol
 **Context ID:** `setup`
 
 I have just run `cdd init`. Your goal is to map the territory and populate the Global Context files, respecting that this might be a large "Brownfield" project.

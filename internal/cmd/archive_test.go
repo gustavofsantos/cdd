@@ -2,6 +2,7 @@ package cmd_test
 
 import (
 	"bytes"
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -69,6 +70,56 @@ func TestArchiveCmd_Success(t *testing.T) {
 	}
 	if !foundArchive {
 		t.Errorf("expected archived file to exist")
+	}
+}
+
+func TestArchiveCmd_CleanupAndTimestamp(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	trackName := "cleanup-track"
+	trackDir := ".context/tracks/" + trackName
+
+	// Setup track files including scratchpad
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte("Spec"), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
+	_ = fs.WriteFile(trackDir+"/scratchpad.md", []byte("Ephemeral content"), 0644)
+
+	command := cmd.NewArchiveCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+
+	command.SetArgs([]string{trackName})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	// Verify scratchpad is GONE in the archive
+	foundScratchpad := false
+	foundArchive := false
+	var archiveDir string
+	for k := range fs.Files {
+		if strings.HasPrefix(k, ".context/archive/") && strings.HasSuffix(k, "_"+trackName+"/spec.md") {
+			foundArchive = true
+			archiveDir = strings.TrimSuffix(k, "/spec.md")
+		}
+		if strings.Contains(k, "scratchpad.md") {
+			foundScratchpad = true
+		}
+	}
+
+	if !foundArchive {
+		t.Fatal("expected track to be archived")
+	}
+	if foundScratchpad {
+		t.Errorf("expected scratchpad.md to be deleted before archiving")
+	}
+
+	// Verify timestamp format (YYYYMMDDHHMMSS)
+	// Example: .context/archive/20260110150405_cleanup-track
+	base := filepath.Base(archiveDir)
+	timestamp := strings.Split(base, "_")[0]
+	if len(timestamp) != 14 {
+		t.Errorf("expected 14-digit timestamp (YYYYMMDDHHMMSS), got %s (%d digits)", timestamp, len(timestamp))
 	}
 }
 
