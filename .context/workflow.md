@@ -22,7 +22,10 @@ The project is driven by the `cdd` CLI tool.
 5. **Archive**: Close track and move updates to Inbox.
 6. **Garden**: Periodically promote Inbox updates to Global Context.
 
-## Testing
+## Commit Often
+Every significant change (passing test, feature implementation, refactor) must be committed to git.
+The commit hash must be recorded in the `plan.md` task corresponding to the change.
+This ensures traceability and allows for easy retrieval of code changes associated with specific decisions or features.
 - **Framework:** Go `testing` package.
 - **Approach:** Dependency Injection via `FileSystem` interface allows mocking file operations.
 - **Execution:** Run `go test ./...` to verify behavior.
