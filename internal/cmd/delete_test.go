@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"bytes"
-	"cdd/internal/platform"
 	"path/filepath"
 	"testing"
+
+	"cdd/internal/platform"
 )
 
 func TestDeleteCmd(t *testing.T) {
@@ -53,7 +54,9 @@ func TestDeleteCmd(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			fs := platform.NewMockFileSystem()
 			for k, v := range tt.setupFiles {
-				fs.WriteFile(k, v, 0644)
+				if err := fs.WriteFile(k, v, 0644); err != nil {
+					t.Fatalf("failed to setup file %s: %v", k, err)
+				}
 			}
 
 			cmd := NewDeleteCmd(fs)
