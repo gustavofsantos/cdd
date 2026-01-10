@@ -22,7 +22,7 @@ CDD is built on a fundamental power dynamic: **The Engineer is the Strategist; t
 - The AI executes the tactics, guided by a strict protocol that prevents it from drifting off-course.
 
 ### Premium Value from Budget Models
-By providing a "file-based extended memory" and a rigorous step-by-step workflow, CDD enables **smaller, faster, and cheaper models** (like Gemini 1.5 Flash or Claude 3 Haiku) to perform at a level usually reserved for much larger models. It’s about process over brute force.
+By providing a "file-based extended memory" and a rigorous step-by-step workflow, CDD enables **small models** (like Gemini Flash or Claude Haiku) to perform at a level usually reserved for much larger models. It’s about process over brute force.
 
 ### Lineage & Evolution
 This project carries the DNA of specifications-driven workflows like **OpenSpec**, **Conductor**, and **Manus**. It is heavily inspired by the planning and execution patterns of industry leaders like **Cursor**, **Windsurf**, **Claude Code**, and **Antigravity**, but takes a unique direction focused on extreme context isolation and cost-efficiency.
