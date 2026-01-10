@@ -14,7 +14,7 @@ func TestLogCmd_AppendsToLog(t *testing.T) {
 	// Setup existing log
 	logPath := ".context/tracks/active-track/decisions.md"
 	initialContent := "# Decision Log\n"
-	fs.WriteFile(logPath, []byte(initialContent), 0644)
+	_ = fs.WriteFile(logPath, []byte(initialContent), 0644)
 
 	command := cmd.NewLogCmd(fs)
 	buf := new(bytes.Buffer)

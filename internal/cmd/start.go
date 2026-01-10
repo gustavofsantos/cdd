@@ -53,23 +53,33 @@ Usage: cdd start <track-name>`,
 >     When ...
 >     Then ...
 `, trackName, trackName)
-			fs.WriteFile(filepath.Join(trackDir, "spec.md"), []byte(specTemplate), 0644)
+			if err := fs.WriteFile(filepath.Join(trackDir, "spec.md"), []byte(specTemplate), 0644); err != nil {
+				return fmt.Errorf("failed to write spec.md: %w", err)
+			}
 
 			// Context Updates Staging File
 			updatesContent := "# Proposed Global Context Updates\n> Add notes here if product.md or tech-stack.md needs updating.\n"
-			fs.WriteFile(filepath.Join(trackDir, "context_updates.md"), []byte(updatesContent), 0644)
+			if err := fs.WriteFile(filepath.Join(trackDir, "context_updates.md"), []byte(updatesContent), 0644); err != nil {
+				return fmt.Errorf("failed to write context_updates.md: %w", err)
+			}
 
 			// Plan Template
 			planContent := fmt.Sprintf("# Plan for %s\n- [ ] 🗣️ Phase 0: Alignment & Analysis (Fill spec.md)\n- [ ] 📝 Phase 1: Approval (User signs off)\n", trackName)
-			fs.WriteFile(filepath.Join(trackDir, "plan.md"), []byte(planContent), 0644)
+			if err := fs.WriteFile(filepath.Join(trackDir, "plan.md"), []byte(planContent), 0644); err != nil {
+				return fmt.Errorf("failed to write plan.md: %w", err)
+			}
 
 			// Decisions Log
 			decisionsContent := fmt.Sprintf("# Decision Log\n> Created %s\n", time.Now().Format("Mon Jan 2 15:04:05 MST 2006"))
-			fs.WriteFile(filepath.Join(trackDir, "decisions.md"), []byte(decisionsContent), 0644)
+			if err := fs.WriteFile(filepath.Join(trackDir, "decisions.md"), []byte(decisionsContent), 0644); err != nil {
+				return fmt.Errorf("failed to write decisions.md: %w", err)
+			}
 
 			// Scratchpad
 			scratchContent := fmt.Sprintf("# Scratchpad for %s\n> Dump raw logs here.\n", trackName)
-			fs.WriteFile(filepath.Join(trackDir, "scratchpad.md"), []byte(scratchContent), 0644)
+			if err := fs.WriteFile(filepath.Join(trackDir, "scratchpad.md"), []byte(scratchContent), 0644); err != nil {
+				return fmt.Errorf("failed to write scratchpad.md: %w", err)
+			}
 
 			cmd.Printf("Track '%s' initialized.\n", trackName)
 			return nil

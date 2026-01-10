@@ -26,7 +26,7 @@ Usage: command | cdd dump <track-name>`,
 			if err != nil {
 				return fmt.Errorf("Error opening scratchpad: %v", err)
 			}
-			defer f.Close()
+			defer func() { _ = f.Close() }()
 
 			if _, err := io.Copy(f, cmd.InOrStdin()); err != nil {
 				return fmt.Errorf("Error writing to scratchpad: %v", err)
