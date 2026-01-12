@@ -31,3 +31,10 @@ jobs:
 
           git tag -a "$VERSION" -m "Release $VERSION"
           git push origin "$VERSION"
+
+  release:
+    needs: create-tag
+    uses: ./.github/workflows/release.yml
+    with:
+      tag: ${{ inputs.version }}
+    secrets: inherit
