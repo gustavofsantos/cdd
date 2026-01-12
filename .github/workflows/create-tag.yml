@@ -1,0 +1,33 @@
+name: Create Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Tag version (e.g. v0.0.1)'
+        required: true
+        type: string
+
+jobs:
+  create-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create and push tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [[ ! "$VERSION" =~ ^v ]]; then
+            echo "Error: Version must start with 'v'"
+            exit 1
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git tag -a "$VERSION" -m "Release $VERSION"
+          git push origin "$VERSION"
