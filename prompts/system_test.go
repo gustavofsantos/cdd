@@ -9,10 +9,14 @@ import (
 
 func TestSystemPromptIsLean(t *testing.T) {
 	requiredPhrases := []string{
-		"Spec-Driven Philosophy",
-		"Tracks are Ephemeral",
-		"Specs are Eternal",
-		"The Cycle",
+		"The Lean CDD Protocol",
+		"strict 3-file Track structure",
+		"spec.md",
+		"(The Delta)",
+		"plan.md",
+		"(The Execution)",
+		"decisions.md",
+		"(The How)",
 	}
 
 	for _, phrase := range requiredPhrases {
@@ -25,7 +29,6 @@ func TestSystemPromptIsLean(t *testing.T) {
 func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 	requiredPhrases := []string{
 		"cdd recite",
-		"cdd start",
 		"AGENTS.local.md",
 	}
 
@@ -36,20 +39,16 @@ func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 	}
 
 	// Ensure we are NOT using go run in the system prompt instructions anymore
-
 	if strings.Contains(prompts.System, "go run cmd/cdd/main.go") {
-
 		t.Errorf("System prompt still contains 'go run cmd/cdd/main.go', it should use 'cdd' directly")
-
 	}
-
 }
 
 func TestSystemPromptConstraints(t *testing.T) {
 	requiredPhrases := []string{
 		"Global Constraints",
-		"NO Manual Lifecycle",
-		"NO Global Edits",
+		"Files:",
+		"Lifecycle:",
 	}
 
 	for _, phrase := range requiredPhrases {

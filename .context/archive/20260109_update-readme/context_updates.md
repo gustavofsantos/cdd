@@ -1,5 +1,0 @@
-- Refactored project documentation to improve "sellability" and organization.
-- Created `INSTALLATION.md` to house platform-specific setup instructions, keeping the main README clean.
-- Added a comprehensive "Why CDD?" (Rationale) section to `README.md`, detailing the Strategist/Tactician philosophy, cost-efficiency of small models, and the project's lineage from OpenSpec, Conductor, etc.
-- Added a "Target Audience" section to `README.md` to clearly define who the tool is for.
-- Cleaned up redundant instructions in `README.md` and added a proper "Getting Started" flow.

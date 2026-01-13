@@ -1,3 +1,0 @@
-- Integrated the new `calibration.md` prompt into the `prompts` package.
-- Added `--calibration-prompt` flag to the `cdd init` command.
-- Updated `README.md` to document the new flag.

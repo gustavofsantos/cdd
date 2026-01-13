@@ -1,22 +1,29 @@
-# Product Context
+# Product Vision & Strategy
 
-**Product Name:** CDD Tool Suite
-**Description:** A CLI application designed to facilitate Context-Driven Development (CDD).
+## 1. Core Value Proposition
+The CDD Tool Suite is a CLI application that facilitates Context-Driven Development through file-based state management. It enables developers and AI agents to work together efficiently by providing structured context, isolated workspaces ("tracks"), and a rigorous workflow protocol. The tool addresses the challenge of AI context pollution in large codebases by implementing extreme context isolation, allowing smaller AI models to perform at the level of flagship models through superior context engineering.
 
-## System Specifications (The Living Documentation)
-The definitive truth about the system's capabilities and standards is now maintained in the `specs/` directory:
+## 2. Target Audience / Personas
+* **Experienced Engineers**: Developers who want to leverage AI without abdicating their role as the project architect.
+* **Context-Engineers**: Developers who believe that well-structured context is the key to reliable AI outputs.
+* **Cost-Conscious Teams**: Teams looking to maximize their AI ROI by getting the most out of efficient, low-latency models.
+* **Legacy Navigators**: Anyone working in "noisy" brownfield projects where AI traditionally struggles to stay aligned.
 
-- [Product Vision & Core Value Prop](specs/product/spec.md)
-- [Lifecycle & CLI Commands](specs/lifecycle/spec.md)
-- [Standards & Patterns](specs/standards/spec.md)
-- [Prompt Engineering & AI Roles](specs/prompts/spec.md)
+## 3. Key Capabilities (The "What")
+* **Track Management**: Create isolated workspaces for specific features/tasks to prevent context pollution
+* **Workflow Automation**: Commands to start, archive, and manage development tracks
+* **Prompt Orchestration**: Serve role-specific prompts (System, Bootstrap, Executor, Planner, Integrator) for AI agents
+* **Context Engineering**: Maintain living documentation through structured specs and decision logs
+* **Time Tracking**: Automatic capture of track lifecycle timestamps
 
-## Domain Logic Summary
-- **Tracks:** Active workspaces in `.context/tracks/`.
-- **Archive:** Completed workspaces in `.context/archive/`.
-- **Global Context:** Permanent records managed via Specifications.
-- **Context Inbox:** Ephemeral queue for pending changes from closed tracks (`.context/inbox.md`).
-- **Development Cycle:** Recite -> Spec -> Plan -> Implement -> Archive -> Garden.
+## 4. Ubiquitous Language (Domain Glossary)
+| Term | Definition |
+| :--- | :--- |
+| **Track** | An isolated workspace in `.context/tracks/<name>` for a specific feature or task. |
+| **Spec** | The specification document (`spec.md`) defining requirements in EARS notation. |
+| **Plan** | The task checklist and execution log (`plan.md`) showing workflow progress. |
+| **Decisions** | The Architecture Decision Record journal (`decisions.md`) documenting key choices. |
+| **Inbox** | The staging area (`.context/inbox.md`) for pending context updates awaiting integration. |
+| **Bootstrap** | The initial project mapping phase where the AI scans and documents the codebase. |
+| **Archive** | Completed tracks moved to `.context/archive/` with their specs promoted to global context. |
 
-## Dogfooding
-The tool is used to develop itself, ensuring immediate feedback on UX and functionality.

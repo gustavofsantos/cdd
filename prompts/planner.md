@@ -23,6 +23,7 @@ You MUST use this format. It tells the Integrator what to merge later.
 
 ### MODIFIED Requirements
 * WHEN password validation occurs, the system SHALL require minimum 12 characters (previously: 8 characters)
+  * *Note:* You MUST include `(previously: <old_value>)` so the Integrator knows what to replace.
 
 ## Relevant Files
 * `internal/auth/login.go` - Login handler implementation

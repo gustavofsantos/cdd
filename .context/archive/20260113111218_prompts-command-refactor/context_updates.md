@@ -1,4 +1,0 @@
-- Refactored prompt printing: moved logic from flags in the `init` command to a new dedicated `prompts` command.
-- The `prompts` command supports flags: `--system`, `--bootstrap`, `--inbox`, `--executor`, `--planner`, and `--calibration`.
-- Validated that `init` still correctly initializes the `.context` directory structure without prompt flags.
-- Updated `README.md` to reflect the new command usage.
