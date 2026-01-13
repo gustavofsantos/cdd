@@ -29,3 +29,9 @@ Added/Updated `prompts/system_test.go` to validate these requirements.
 - Updated `internal/cmd/init.go` to use `cmd.Println` instead of `fmt.Println` to support testing output.
 - Synchronized `prompts/system.md` with `GEMINI.md` to fix failing tests in the `prompts` package.
 - Updated `README.md` to document the new prompt flags.
+
+
+## Updates from Track: calibration-prompt (Tue Jan 13 11:07:16 -03 2026)
+- Integrated the new `calibration.md` prompt into the `prompts` package.
+- Added `--calibration-prompt` flag to the `cdd init` command.
+- Updated `README.md` to document the new flag.
