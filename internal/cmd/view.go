@@ -1,11 +1,12 @@
 package cmd
 
 import (
-	"cdd/internal/platform"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"cdd/internal/platform"
 
 	"github.com/charmbracelet/glamour"
 	"github.com/mattn/go-isatty"
@@ -34,16 +35,16 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 
 			// If not a TTY or --raw is set, print raw markdown/text
 			if viewRaw || (!isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd())) {
-				fmt.Fprint(cmd.OutOrStdout(), markdown)
-				return nil
+				_, err := fmt.Fprint(cmd.OutOrStdout(), markdown)
+				return err
 			}
 
 			out, err := glamour.Render(markdown, "dark")
 			if err != nil {
 				return fmt.Errorf("error rendering markdown: %v", err)
 			}
-			fmt.Fprint(cmd.OutOrStdout(), out)
-			return nil
+			_, err = fmt.Fprint(cmd.OutOrStdout(), out)
+			return err
 		},
 	}
 

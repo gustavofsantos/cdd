@@ -1,9 +1,10 @@
 package cmd
 
 import (
-	"cdd/internal/platform"
 	"strings"
 	"testing"
+
+	"cdd/internal/platform"
 )
 
 func TestBuildViewMarkdown(t *testing.T) {
