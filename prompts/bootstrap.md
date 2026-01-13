@@ -1,42 +1,41 @@
-# Agent Protocol
-**Context ID:** `setup`
+# BOOTSTRAP PROTOCOL
+**Context ID:** `initialization`
 **Role:** Domain Cartographer
+**Objective:** Replace the `[Bootstrap: ...]` placeholders in the Global Context files with concrete data derived from the codebase.
 
-I have just run `cdd init`. Your goal is to identify the **Bounded Contexts** (Business Domains) within this project and populate the Global Context files. Focus on *high-level structure* to avoid getting lost in the noise of a large brownfield project.
+## 1. Topography (The Scan)
+Perform a shallow scan of the codebase to build a mental map.
+1.  **Run:** `ls -R src/` (or `ls -R lib/`, `ls -R app/` depending on language).
+2.  **Read:** `package.json`, `go.mod`, `pom.xml`, or `requirements.txt` to identify the **Tech Stack**.
+3.  **Read:** `README.md` (if exists) to understand the **Product Vision**.
 
-## Protocol (Strictly Sequential)
-Run `cdd recite setup` to confirm your next step.
+## 2. Analysis (The Mapping)
+Based on the file structure, deduce the following:
+* **Architecture Style:** Is it a Monolith (layered folders), Microservices (separate repos/folders), or Modular Monolith (domain folders)?
+* **Bounded Contexts:** Identify the high-level business domains (e.g., "Checkout", "Identity", "Inventory").
+* **Ubiquitous Language:** Extract 3-5 key domain terms used in class/file names.
 
-### Phase 1: Domain Survey (The Map)
-**Objective:** Identify the architectural style and candidate Bounded Contexts.
-1.  **Topography:** Run `ls -F` on the root.
-    * *Ignore* generic noise: `scripts/`, `bin/`, `dist/`, `build/`, `.config/`, `node_modules/`, `vendor/`.
-    * *Focus* on source roots: `src/`, `lib/`, `pkg/`, `internal/`, `services/`, `apps/`.
-2.  **Workspace Detection:** Read configuration files (`package.json`, `go.work`, `pom.xml`, `lerna.json`) to detect Monorepo or Multi-Module structures.
-3.  **Architecture Inference:**
-    * *Layered (Technical Grouping):* Do you see `controllers/`, `models/`, `views/`? -> **Contexts are likely hidden inside these folders.**
-    * *Modular (Domain Grouping):* Do you see `billing/`, `auth/`, `shipping/`? -> **These ARE the Contexts.**
-4.  **Drafting:** Create a *provisional* `product.md` and `tech-stack.md`. List your candidate Bounded Contexts clearly.
+## 3. The Injection (The Output)
+You will now edit the Global Context files. **DO NOT** rewrite the whole file. **ONLY** replace the blockquotes starting with `> [Bootstrap: ...]`.
 
-### Phase 2: Domain Alignment (The Handshake)
-**Objective:** Validate the business domains with the user.
-1.  **Report:** Present the "Domain Map":
-    * "Architecture Style: [Monolith/Microservices/Layered/Modular]"
-    * "Detected Bounded Contexts: [List of potential domains, e.g., 'Auth', 'Payment', 'Legacy-Core']"
-2.  **The Ask:** Ask the user:
-    * "Do these Bounded Contexts accurately represent your business domains?"
-    * "**Select your Primary Focus:** Which Context are we working on today? (We will ignore the others to reduce noise)."
+### Target: `.context/product.md`
+* **Core Value:** detailed summary of what this software does based on the README.
+* **Ubiquitous Language:** Fill the table with the terms you found.
 
-### Phase 3: Context Deep Dive
-**Objective:** Map ONLY the user's chosen Context.
-1.  **Focused Scan:** Scan only the directories relevant to the selected Bounded Context.
-    * *If Layered:* You may need to look at `controllers/BillingController.ts` and `models/Billing.ts`.
-    * *If Modular:* Scan `services/billing/`.
-2.  **Pattern Discovery:**
-    * Identify the testing strategy *for this specific context*.
-    * Identify the specific database or API patterns *for this specific context*.
-3.  **Document:** Update `workflow.md` and `patterns.md` with findings specific to this domain.
+### Target: `.context/architecture.md`
+* **High-Level Design:** Describe the system boundary (e.g., "A monolithic Rails app serving a React frontend").
+* **Architectural Pattern:** State the inferred pattern (e.g., "MVC", "Hexagonal", "Clean Architecture").
+* **Core Components:** List the top-level modules or bounded contexts found in step 2.
 
-### Phase 4: Finalization
-1.  Write the final content to `.context/`.
-2.  Run `cdd archive setup`.
+### Target: `.context/tech-stack.md`
+* **Core Foundations:** Fill in Language, Framework, and Database versions found in config files.
+* **Libraries:** List the major libraries used for Styling, State, and Testing.
+
+## 4. Final Verification
+Ask the user:
+> "I have mapped the domain and populated the Global Context.
+> **Detected Style:** [Style]
+> **Detected Contexts:** [List]
+>
+> Please review `.context/product.md`, `.context/architecture.md`, and `.context/tech-stack.md`.
+> Are these definitions correct before we begin the first Track?"
