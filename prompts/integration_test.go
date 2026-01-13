@@ -1,8 +1,9 @@
 package prompts_test
 
 import (
-	"cdd/prompts"
 	"testing"
+
+	"cdd/prompts"
 )
 
 func TestExecutorAndPlannerPrompts(t *testing.T) {

@@ -9,26 +9,24 @@ import (
 
 func TestSystemPromptIsLean(t *testing.T) {
 	requiredPhrases := []string{
-		"The Lean CDD Protocol",
-		"strict 3-file Track structure",
+		"CDD Engine",
+		".context/tracks",
 		"spec.md",
-		"(The Delta)",
 		"plan.md",
-		"(The Execution)",
 		"decisions.md",
-		"(The How)",
+		"THE STATE MACHINE",
+		"PHASE INSTRUCTIONS",
 	}
 
 	for _, phrase := range requiredPhrases {
 		if !strings.Contains(prompts.System, phrase) {
-			t.Errorf("System prompt missing philosophy phase: %q", phrase)
+			t.Errorf("System prompt missing phrase: %q", phrase)
 		}
 	}
 }
 
 func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 	requiredPhrases := []string{
-		"cdd recite",
 		"AGENTS.local.md",
 	}
 
@@ -46,9 +44,8 @@ func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 
 func TestSystemPromptConstraints(t *testing.T) {
 	requiredPhrases := []string{
-		"Global Constraints",
-		"Files:",
-		"Lifecycle:",
+		"GLOBAL CONSTRAINTS",
+		"Atomic Steps:",
 	}
 
 	for _, phrase := range requiredPhrases {

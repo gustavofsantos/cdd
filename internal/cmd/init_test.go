@@ -13,12 +13,14 @@ func TestInitCommand(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to create temp dir: %v", err)
 	}
-	defer os.RemoveAll(tmpDir)
+	defer func() { _ = os.RemoveAll(tmpDir) }()
 
 	// Change working directory to temp dir
 	oldWd, _ := os.Getwd()
-	os.Chdir(tmpDir)
-	defer os.Chdir(oldWd)
+	if err := os.Chdir(tmpDir); err != nil {
+		t.Fatalf("failed to change dir: %v", err)
+	}
+	defer func() { _ = os.Chdir(oldWd) }()
 
 	b := bytes.NewBufferString("")
 	rootCmd.SetOut(b)

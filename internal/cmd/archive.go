@@ -85,10 +85,12 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 				entry := fmt.Sprintf("\n---\n###### Archived at: %s | Track: %s\n\n%s\n", timestamp, trackName, string(content))
 
 				if _, err := f.WriteString(entry); err != nil {
-					f.Close()
+					_ = f.Close()
 					return fmt.Errorf("Error appending to inbox.md: %v", err)
 				}
-				f.Close()
+				if err := f.Close(); err != nil {
+					return fmt.Errorf("Error closing inbox.md: %v", err)
+				}
 			}
 
 			// 3. Cleanup Legacy Files
