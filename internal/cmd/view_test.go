@@ -59,8 +59,11 @@ func TestBuildViewMarkdown(t *testing.T) {
 		if !strings.Contains(md, "Archived Tracks") {
 			t.Errorf("expected 'Archived Tracks' in output, got %q", md)
 		}
-		if !strings.Contains(md, "20260101120000_old-feat") {
-			t.Errorf("expected '20260101120000_old-feat' in output, got %q", md)
+		if !strings.Contains(md, "old-feat") {
+			t.Errorf("expected 'old-feat' in output, got %q", md)
+		}
+		if strings.Contains(md, "20260101120000") {
+			t.Errorf("did not expect timestamp in output, got %q", md)
 		}
 	})
 

@@ -65,7 +65,8 @@ func buildViewMarkdown(fs platform.FileSystem, args []string) (string, error) {
 				found := false
 				for _, entry := range entries {
 					if entry.IsDir() {
-						contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", entry.Name()))
+						cleanName := stripTimestamp(entry.Name())
+						contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", cleanName))
 						found = true
 					}
 				}
@@ -167,6 +168,24 @@ func dirExistsFS(fs platform.FileSystem, path string) bool {
 		return false
 	}
 	return info.IsDir()
+}
+
+func stripTimestamp(name string) string {
+	parts := strings.SplitN(name, "_", 2)
+	if len(parts) > 1 && len(parts[0]) == 14 {
+		// Basic check if it's a timestamp (all digits)
+		isTimestamp := true
+		for _, c := range parts[0] {
+			if c < '0' || c > '9' {
+				isTimestamp = false
+				break
+			}
+		}
+		if isTimestamp {
+			return parts[1]
+		}
+	}
+	return name
 }
 
 func init() {
