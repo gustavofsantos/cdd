@@ -1,7 +1,3 @@
-
----
-###### Archived at: 2026-01-13 18:23:45 | Track: view-flags
-
 # Track: view-flags
 
 ## 1. User Intent
@@ -51,4 +47,3 @@ Feature: Enhanced view command with flags
     Given an archived track "20260113161017_setup" exists
     When I run `cdd view setup --archived --spec`
     Then it should show the content of "spec.md" for the archived track "setup"
-
