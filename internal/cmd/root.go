@@ -12,6 +12,11 @@ var rootCmd = &cobra.Command{
 	Long:  `Context-Driven Development (CDD) Tool Suite.`,
 }
 
+func init() {
+	rootCmd.SetOut(os.Stdout)
+	rootCmd.SetErr(os.Stderr)
+}
+
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
