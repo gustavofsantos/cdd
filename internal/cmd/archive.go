@@ -66,6 +66,12 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 				}
 			}
 
+			// 2. Cleanup Legacy Files
+			filesToDelete := []string{"scratchpad.md", "context_updates.md"}
+			for _, f := range filesToDelete {
+				_ = fs.Remove(filepath.Join(src, f))
+			}
+
 			// 2. Archive
 			if err := fs.Rename(src, dest); err != nil {
 				return fmt.Errorf("Error archiving track: %v", err)

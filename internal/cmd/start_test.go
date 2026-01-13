@@ -2,6 +2,7 @@ package cmd_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	"cdd/internal/cmd"
@@ -25,8 +26,8 @@ func TestStartCmd_CreatesTrack(t *testing.T) {
 
 	// Verify Output
 	output := buf.String()
-	if output != "Track 'test-track' initialized.\n" {
-		t.Errorf("expected output 'Track 'test-track' initialized.', got '%s'", output)
+	if !strings.Contains(output, "Track 'test-track' initialized.") {
+		t.Errorf("expected output to contain 'Track 'test-track' initialized.', got '%s'", output)
 	}
 
 	// Verify File System

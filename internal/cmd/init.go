@@ -1,10 +1,10 @@
 package cmd
 
 import (
-	_ "embed"
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -54,27 +54,39 @@ var initCmd = &cobra.Command{
 				os.Exit(1)
 			}
 
-			specContent := "# Spec: Project Initialization\nThis track is dedicated to establishing the global project context.\n"
-			if err := os.WriteFile(filepath.Join(setupDir, "spec.md"), []byte(specContent), 0644); err != nil {
-				fmt.Printf("Error writing spec.md: %v\n", err)
+			data := trackData{
+				TrackName: "setup",
+				CreatedAt: time.Now().Format("Mon Jan 2 15:04:05 MST 2006"),
 			}
 
-			planContent := `# Plan for setup
-- [ ] Phase 1: Automated Archeology (Scan file structure & configs)
-- [ ] Phase 2: Draft Context (Create provisional product.md/tech-stack.md)
-- [ ] Phase 3: Focus Alignment (Ask user for their specific Domain of Interest)
-- [ ] Phase 4: Deep Dive (Scan the specific Domain of Interest)
-- [ ] Phase 5: Final Review & Archive
-`
-			if err := os.WriteFile(filepath.Join(setupDir, "plan.md"), []byte(planContent), 0644); err != nil {
-				fmt.Printf("Error writing plan.md: %v\n", err)
+			// Spec
+			specContent, err := renderTrackTemplate("spec.md", "setup_spec.md", data)
+			if err != nil {
+				fmt.Printf("Error rendering spec.md: %v\n", err)
+			} else {
+				if err := os.WriteFile(filepath.Join(setupDir, "spec.md"), specContent, 0644); err != nil {
+					fmt.Printf("Error writing spec.md: %v\n", err)
+				}
 			}
 
-			if err := os.WriteFile(filepath.Join(setupDir, "decisions.md"), []byte("# Decision Log\n"), 0644); err != nil {
-				fmt.Printf("Error writing decisions.md: %v\n", err)
+			// Plan
+			planContent, err := renderTrackTemplate("plan.md", "setup_plan.md", data)
+			if err != nil {
+				fmt.Printf("Error rendering plan.md: %v\n", err)
+			} else {
+				if err := os.WriteFile(filepath.Join(setupDir, "plan.md"), planContent, 0644); err != nil {
+					fmt.Printf("Error writing plan.md: %v\n", err)
+				}
 			}
-			if err := os.WriteFile(filepath.Join(setupDir, "scratchpad.md"), []byte("# Scratchpad\n"), 0644); err != nil {
-				fmt.Printf("Error writing scratchpad.md: %v\n", err)
+
+			// Decisions
+			decisionsContent, err := renderTrackTemplate("decisions.md", "decisions.md", data)
+			if err != nil {
+				fmt.Printf("Error rendering decisions.md: %v\n", err)
+			} else {
+				if err := os.WriteFile(filepath.Join(setupDir, "decisions.md"), decisionsContent, 0644); err != nil {
+					fmt.Printf("Error writing decisions.md: %v\n", err)
+				}
 			}
 
 			cmd.Println("Created 'setup' track.")
