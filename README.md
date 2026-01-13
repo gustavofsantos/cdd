@@ -2,45 +2,9 @@
 
 The CDD Tool Suite is a CLI application designed to facilitate Context-Driven Development. It helps developers and AI agents manage context, track progress, and maintain a history of decisions and changes through a file-based state management system.
 
-## Features
-
-- **Context Management**: Organized structure for project context (`.context/` directory).
-- **Track Isolation**: Work on specific tasks in isolated "tracks" to prevent context pollution.
-- **Workflow Automation**: Commands to start, archive, and manage tracks.
-- **Documentation Integration**: Promotes knowledge from tracks to living documentation.
-- **AI-Ready**: Designed to work seamlessly with AI agents by providing structured context.
-
-## Why CDD? (The Rationale)
+## The Rationale
 
 In the rapidly evolving world of AI-assisted programming, noise is the enemy of efficiency. While modern AI models can write excellent code, they often get "lost" when navigating large, legacy, or high-entropy projects. Furthermore, the operational cost of using massive flagship models for every task can be prohibitive.
-
-**Context-Driven Development (CDD)** is an attempt to solve these challenges through **Context Engineering**.
-
-### The Strategist and the Tactician
-CDD is built on a fundamental power dynamic: **The Engineer is the Strategist; the AI is the Tactician.**
-- You remain in charge, commanding the changes and ensuring the strategy is sound.
-- The AI executes the tactics, guided by a strict protocol that prevents it from drifting off-course.
-
-### The CDD State Machine
-The workflow is governed by a strict state machine with four distinct phases. The AI adopts a specific persona for each phase:
-
-1.  **Analyst (Phase 0)**: Interviews the user to understand the intent and frames the problem in a `spec.md`.
-2.  **Architect (Phase 1)**: Designs the technical solution and creates a step-by-step TDD `plan.md`.
-3.  **Executor (Phase 2+)**: Implements the plan using a Red/Green/Refactor loop, checking off items one by one.
-4.  **Integrator**: Merges the finished work into the global context and cleans up the inbox.
-
-### Premium Value from Budget Models
-By providing a "file-based extended memory" and a rigorous step-by-step workflow, CDD enables **small models** (like Gemini Flash or Claude Haiku) to perform at a level usually reserved for much larger models. It’s about process over brute force.
-
-### Lineage & Evolution
-This project carries the DNA of specifications-driven workflows like **OpenSpec**, **Conductor**, and **Manus**. It is heavily inspired by the planning and execution patterns of industry leaders like **Cursor**, **Windsurf**, **Claude Code**, and **Antigravity**, but takes a unique direction focused on extreme context isolation and cost-efficiency.
-
-## Target Audience
-
-- **Experienced Engineers**: Those who want to leverage AI without abdicating their role as the project architect.
-- **Context-Engineers**: Developers who believe that well-structured context is the key to reliable AI outputs.
-- **Cost-Conscious Teams**: Teams looking to maximize their AI ROI.
-- **Legacy Navigators**: Anyone working in "noisy" brownfield projects where AI traditionally struggles to stay aligned.
 
 ## Quick Start: Your First Task
 
