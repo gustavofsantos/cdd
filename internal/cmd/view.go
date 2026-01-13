@@ -3,10 +3,12 @@ package cmd
 import (
 	"cdd/internal/platform"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/charmbracelet/glamour"
+	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 )
 
@@ -15,6 +17,7 @@ var (
 	viewArchived bool
 	viewSpec     bool
 	viewPlan     bool
+	viewRaw      bool
 )
 
 func NewViewCmd(fs platform.FileSystem) *cobra.Command {
@@ -27,6 +30,12 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 			markdown, err := buildViewMarkdown(fs, args)
 			if err != nil {
 				return err
+			}
+
+			// If not a TTY or --raw is set, print raw markdown/text
+			if viewRaw || (!isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd())) {
+				fmt.Fprint(cmd.OutOrStdout(), markdown)
+				return nil
 			}
 
 			out, err := glamour.Render(markdown, "dark")
@@ -42,55 +51,71 @@ Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
 	cmd.Flags().BoolVarP(&viewArchived, "archived", "a", false, "Show archived tracks")
 	cmd.Flags().BoolVarP(&viewSpec, "spec", "s", false, "Show track specification")
 	cmd.Flags().BoolVarP(&viewPlan, "plan", "p", false, "Show track plan")
+	cmd.Flags().BoolVarP(&viewRaw, "raw", "r", false, "Output raw text (suitable for piping)")
 
 	return cmd
 }
 
 func buildViewMarkdown(fs platform.FileSystem, args []string) (string, error) {
 	var contentBuilder strings.Builder
+	isRaw := viewRaw || (!isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd()))
 
 	if len(args) == 0 {
 		// Dashboard Mode
 		if viewInbox {
-			contentBuilder.WriteString("# 📥 Context Inbox (Pending Updates)\n\n")
+			if !isRaw {
+				contentBuilder.WriteString("# 📥 Context Inbox (Pending Updates)\n\n")
+			}
 			if content, err := fs.ReadFile(".context/inbox.md"); err == nil {
 				contentBuilder.Write(content)
-			} else {
+			} else if !isRaw {
 				contentBuilder.WriteString("_Inbox empty._\n")
 			}
 		} else if viewArchived {
-			contentBuilder.WriteString("# 📦 Archived Tracks\n\n")
+			if !isRaw {
+				contentBuilder.WriteString("# 📦 Archived Tracks\n\n")
+			}
 			entries, err := fs.ReadDir(".context/archive")
 			if err == nil {
 				found := false
 				for _, entry := range entries {
 					if entry.IsDir() {
 						cleanName := stripTimestamp(entry.Name())
-						contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", cleanName))
+						if isRaw {
+							contentBuilder.WriteString(cleanName + "\n")
+						} else {
+							contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", cleanName))
+						}
 						found = true
 					}
 				}
-				if !found {
+				if !found && !isRaw {
 					contentBuilder.WriteString("_No archived tracks._\n")
 				}
-			} else {
+			} else if !isRaw {
 				contentBuilder.WriteString("_No archive directory found._\n")
 			}
 		} else {
-			contentBuilder.WriteString("# 🟢 Active Tracks\n\n")
+			if !isRaw {
+				contentBuilder.WriteString("# 🟢 Active Tracks\n\n")
+			}
 			entries, err := fs.ReadDir(".context/tracks")
 			if err == nil {
 				found := false
 				for _, entry := range entries {
 					if entry.IsDir() {
-						contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", entry.Name()))
+						if isRaw {
+							contentBuilder.WriteString(entry.Name() + "\n")
+						} else {
+							contentBuilder.WriteString(fmt.Sprintf("* **%s**\n", entry.Name()))
+						}
 						found = true
 					}
 				}
-				if !found {
+				if !found && !isRaw {
 					contentBuilder.WriteString("_No active tracks._\n")
 				}
-			} else {
+			} else if !isRaw {
 				contentBuilder.WriteString("_No tracks directory found._\n")
 			}
 		}
