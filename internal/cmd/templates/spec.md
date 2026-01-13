@@ -1,18 +1,15 @@
 # Track: {{.TrackName}}
-**Target Spec:** .context/specs/TODO/spec.md
-
-## Context
-(Links to relevant files)
 
 ## Proposed Changes
+
 ### ADDED Requirements
-* **Requirement: Feature Name**
-    * The system SHALL ...
-    * #### Scenario: Happy Path
-        * Given ...
-        * When ...
-        * Then ...
+* WHEN [trigger condition], the system SHALL [expected behavior]
+* WHILE [system state], the system SHALL [expected behavior]
+* WHERE [feature/location], the system SHALL [expected behavior]
+* IF [optional condition], THEN the system SHALL [expected behavior]
 
 ### MODIFIED Requirements
-* **Requirement: Existing Feature**
-    * (Copy current text and show changes)
+* WHEN [trigger condition], the system SHALL [new behavior] (previously: [old behavior])
+
+## Relevant Files
+* `path/to/relevant/file.ext` - Brief description of relevance

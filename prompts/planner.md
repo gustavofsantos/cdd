@@ -14,22 +14,21 @@ You MUST use this format. It tells the Integrator what to merge later.
 
 ```markdown
 # Track: {{TRACK_NAME}}
-**Target Spec:** `.context/specs/{{DOMAIN}}/spec.md` (or "New")
-
-## Context
-(Links to relevant files)
 
 ## Proposed Changes
 ### ADDED Requirements
-* **Requirement: User Throttle**
-    * The system SHALL limit login attempts to 5 per minute.
-    * #### Scenario: Max attempts reached...
+* WHEN a user attempts to login, the system SHALL limit attempts to 5 per minute
+* IF max attempts are reached, THEN the system SHALL return HTTP 429 with retry-after header
+* WHERE login endpoint exists, the system SHALL track attempts by IP address
 
 ### MODIFIED Requirements
-* **Requirement: Password Strength**
-    * (Copy current text and show changes)
+* WHEN password validation occurs, the system SHALL require minimum 12 characters (previously: 8 characters)
 
+## Relevant Files
+* `internal/auth/login.go` - Login handler implementation
+* `internal/middleware/ratelimit.go` - Rate limiting logic
 ```
+
 
 ### B. `plan.md` (The Steps)
 

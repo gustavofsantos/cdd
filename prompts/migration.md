@@ -17,10 +17,12 @@
 ## 2. The Spec Transformation (Refactoring)
 For each item identified as a **Capability**:
 1.  **Read:** Read the legacy file/text.
-2.  **Transform:** Rewrite the content into the **OpenSpec Standard**:
-    * **Legacy:** "The system should..." -> **New:** `### Requirement: <Title>`
-    * **Legacy:** Bullet points -> **New:** `#### Scenario: <Name>` (Strict Gherkin).
+2.  **Transform:** Rewrite the content into **EARS Notation** (Easy Approach to Requirements Syntax):
+    * **Legacy:** "The system should..." → **New:** `WHEN [trigger], the system SHALL [behavior]`
+    * **Legacy:** "User can..." → **New:** `WHERE [feature], the system SHALL [behavior]`
+    * **Legacy:** Bullet points → **New:** EARS patterns (WHEN/WHILE/WHERE/IF...THEN)
 3.  **Persist:** Create the file `.context/specs/<domain>/spec.md`.
+
 
 ## 3. Global Cleanup
 1.  **Update Product:** Rewrite `.context/product.md` to reference the new `specs/` directory instead of listing features inline.
