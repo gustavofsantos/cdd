@@ -163,3 +163,47 @@ func TestArchiveCmd_TimeTracking(t *testing.T) {
 		t.Errorf("expected output to contain duration, got: %s", output)
 	}
 }
+
+func TestArchiveCmd_InboxIntegration(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	trackName := "inbox-track"
+	trackDir := ".context/tracks/" + trackName
+
+	specContent := "Spec Content for Inbox"
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte(specContent), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
+
+	// Pre-existing inbox
+	_ = fs.MkdirAll(".context", 0755)
+	_ = fs.WriteFile(".context/inbox.md", []byte("Existing Data"), 0644)
+
+	command := cmd.NewArchiveCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+
+	command.SetArgs([]string{trackName})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	// Verify inbox content
+	inboxContent, err := fs.ReadFile(".context/inbox.md")
+	if err != nil {
+		t.Fatalf("expected inbox to exist")
+	}
+	contentStr := string(inboxContent)
+	if !strings.Contains(contentStr, "Existing Data") {
+		t.Errorf("expected original inbox content to be preserved")
+	}
+	if !strings.Contains(contentStr, specContent) {
+		t.Errorf("expected spec content to be appended")
+	}
+	// Check for timestamp/header
+	if !strings.Contains(contentStr, "Archived at:") {
+		t.Errorf("expected header with timestamp")
+	}
+	if !strings.Contains(contentStr, "\n---\n") {
+		t.Errorf("expected separator")
+	}
+}

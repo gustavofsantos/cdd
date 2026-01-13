@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -66,7 +67,31 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 				}
 			}
 
-			// 2. Cleanup Legacy Files
+			// 2. Archive Spec to Inbox
+			specFile := filepath.Join(src, "spec.md")
+			if _, err := fs.Stat(specFile); err == nil {
+				content, err := fs.ReadFile(specFile)
+				if err != nil {
+					return fmt.Errorf("Error reading spec.md: %v", err)
+				}
+
+				inboxFile := filepath.Join(".context", "inbox.md")
+				f, err := fs.OpenFile(inboxFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+				if err != nil {
+					return fmt.Errorf("Error opening inbox.md: %v", err)
+				}
+
+				timestamp := time.Now().Format("2006-01-02 15:04:05")
+				entry := fmt.Sprintf("\n---\n###### Archived at: %s | Track: %s\n\n%s\n", timestamp, trackName, string(content))
+
+				if _, err := f.WriteString(entry); err != nil {
+					f.Close()
+					return fmt.Errorf("Error appending to inbox.md: %v", err)
+				}
+				f.Close()
+			}
+
+			// 3. Cleanup Legacy Files
 			filesToDelete := []string{"scratchpad.md", "context_updates.md"}
 			for _, f := range filesToDelete {
 				_ = fs.Remove(filepath.Join(src, f))
