@@ -15,6 +15,7 @@ The `view` command provides a dashboard for monitoring active development tracks
 - When a `<track-name>` argument is provided, `cdd view` shall display the "Next Tasks" from that track's `plan.md`.
 - When a `<track-name>` argument and the `--spec` flag are provided, `cdd view` shall display the content of that track's `spec.md`.
 - Where the `--archived` flag is used with a `<track-name>`, `cdd view` shall lookup the track in `.context/archive/` instead of `.context/tracks/`.
+- When a `<track-name>` argument and the `--plan` flag are provided, `cdd view` shall display the content of that track's `plan.md`.
 
 ### 2.3 Output Modes
 - When the output is not a TTY (terminal), the system shall default to raw output mode.

@@ -154,8 +154,15 @@ func buildViewMarkdown(fs platform.FileSystem, args []string) (string, error) {
 			} else {
 				contentBuilder.WriteString("_Missing spec.md_\n")
 			}
+		} else if viewPlan {
+			contentBuilder.WriteString("## 📋 Plan\n")
+			if content, err := fs.ReadFile(filepath.Join(trackDir, "plan.md")); err == nil {
+				contentBuilder.Write(content)
+			} else {
+				contentBuilder.WriteString("_Missing plan.md_\n")
+			}
 		} else {
-			// Default to plan/Next Tasks unless viewPlan is explicitly set
+			// Default to plan/Next Tasks
 			contentBuilder.WriteString("## 📋 Next Tasks\n")
 			if content, err := fs.ReadFile(filepath.Join(trackDir, "plan.md")); err == nil {
 				tasks := extractNextTasks(string(content))

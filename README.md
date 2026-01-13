@@ -12,14 +12,22 @@ The CDD Tool Suite is a CLI application designed to facilitate Context-Driven De
 
 ## Why CDD? (The Rationale)
 
-In the rapidly evolving world of AI-assisted programming, noise is the enemy of efficiency. While modern AI models can write excellent code, they often get "lost" when navigating large, legacy, or high-entropy projects. Furthermore, the operational cost of using massive flagship models for every task can be prohibitive—especially in regions where API costs are a significant factor.
+In the rapidly evolving world of AI-assisted programming, noise is the enemy of efficiency. While modern AI models can write excellent code, they often get "lost" when navigating large, legacy, or high-entropy projects. Furthermore, the operational cost of using massive flagship models for every task can be prohibitive.
 
 **Context-Driven Development (CDD)** is an attempt to solve these challenges through **Context Engineering**.
 
 ### The Strategist and the Tactician
-CDD is built on a fundamental power dynamic: **The Engineer is the Strategist; the AI is the Tactician.** 
-- You remain in charge, commanding the changes and ensuring the strategy is sound. 
+CDD is built on a fundamental power dynamic: **The Engineer is the Strategist; the AI is the Tactician.**
+- You remain in charge, commanding the changes and ensuring the strategy is sound.
 - The AI executes the tactics, guided by a strict protocol that prevents it from drifting off-course.
+
+### The CDD State Machine
+The workflow is governed by a strict state machine with four distinct phases. The AI adopts a specific persona for each phase:
+
+1.  **Analyst (Phase 0)**: Interviews the user to understand the intent and frames the problem in a `spec.md`.
+2.  **Architect (Phase 1)**: Designs the technical solution and creates a step-by-step TDD `plan.md`.
+3.  **Executor (Phase 2+)**: Implements the plan using a Red/Green/Refactor loop, checking off items one by one.
+4.  **Integrator**: Merges the finished work into the global context and cleans up the inbox.
 
 ### Premium Value from Budget Models
 By providing a "file-based extended memory" and a rigorous step-by-step workflow, CDD enables **small models** (like Gemini Flash or Claude Haiku) to perform at a level usually reserved for much larger models. It’s about process over brute force.
@@ -29,9 +37,9 @@ This project carries the DNA of specifications-driven workflows like **OpenSpec*
 
 ## Target Audience
 
-- **Experienced Engineers**: Those who want to leverage AI without abdicated their role as the project architect.
+- **Experienced Engineers**: Those who want to leverage AI without abdicating their role as the project architect.
 - **Context-Engineers**: Developers who believe that well-structured context is the key to reliable AI outputs.
-- **Cost-Conscious Teams**: Teams looking to maximize their AI ROI by getting the most out of efficient, low-latency models.
+- **Cost-Conscious Teams**: Teams looking to maximize their AI ROI.
 - **Legacy Navigators**: Anyone working in "noisy" brownfield projects where AI traditionally struggles to stay aligned.
 
 ## Quick Start: Your First Task
@@ -68,7 +76,7 @@ Now that your environment is initialized, you are ready to start. The `setup` tr
 cdd prompts --bootstrap
 ```
 
-Copy the output and paste it as your first message to the AI. This will instruct the AI (Role: Principal Archaeologist) to begin the setup process.
+Copy the output and paste it as your first message to the AI. This will instruct the AI to begin the setup process.
 
 ### 4. The Workflow Loop
 The AI will now guide you through the **CDD Loop**. Your job is to be the conduit between the AI and the terminal.
@@ -101,15 +109,15 @@ This moves the track to the archive and promotes the findings to the global cont
   ```bash
   cdd archive <track-name>
   ```
-  Moves the track to `.context/archive` and promotes the specification.
+  Moves the track to `.context/archive` and promotes the specification to the Inbox.
 
 ### Working in a Track
 
-- **View Plan**:
+- **View Plan (for Agent)**:
   ```bash
   cdd recite <track-name>
   ```
-  Displays the current status of the plan. Always run this before asking the AI for the next step.
+  Displays the current status of the plan with specific instructions for the agent.
 
 - **Log Decision**:
   ```bash
@@ -117,61 +125,43 @@ This moves the track to the archive and promotes the findings to the global cont
   ```
   Records a decision in `decisions.md`.
 
-- **Dump Output**:
-  ```bash
-  command | cdd dump <track-name>
-  ```
-  Pipes the output of a command directly to `scratchpad.md` so the AI can read it.
+
 
 ### Prompt Commands
 
 You can retrieve the core prompts using the dedicated `prompts` command:
 
-- **System Prompt** (for the AI Agent):
-  ```bash
-  cdd prompts --system
-  ```
-- **Bootstrap Prompt** (to start the `setup` track):
-  ```bash
-  cdd prompts --bootstrap
-  ```
-- **Inbox Prompt** (to process context updates):
-  ```bash
-  cdd prompts --inbox
-  ```
-- **Executor Prompt** (for task execution):
-  ```bash
-  cdd prompts --executor
-  ```
-- **Planner Prompt** (for high-level planning):
-  ```bash
-  cdd prompts --planner
-  ```
-- **Calibration Prompt** (for workflow configuration):
-  ```bash
-  cdd prompts --calibration
-  ```
-- **Integrator Prompt** (for merging and archival):
-  ```bash
-  cdd prompts --integrator
-  ```
+- **System Prompt**: `cdd prompts --system`
+- **Bootstrap Prompt**: `cdd prompts --bootstrap`
+- **Inbox Prompt** (Context Gardener): `cdd prompts --inbox`
+- **Executor Prompt**: `cdd prompts --executor`
+- **Planner Prompt**: `cdd prompts --planner`
+- **Calibration Prompt**: `cdd prompts --calibration`
+- **Integrator Prompt**: `cdd prompts --integrator`
 
 ### Viewing Status
 
-- **List Tracks**: `cdd list` - Lists active tracks.
-- **List Archived**: `cdd list --archived` - Lists archived tracks.
-- **View Dashboard**: `cdd view` - Shows a project dashboard.
-- **View Track**: `cdd view <track-name>` - Shows details for a specific track.
+### Viewing Status / Dashboard
+
+- **Dashboard**: `cdd view` 
+  Shows active tracks. Use `--archived` to see history. Use `--inbox` to see pending updates.
+
+- **Track Details**: `cdd view <track-name> [flags]`
+  **Flags:**
+  - `--spec`: Show the track specification.
+  - `--plan`: Show the track plan.
+  - `--log`: Show the decision log.
+  - `--raw`: Output raw text (pipe-friendly).
 
 ## Project Structure
 
 The tool manages a `.context` directory with the following structure:
 
-- `tracks/`: Active workspaces.
-- `archive/`: Completed and archived workspaces.
-- `features/`: Living documentation (promoted specifications).
-- `product.md`: Product context.
-- `tech-stack.md`: Technology stack context.
-- `workflow.md`: Workflow context.
-- `patterns.md`: Project patterns.
-- `inbox.md`: Pending context updates.
+- `tracks/`: Active workspaces (ephemeral).
+- `archive/`: Completed and archived workspaces (history).
+- `specs/`: Living documentation (promoted specifications, functional requirements).
+- `product.md`: Product vision and global goals.
+- `tech-stack.md`: Technology stack and constraints.
+- `architecture.md`: High-level architecture and boundaries.
+- `inbox.md`: Pending context updates waiting to be integrated.
+
