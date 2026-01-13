@@ -21,6 +21,6 @@ func CheckInboxSize(fs platform.FileSystem, cmd *cobra.Command) {
 	// Some Split implementations might return extra line if ends with \n,
 	// but for a reminder this is fine.
 	if lineCount > 50 {
-		cmd.Printf("\n⚠️ Your .context/inbox.md has %d lines. It's getting large! Run 'cdd init --inbox-prompt' to get the cleaner prompt and run it with your agent to consolidate context.\n", lineCount)
+		cmd.Printf("\n⚠️ Your .context/inbox.md has %d lines. It's getting large! Use the Integrator role to consolidate context.\n", lineCount)
 	}
 }

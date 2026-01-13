@@ -16,25 +16,11 @@ func TestPromptsCommand(t *testing.T) {
 			args: []string{"prompts", "--system"},
 			want: "AGENT SYSTEM PROMPT",
 		},
-		{
-			name: "executor prompt",
-			args: []string{"prompts", "--executor"},
-			want: "AGENT EXECUTOR PROMPT",
-		},
-		{
-			name: "planner prompt",
-			args: []string{"prompts", "--planner"},
-			want: "AGENT PLANNER PROMPT",
-		},
+
 		{
 			name: "calibration prompt",
 			args: []string{"prompts", "--calibration"},
 			want: "CDD Workflow Calibrator",
-		},
-		{
-			name: "integrator prompt",
-			args: []string{"prompts", "--integrator"},
-			want: "AGENT SUB-PROMPT: INTEGRATOR",
 		},
 	}
 
