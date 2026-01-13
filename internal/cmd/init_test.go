@@ -29,22 +29,40 @@ func TestInitCommand(t *testing.T) {
 		t.Fatalf("Execute() failed: %v", err)
 	}
 
-	// Verify .context directory and files were created
+	// Verify .context directory structure was created
 	contextDir := filepath.Join(tmpDir, ".context")
 	if _, err := os.Stat(contextDir); os.IsNotExist(err) {
 		t.Errorf(".context directory was not created")
 	}
 
-	files := []string{
-		"product.md",
-		"tech-stack.md",
-		"workflow.md",
-		"patterns.md",
-		"inbox.md",
+	// Verify subdirectories
+	subdirs := []string{
+		".context/tracks",
+		".context/archive",
+		".context/specs",
 	}
-	for _, f := range files {
-		if _, err := os.Stat(filepath.Join(contextDir, f)); os.IsNotExist(err) {
-			t.Errorf(".context/%s was not created", f)
+	for _, d := range subdirs {
+		if _, err := os.Stat(filepath.Join(tmpDir, d)); os.IsNotExist(err) {
+			t.Errorf("%s directory was not created", d)
+		}
+	}
+
+	// Verify setup track was created
+	setupDir := filepath.Join(tmpDir, ".context/tracks/setup")
+	if _, err := os.Stat(setupDir); os.IsNotExist(err) {
+		t.Errorf(".context/tracks/setup directory was not created")
+	}
+
+	// Verify setup track files
+	trackFiles := []string{
+		"spec.md",
+		"plan.md",
+		"decisions.md",
+	}
+	for _, f := range trackFiles {
+		filePath := filepath.Join(setupDir, f)
+		if _, err := os.Stat(filePath); os.IsNotExist(err) {
+			t.Errorf(".context/tracks/setup/%s was not created", f)
 		}
 	}
 }
