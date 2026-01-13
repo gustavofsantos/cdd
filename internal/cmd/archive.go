@@ -95,19 +95,28 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 				}
 			}
 
-			// 3. Time Tracking (Calculate Duration)
+			// 3. Time Tracking (Calculate Duration & Save end time)
 			metaFile := filepath.Join(src, "metadata.json")
 			if _, err := fs.Stat(metaFile); err == nil {
 				content, err := fs.ReadFile(metaFile)
 				if err == nil {
 					var meta map[string]interface{}
 					if err := json.Unmarshal(content, &meta); err == nil {
+						// Add ended timestamp
+						meta["archived_at"] = time.Now().Format(time.RFC3339)
+
 						if startStr, ok := meta["started_at"].(string); ok {
 							startTime, err := time.Parse(time.RFC3339, startStr)
 							if err == nil {
 								duration := time.Since(startTime)
 								cmd.Printf("⏱️  Duration: %s\n", duration.Round(time.Second))
 							}
+						}
+
+						// Save back to metadata.json
+						metaBytes, err := json.MarshalIndent(meta, "", "  ")
+						if err == nil {
+							_ = fs.WriteFile(metaFile, metaBytes, 0644)
 						}
 					}
 				}
