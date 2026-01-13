@@ -1,0 +1,2 @@
+# Decision Log
+> Created {{.CreatedAt}}

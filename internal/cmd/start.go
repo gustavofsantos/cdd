@@ -1,16 +1,39 @@
 package cmd
 
 import (
+	"bytes"
+	"embed"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
+	"text/template"
 	"time"
 
 	"cdd/internal/platform"
 
 	"github.com/spf13/cobra"
 )
+
+//go:embed templates/*
+var trackTemplates embed.FS
+
+type trackData struct {
+	TrackName string
+	CreatedAt string
+}
+
+func renderTrackTemplate(name string, nameInFS string, data trackData) ([]byte, error) {
+	tmpl, err := template.ParseFS(trackTemplates, "templates/"+nameInFS)
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse template %s: %w", name, err)
+	}
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		return nil, fmt.Errorf("failed to execute template %s: %w", name, err)
+	}
+	return buf.Bytes(), nil
+}
 
 func NewStartCmd(fs platform.FileSystem) *cobra.Command {
 	return &cobra.Command{
@@ -31,39 +54,35 @@ Usage: cdd start <track-name>`,
 				return fmt.Errorf("Error creating track directory: %v", err)
 			}
 
-			// Spec Template (v4.1 Delta Spec)
-			specTemplate := fmt.Sprintf(`# Track: %s
-**Target Spec:** .context/specs/TODO/spec.md
+			data := trackData{
+				TrackName: trackName,
+				CreatedAt: time.Now().Format("Mon Jan 2 15:04:05 MST 2006"),
+			}
 
-## Context
-(Links to relevant files)
-
-## Proposed Changes
-### ADDED Requirements
-* **Requirement: Feature Name**
-    * The system SHALL ...
-    * #### Scenario: Happy Path
-        * Given ...
-        * When ...
-        * Then ...
-
-### MODIFIED Requirements
-* **Requirement: Existing Feature**
-    * (Copy current text and show changes)
-`, trackName)
-			if err := fs.WriteFile(filepath.Join(trackDir, "spec.md"), []byte(specTemplate), 0644); err != nil {
+			// Spec Template
+			specContent, err := renderTrackTemplate("spec.md", "spec.md", data)
+			if err != nil {
+				return err
+			}
+			if err := fs.WriteFile(filepath.Join(trackDir, "spec.md"), specContent, 0644); err != nil {
 				return fmt.Errorf("failed to write spec.md: %w", err)
 			}
 
-			// Plan Template (v4.1 TDD Steps)
-			planContent := fmt.Sprintf("# Plan for %s\n[ ] 🔴 Test: (Red)\n[ ] 🟢 Impl: (Green)\n[ ] 🔵 Refactor: (Refactor)\n", trackName)
-			if err := fs.WriteFile(filepath.Join(trackDir, "plan.md"), []byte(planContent), 0644); err != nil {
+			// Plan Template
+			planContent, err := renderTrackTemplate("plan.md", "plan.md", data)
+			if err != nil {
+				return err
+			}
+			if err := fs.WriteFile(filepath.Join(trackDir, "plan.md"), planContent, 0644); err != nil {
 				return fmt.Errorf("failed to write plan.md: %w", err)
 			}
 
 			// Decisions Log
-			decisionsContent := fmt.Sprintf("# Decision Log\n> Created %s\n", time.Now().Format("Mon Jan 2 15:04:05 MST 2006"))
-			if err := fs.WriteFile(filepath.Join(trackDir, "decisions.md"), []byte(decisionsContent), 0644); err != nil {
+			decisionsContent, err := renderTrackTemplate("decisions.md", "decisions.md", data)
+			if err != nil {
+				return err
+			}
+			if err := fs.WriteFile(filepath.Join(trackDir, "decisions.md"), decisionsContent, 0644); err != nil {
 				return fmt.Errorf("failed to write decisions.md: %w", err)
 			}
 

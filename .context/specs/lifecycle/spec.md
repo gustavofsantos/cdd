@@ -18,7 +18,12 @@ The system MUST support an isolated "Track" lifecycle using the "Pull Request Pa
 - **Given** an initialized CDD environment
 - **When** I run `cdd start feature-name`
 - **Then** a directory `.context/tracks/feature-name/` should be created
-- **And** it should contain `spec.md`, `plan.md`, and `decisions.md` templates.
+- **And** it should contain `spec.md`, `plan.md`, and `decisions.md` templates loaded from embedded files.
+
+## Requirement: Template Externalization
+The CLI SHALL use external template files instead of hardcoded strings for track initialization.
+- Templates MUST be embedded into the binary using `go:embed`.
+- Templates SHOULD support variable substitution (e.g., using `text/template`).
 
 #### Scenario: Archiving a track
 - **Given** an active track that has been integrated
