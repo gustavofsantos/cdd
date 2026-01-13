@@ -16,3 +16,6 @@ var Executor string
 
 //go:embed planner.md
 var Planner string
+
+//go:embed calibration.md
+var Calibration string

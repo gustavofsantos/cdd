@@ -12,4 +12,7 @@ func TestExecutorAndPlannerPrompts(t *testing.T) {
 	if prompts.Planner == "" {
 		t.Error("Planner prompt is empty")
 	}
+	if prompts.Calibration == "" {
+		t.Error("Calibration prompt is empty")
+	}
 }

@@ -16,13 +16,15 @@ var bootstrapPrompt = prompts.Bootstrap
 var inboxPrompt = prompts.Inbox
 var executorPrompt = prompts.Executor
 var plannerPrompt = prompts.Planner
+var calibrationPrompt = prompts.Calibration
 
 var (
-	showSystemPrompt    bool
-	showBootstrapPrompt bool
-	showInboxPrompt     bool
-	showExecutorPrompt  bool
-	showPlannerPrompt   bool
+	showSystemPrompt      bool
+	showBootstrapPrompt   bool
+	showInboxPrompt       bool
+	showExecutorPrompt    bool
+	showPlannerPrompt     bool
+	showCalibrationPrompt bool
 )
 
 var initCmd = &cobra.Command{
@@ -35,7 +37,8 @@ Flags:
   --bootstrap-prompt  Output the Architect Prompt for initial setup.
   --inbox-prompt      Output the Context Gardener Prompt for processing the inbox.
   --executor-prompt   Output the Executor Prompt for task execution.
-  --planner-prompt    Output the Planner Prompt for high-level planning.`,
+  --planner-prompt    Output the Planner Prompt for high-level planning.
+  --calibration-prompt Output the Calibration Prompt for workflow configuration.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if showSystemPrompt {
 			cmd.Println(systemPrompt)
@@ -55,6 +58,10 @@ Flags:
 		}
 		if showPlannerPrompt {
 			cmd.Println(plannerPrompt)
+			return
+		}
+		if showCalibrationPrompt {
+			cmd.Println(calibrationPrompt)
 			return
 		}
 
@@ -134,5 +141,6 @@ func init() {
 	initCmd.Flags().BoolVar(&showInboxPrompt, "inbox-prompt", false, "Output the Context Gardener Prompt for processing the inbox.")
 	initCmd.Flags().BoolVar(&showExecutorPrompt, "executor-prompt", false, "Output the Executor Prompt for task execution.")
 	initCmd.Flags().BoolVar(&showPlannerPrompt, "planner-prompt", false, "Output the Planner Prompt for high-level planning.")
+	initCmd.Flags().BoolVar(&showCalibrationPrompt, "calibration-prompt", false, "Output the Calibration Prompt for workflow configuration.")
 	rootCmd.AddCommand(initCmd)
 }

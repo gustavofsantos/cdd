@@ -21,6 +21,11 @@ func TestInitFlags(t *testing.T) {
 			args: []string{"init", "--planner-prompt"},
 			want: "Planner Prompt",
 		},
+		{
+			name: "calibration prompt flag",
+			args: []string{"init", "--calibration-prompt"},
+			want: "Calibration Prompt",
+		},
 	}
 
 	for _, tt := range tests {

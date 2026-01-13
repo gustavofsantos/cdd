@@ -147,6 +147,10 @@ You can retrieve the core prompts using the `init` command flags:
   ```bash
   cdd init --planner-prompt
   ```
+- **Calibration Prompt** (for workflow configuration):
+  ```bash
+  cdd init --calibration-prompt
+  ```
 
 ### Viewing Status
 
