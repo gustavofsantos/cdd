@@ -28,17 +28,42 @@ var initCmd = &cobra.Command{
 			}
 		}
 
+		data := trackData{
+			TrackName: "setup",
+			CreatedAt: time.Now().Format("Mon Jan 2 15:04:05 MST 2006"),
+		}
+
+		// Create default files
+		files := []struct {
+			Destination string
+			Template    string
+		}{
+			{".context/product.md", "init_product.md"},
+			{".context/tech-stack.md", "init_tech-stack.md"},
+			{".context/architecture.md", "init_architecture.md"},
+		}
+
+		for _, f := range files {
+			if _, err := os.Stat(f.Destination); os.IsNotExist(err) {
+				content, err := renderTrackTemplate(filepath.Base(f.Destination), f.Template, data)
+				if err != nil {
+					fmt.Printf("Error rendering %s: %v\n", f.Destination, err)
+					continue
+				}
+				if err := os.WriteFile(f.Destination, content, 0644); err != nil {
+					fmt.Printf("Error writing %s: %v\n", f.Destination, err)
+				} else {
+					cmd.Printf("Created '%s'.\n", f.Destination)
+				}
+			}
+		}
+
 		// Auto-start setup track
 		setupDir := ".context/tracks/setup"
 		if _, err := os.Stat(setupDir); os.IsNotExist(err) {
 			if err := os.MkdirAll(setupDir, 0755); err != nil {
 				fmt.Printf("Error creating setup track: %v\n", err)
 				os.Exit(1)
-			}
-
-			data := trackData{
-				TrackName: "setup",
-				CreatedAt: time.Now().Format("Mon Jan 2 15:04:05 MST 2006"),
 			}
 
 			// Spec

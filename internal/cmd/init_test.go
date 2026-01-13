@@ -47,6 +47,18 @@ func TestInitCommand(t *testing.T) {
 		}
 	}
 
+	// Verify global files
+	globalFiles := []string{
+		".context/product.md",
+		".context/tech-stack.md",
+		".context/architecture.md",
+	}
+	for _, f := range globalFiles {
+		if _, err := os.Stat(filepath.Join(tmpDir, f)); os.IsNotExist(err) {
+			t.Errorf("%s was not created", f)
+		}
+	}
+
 	// Verify setup track was created
 	setupDir := filepath.Join(tmpDir, ".context/tracks/setup")
 	if _, err := os.Stat(setupDir); os.IsNotExist(err) {
