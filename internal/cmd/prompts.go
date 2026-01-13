@@ -13,6 +13,7 @@ var (
 	showExecPrompt  bool
 	showPlanPrompt  bool
 	showCalibPrompt bool
+	showIntegPrompt bool
 )
 
 var promptsCmd = &cobra.Command{
@@ -44,6 +45,10 @@ var promptsCmd = &cobra.Command{
 			cmd.Println(prompts.Calibration)
 			return
 		}
+		if showIntegPrompt {
+			cmd.Println(prompts.Integrator)
+			return
+		}
 
 		// If no flag provided, show help
 		_ = cmd.Help()
@@ -57,6 +62,7 @@ func init() {
 	promptsCmd.Flags().BoolVar(&showExecPrompt, "executor", false, "Output the Executor Prompt.")
 	promptsCmd.Flags().BoolVar(&showPlanPrompt, "planner", false, "Output the Planner Prompt.")
 	promptsCmd.Flags().BoolVar(&showCalibPrompt, "calibration", false, "Output the Calibration Prompt.")
+	promptsCmd.Flags().BoolVar(&showIntegPrompt, "integrator", false, "Output the Integrator Prompt.")
 
 	rootCmd.AddCommand(promptsCmd)
 }

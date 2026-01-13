@@ -9,15 +9,15 @@ import (
 
 func TestSystemPromptIsLean(t *testing.T) {
 	requiredPhrases := []string{
-		"Tests are Truth",
-		"Treat this file as documentation",
-		"Spec Cleanup",
-		"## Test Reference",
+		"Spec-Driven Philosophy",
+		"Tracks are Ephemeral",
+		"Specs are Eternal",
+		"The Cycle",
 	}
 
 	for _, phrase := range requiredPhrases {
 		if !strings.Contains(prompts.System, phrase) {
-			t.Errorf("System prompt missing lean phase: %q", phrase)
+			t.Errorf("System prompt missing philosophy phase: %q", phrase)
 		}
 	}
 }
@@ -45,23 +45,16 @@ func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 
 }
 
-func TestSystemPromptHasCommitOften(t *testing.T) {
-
+func TestSystemPromptConstraints(t *testing.T) {
 	requiredPhrases := []string{
-
-		"Commit Often",
-
-		"include the commit hash",
+		"Global Constraints",
+		"NO Manual Lifecycle",
+		"NO Global Edits",
 	}
 
 	for _, phrase := range requiredPhrases {
-
 		if !strings.Contains(prompts.System, phrase) {
-
-			t.Errorf("System prompt missing commit often mandate: %q", phrase)
-
+			t.Errorf("System prompt missing constraint: %q", phrase)
 		}
-
 	}
-
 }

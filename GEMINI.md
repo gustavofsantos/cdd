@@ -19,6 +19,7 @@ Run `cdd recite` first. Then route based on intent:
 | :--- | :--- | :--- |
 | **Design/Plan** ("New Feature", "Refactor") | **PLANNER** | `cdd prompts --planner` |
 | **Build/Test** ("Implement", "Fix Bug") | **EXECUTOR** | `cdd prompts --executor` |
+| **Merge/Clean-up** ("Integrate Changes")| **INTEGRATOR**| `cdd prompts --integrator` |
 | **Setup** ("Configure tools/style") | **CALIBRATOR**| `cdd prompts --calibration` |
 
 ## 3. The Hotswap Protocol

@@ -31,6 +31,11 @@ func TestPromptsCommand(t *testing.T) {
 			args: []string{"prompts", "--calibration"},
 			want: "CDD Workflow Calibrator",
 		},
+		{
+			name: "integrator prompt",
+			args: []string{"prompts", "--integrator"},
+			want: "AGENT SUB-PROMPT: INTEGRATOR",
+		},
 	}
 
 	for _, tt := range tests {

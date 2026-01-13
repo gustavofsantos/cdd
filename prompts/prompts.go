@@ -19,3 +19,6 @@ var Planner string
 
 //go:embed calibration.md
 var Calibration string
+
+//go:embed integrator.md
+var Integrator string

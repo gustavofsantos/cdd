@@ -151,6 +151,10 @@ You can retrieve the core prompts using the dedicated `prompts` command:
   ```bash
   cdd prompts --calibration
   ```
+- **Integrator Prompt** (for merging and archival):
+  ```bash
+  cdd prompts --integrator
+  ```
 
 ### Viewing Status
 
