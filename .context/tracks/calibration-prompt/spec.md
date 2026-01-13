@@ -12,14 +12,6 @@ Integrate the new `calibration` prompt into the application, making it accessibl
 ## Context Analysis
 The application has a pattern for embedding prompts in the `prompts` package and exposing them through the `init` command. A new prompt `calibration.md` was added and needs to be wired into the system.
 
-## Scenarios
-
-### Scenario 1: Prompt is embedded in the Go package
-- **Given** file `prompts/calibration.md` exists.
-- **When** the `prompts` package is compiled.
-- **Then** `prompts.Calibration` should contain the contents of the file.
-
-### Scenario 2: CLI provides flag for the calibration prompt
-- **Given** the application is compiled.
-- **When** I run `cdd init --calibration-prompt`.
-- **Then** it should output the content of `calibration.md`.
+## Test Reference
+- `prompts/integration_test.go`: Verifies embedding of `prompts.Calibration`.
+- `internal/cmd/init_test.go`: Verifies CLI flag `--calibration-prompt`.
