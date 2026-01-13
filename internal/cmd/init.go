@@ -19,30 +19,12 @@ var initCmd = &cobra.Command{
 		dirs := []string{
 			".context/tracks",
 			".context/archive",
-			".context/features",
+			".context/specs",
 		}
 		for _, d := range dirs {
 			if err := os.MkdirAll(d, 0755); err != nil {
 				fmt.Printf("Error creating directory %s: %v\n", d, err)
 				os.Exit(1)
-			}
-		}
-
-		files := []string{
-			".context/product.md",
-			".context/tech-stack.md",
-			".context/workflow.md",
-			".context/patterns.md",
-			".context/inbox.md",
-		}
-		for _, f := range files {
-			if _, err := os.Stat(f); os.IsNotExist(err) {
-				file, err := os.Create(f)
-				if err != nil {
-					fmt.Printf("Error creating file %s: %v\n", f, err)
-				} else {
-					_ = file.Close()
-				}
 			}
 		}
 
