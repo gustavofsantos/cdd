@@ -2,34 +2,51 @@
 **Role:** Senior Architect
 **Mode:** PLANNING ONLY
 
-## 0. Local Constraints
-* Check `AGENTS.local.md`.
+## 1. The Spec-First Protocol
+You must define the "Delta" (Change) before work begins.
+1.  **Read:** Check existing specs in `.context/specs/`.
+2.  **Draft:** Create the Track Spec as a *proposal* of changes.
 
-## 1. Spec-First Discovery
-Before drafting a plan, you must understand the existing behavior.
-1.  **Map Capabilities:** Run `ls -F .context/specs/`.
-2.  **Read Behavior:** Read the relevant `spec.md` for the feature you are touching.
-3.  **Pointer-First:** Don't `cat` code yet. Trust the Spec first.
+## 2. The Output Schema (MIMIC THIS)
 
-## 2. The Planning Loop
+### A. `spec.md` (The Delta)
+You MUST use this format. It tells the Integrator what to merge later.
 
-### Phase 1: Cartography
-1.  **Scout:** Locate the "Bounded Context" in the code (`src/...`).
-2.  **Match:** Identify which Living Spec covers this area (e.g., `.context/specs/auth/spec.md`).
+```markdown
+# Track: {{TRACK_NAME}}
+**Target Spec:** `.context/specs/{{DOMAIN}}/spec.md` (or "New")
 
-### Phase 2: The Spec Delta (Proposal)
-Draft `.context/tracks/{{TRACK}}/spec.md`.
-**CRITICAL:** This file is a **DELTA** (Proposal).
-* **Format:**
-    * `## Context`: Links to code files.
-    * `## Proposed Changes`:
-        * `### ADDED Requirement`: New behaviors.
-        * `### MODIFIED Requirement`: Changes to existing logic.
-    * `## Scenarios`: Gherkin (Given/When/Then).
+## Context
+(Links to relevant files)
 
-### Phase 3: The Plan
-Draft `.context/tracks/{{TRACK}}/plan.md` with TDD steps.
+## Proposed Changes
+### ADDED Requirements
+* **Requirement: User Throttle**
+    * The system SHALL limit login attempts to 5 per minute.
+    * #### Scenario: Max attempts reached...
+
+### MODIFIED Requirements
+* **Requirement: Password Strength**
+    * (Copy current text and show changes)
+
+```
+
+### B. `plan.md` (The Steps)
+
+```markdown
+[ ] 🔴 Test: Verify throttle limit (Red)
+[ ] 🟢 Impl: Implement RateLimiter middleware
+[ ] 🔵 Refactor: Optimize storage
+
+```
+
+### C. `decisions.md` (Optional)
+
+Create this ONLY if a major architectural choice is made (e.g., "Chose Redis over Memcached").
+
+* **Format:** `## ADR-001: [Title]` -> Context, Decision, Consequences.
 
 ## 3. The Handshake
-* **Gate:** Ask: *"I have drafted the Spec Proposal. Do you approve?"*
+
+* **Gate:** "Spec Delta and Plan ready. Do you approve?"
 * **Trigger:** On "Yes", run `cdd prompts --executor`.

@@ -16,7 +16,7 @@ func NewStartCmd(fs platform.FileSystem) *cobra.Command {
 	return &cobra.Command{
 		Use:   "start [track-name]",
 		Short: "Create an isolated workspace (Track).",
-		Long: `Creates an isolated workspace so multiple agents/tasks don't collide.
+		Long: `Creates an isolated workspace following the Lean CDD v4.1 protocol.
 Usage: cdd start <track-name>`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -31,41 +31,32 @@ Usage: cdd start <track-name>`,
 				return fmt.Errorf("Error creating track directory: %v", err)
 			}
 
-			// Spec Template
-			specTemplate := fmt.Sprintf(`# Specification: %s
+			// Spec Template (v4.1 Delta Spec)
+			specTemplate := fmt.Sprintf(`# Track: %s
+**Target Spec:** .context/specs/TODO/spec.md
 
-## 1. User Intent (The Goal)
-> [User Input Required]
+## Context
+(Links to relevant files)
 
-## 2. Relevant Context (The Files)
-> [Agent to Populate during Analysis]
-- `+"`path/to/relevant/file.ext`"+`
+## Proposed Changes
+### ADDED Requirements
+* **Requirement: Feature Name**
+    * The system SHALL ...
+    * #### Scenario: Happy Path
+        * Given ...
+        * When ...
+        * Then ...
 
-## 3. Context Analysis (Agent Findings)
-> [Agent to Populate]
-> - Current Behavior:
-> - Proposed Changes:
-
-## 4. Scenarios (Acceptance Criteria)
-> [Agent to Draft based on Intent - Gherkin Style Preferred]
-> Feature: %s
->   Scenario: Happy Path
->     Given ...
->     When ...
->     Then ...
-`, trackName, trackName)
+### MODIFIED Requirements
+* **Requirement: Existing Feature**
+    * (Copy current text and show changes)
+`, trackName)
 			if err := fs.WriteFile(filepath.Join(trackDir, "spec.md"), []byte(specTemplate), 0644); err != nil {
 				return fmt.Errorf("failed to write spec.md: %w", err)
 			}
 
-			// Context Updates Staging File
-			updatesContent := "# Proposed Global Context Updates\n> Add notes here if product.md or tech-stack.md needs updating.\n"
-			if err := fs.WriteFile(filepath.Join(trackDir, "context_updates.md"), []byte(updatesContent), 0644); err != nil {
-				return fmt.Errorf("failed to write context_updates.md: %w", err)
-			}
-
-			// Plan Template
-			planContent := fmt.Sprintf("# Plan for %s\n- [ ] 🗣️ Phase 0: Alignment & Analysis (Fill spec.md)\n- [ ] 📝 Phase 1: Approval (User signs off)\n", trackName)
+			// Plan Template (v4.1 TDD Steps)
+			planContent := fmt.Sprintf("# Plan for %s\n[ ] 🔴 Test: (Red)\n[ ] 🟢 Impl: (Green)\n[ ] 🔵 Refactor: (Refactor)\n", trackName)
 			if err := fs.WriteFile(filepath.Join(trackDir, "plan.md"), []byte(planContent), 0644); err != nil {
 				return fmt.Errorf("failed to write plan.md: %w", err)
 			}
@@ -76,13 +67,7 @@ Usage: cdd start <track-name>`,
 				return fmt.Errorf("failed to write decisions.md: %w", err)
 			}
 
-			// Scratchpad
-			scratchContent := fmt.Sprintf("# Scratchpad for %s\n> Dump raw logs here.\n", trackName)
-			if err := fs.WriteFile(filepath.Join(trackDir, "scratchpad.md"), []byte(scratchContent), 0644); err != nil {
-				return fmt.Errorf("failed to write scratchpad.md: %w", err)
-			}
-
-			// Metadata for Time Tracking
+			// Metadata for Time Tracking (Internal)
 			metadata := map[string]interface{}{
 				"started_at": time.Now().Format(time.RFC3339),
 			}
@@ -94,7 +79,7 @@ Usage: cdd start <track-name>`,
 				return fmt.Errorf("failed to write metadata.json: %w", err)
 			}
 
-			cmd.Printf("Track '%s' initialized.\n", trackName)
+			cmd.Printf("Track '%s' initialized.\n活跃 (Active) Track created with 3-file structure.\n", trackName)
 			return nil
 		},
 	}

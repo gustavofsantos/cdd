@@ -22,10 +22,10 @@ The codebase SHOULD follow established patterns:
 ## Requirement: Development Workflow
 The CDD workflow MUST follow these stages:
 1. **Recite:** Load and review current plan/spec.
-2. **Spec:** Define *what* is being built in a track's `spec.md`.
-3. **Plan:** Define *how* it will be built in `plan.md`.
-4. **Implement:** Write code, preferably following TDD.
-5. **Archive:** Close the track, moving updates to the Global Context via the Inbox.
+2. **Spec:** Define the *Delta* (Additions/Modifications) in `spec.md`.
+3. **Plan:** Define TDD execution steps in `plan.md`.
+4. **Implement:** TDD implementation (Red-Green-Refactor).
+5. **Integrate:** Apply the Delta to Global Specs and Archive.
 
 ## Requirement: Testing Standard
 - **Unit Testing:** Commands and logic MUST be tested using the standard Go `testing` package.
