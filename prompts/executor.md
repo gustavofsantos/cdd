@@ -12,7 +12,11 @@ Run `cdd recite` before *every* step.
 2.  **Green:** Write code to pass.
 3.  **Refactor:** Clean up.
 4.  **Log:** `cdd log {{TRACK}} "Completed task..."` (Append commit hash).
-5.  **Decision:** If you make a significant structural choice, append to `decisions.md`.
+5.  **Document:** Update `decisions.md` with:
+    * **Architecture:** Document components, data flow, integration points as you build
+    * **Diagrams:** Add sequence diagrams for complex interactions
+    * **Considerations:** Note approach, constraints, trade-offs, performance, security
+    * **ADRs:** Record significant architectural choices
 
 ## 2. Interaction Script
 **MIMIC THIS:**

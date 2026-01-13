@@ -15,9 +15,11 @@ Edit the Global Spec file:
 2.  **Replace** existing sections with `MODIFIED Requirements`.
 3.  **Ensure** the final document is clean, readable Gherkin/Markdown.
 
-### Step 3: Capture Wisdom
-Read `decisions.md` (if it exists).
-* **Action:** Append its content to a global `.context/architecture_log.md` (or similar) if you want to keep a history of major decisions, OR just leave it in the archive for audit trails.
+### Step 3: Preserve Implementation Knowledge
+Review `decisions.md` (Implementation Journal):
+* **Contains:** Technical architecture, sequence diagrams, implementation considerations, and ADRs
+* **Action:** This rich documentation is preserved in the archive when the track is archived
+* **Optional:** Extract significant ADRs to a global `.context/architecture_log.md` for cross-track reference
 
 ### Step 4: Archive
 * **Action:** Run `cdd archive {{TRACK}}`.

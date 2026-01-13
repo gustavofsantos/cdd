@@ -39,11 +39,15 @@ You MUST use this format. It tells the Integrator what to merge later.
 
 ```
 
-### C. `decisions.md` (Optional)
+### C. `decisions.md` (Implementation Journal)
 
-Create this ONLY if a major architectural choice is made (e.g., "Chose Redis over Memcached").
+Use this to document:
+* **Technical Architecture:** System components, data flow, integration points
+* **Sequence Diagrams:** Visual representations of key interactions (mermaid/ASCII)
+* **Implementation Considerations:** Approach, constraints, trade-offs, performance, security
+* **ADRs:** Significant architectural decisions (Format: `## ADR-001: [Title]` → Context, Decision, Consequences)
 
-* **Format:** `## ADR-001: [Title]` -> Context, Decision, Consequences.
+This file serves as the "how" complement to the spec ("what") and plan ("steps").
 
 ## 3. The Handshake
 

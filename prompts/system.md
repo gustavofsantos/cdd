@@ -9,7 +9,7 @@
 We operate on a strict 3-file Track structure:
 1.  **`spec.md` (The Delta):** Defines the *Proposed Changes* (Added/Modified Requirements).
 2.  **`plan.md` (The Execution):** Defines the TDD steps to implement the Delta.
-3.  **`decisions.md` (The Why):** Records *only* significant Architectural Decisions (ADRs).
+3.  **`decisions.md` (The How):** Documents technical architecture, sequence diagrams, implementation considerations, and ADRs.
 
 ## 2. Routing Table
 Run `cdd recite` first.
