@@ -54,7 +54,7 @@ This command sets up the `.context` directory and automatically starts the `setu
 You need to provide your AI (LLM) with the **System Prompt**. This defines its role and the rules of engagement.
 
 ```bash
-cdd init --system-prompt
+cdd prompts --system
 ```
 
 Copy the output of this command and set it as the "System Prompt" or "Custom Instructions" for your AI chat session.
@@ -65,7 +65,7 @@ Now that your environment is initialized, you are ready to start. The `setup` tr
 **Get the Bootstrap Prompt:**
 
 ```bash
-cdd init --bootstrap-prompt
+cdd prompts --bootstrap
 ```
 
 Copy the output and paste it as your first message to the AI. This will instruct the AI (Role: Principal Archaeologist) to begin the setup process.
@@ -125,31 +125,31 @@ This moves the track to the archive and promotes the findings to the global cont
 
 ### Prompt Commands
 
-You can retrieve the core prompts using the `init` command flags:
+You can retrieve the core prompts using the dedicated `prompts` command:
 
 - **System Prompt** (for the AI Agent):
   ```bash
-  cdd init --system-prompt
+  cdd prompts --system
   ```
 - **Bootstrap Prompt** (to start the `setup` track):
   ```bash
-  cdd init --bootstrap-prompt
+  cdd prompts --bootstrap
   ```
 - **Inbox Prompt** (to process context updates):
   ```bash
-  cdd init --inbox-prompt
+  cdd prompts --inbox
   ```
 - **Executor Prompt** (for task execution):
   ```bash
-  cdd init --executor-prompt
+  cdd prompts --executor
   ```
 - **Planner Prompt** (for high-level planning):
   ```bash
-  cdd init --planner-prompt
+  cdd prompts --planner
   ```
 - **Calibration Prompt** (for workflow configuration):
   ```bash
-  cdd init --calibration-prompt
+  cdd prompts --calibration
   ```
 
 ### Viewing Status
