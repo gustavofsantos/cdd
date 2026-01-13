@@ -35,40 +35,33 @@ func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 		}
 	}
 
-		// Ensure we are NOT using go run in the system prompt instructions anymore
+	// Ensure we are NOT using go run in the system prompt instructions anymore
 
-		if strings.Contains(prompts.System, "go run cmd/cdd/main.go") {
+	if strings.Contains(prompts.System, "go run cmd/cdd/main.go") {
 
-			t.Errorf("System prompt still contains 'go run cmd/cdd/main.go', it should use 'cdd' directly")
+		t.Errorf("System prompt still contains 'go run cmd/cdd/main.go', it should use 'cdd' directly")
+
+	}
+
+}
+
+func TestSystemPromptHasCommitOften(t *testing.T) {
+
+	requiredPhrases := []string{
+
+		"Commit Often",
+
+		"include the commit hash",
+	}
+
+	for _, phrase := range requiredPhrases {
+
+		if !strings.Contains(prompts.System, phrase) {
+
+			t.Errorf("System prompt missing commit often mandate: %q", phrase)
 
 		}
 
 	}
 
-	
-
-	func TestSystemPromptHasCommitOften(t *testing.T) {
-
-		requiredPhrases := []string{
-
-			"Commit Often",
-
-			"include the commit hash",
-
-		}
-
-	
-
-		for _, phrase := range requiredPhrases {
-
-			if !strings.Contains(prompts.System, phrase) {
-
-				t.Errorf("System prompt missing commit often mandate: %q", phrase)
-
-			}
-
-		}
-
-	}
-
-	
+}
