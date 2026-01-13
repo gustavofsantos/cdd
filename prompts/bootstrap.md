@@ -1,33 +1,41 @@
 # Agent Protocol
 **Context ID:** `setup`
+**Role:** Domain Cartographer
 
-I have just run `cdd init`. Your goal is to map the territory and populate the Global Context files, respecting that this might be a large "Brownfield" project.
+I have just run `cdd init`. Your goal is to identify the **Bounded Contexts** (Business Domains) within this project and populate the Global Context files. Focus on *high-level structure* to avoid getting lost in the noise of a large brownfield project.
 
 ## Protocol (Strictly Sequential)
 Run `cdd recite setup` to confirm your next step.
 
-### Phase 1: Automated Archeology (Zero User Input)
-**Objective:** Map the project structure without bothering the user.
-1.  **List:** Run `ls -F` (or similar) to map root directories.
-2.  **Detect:** Read configuration files (`package.json`, `pom.xml`, `Dockerfile`, `go.mod`, `.github/workflows`, `README.md`).
-3.  **Draft:** Create a *provisional* version of `.context/tech-stack.md` and `.context/product.md`.
-4.  **Structural Discovery (ast-grep):**
-    * **Check:** Run `sg --version` to see if `ast-grep` is available.
-    * **Hypothesize:** If available, create 2-3 common structural patterns based on the language (e.g., "Find all API endpoints" or "Find all React Components").
-    * **Test & Verify:** Run these patterns against the code. *Only proceed if they return valid hits.*
-    * **Document:** Save the verified, working patterns to `.context/patterns.md` with a description (e.g., "Use this pattern to find all Controllers").
+### Phase 1: Domain Survey (The Map)
+**Objective:** Identify the architectural style and candidate Bounded Contexts.
+1.  **Topography:** Run `ls -F` on the root.
+    * *Ignore* generic noise: `scripts/`, `bin/`, `dist/`, `build/`, `.config/`, `node_modules/`, `vendor/`.
+    * *Focus* on source roots: `src/`, `lib/`, `pkg/`, `internal/`, `services/`, `apps/`.
+2.  **Workspace Detection:** Read configuration files (`package.json`, `go.work`, `pom.xml`, `lerna.json`) to detect Monorepo or Multi-Module structures.
+3.  **Architecture Inference:**
+    * *Layered (Technical Grouping):* Do you see `controllers/`, `models/`, `views/`? -> **Contexts are likely hidden inside these folders.**
+    * *Modular (Domain Grouping):* Do you see `billing/`, `auth/`, `shipping/`? -> **These ARE the Contexts.**
+4.  **Drafting:** Create a *provisional* `product.md` and `tech-stack.md`. List your candidate Bounded Contexts clearly.
 
-### Phase 2: Focus Alignment (The Handshake)
-**Objective:** Narrow the scope to the user's specific domain.
-1.  Present your findings: "Based on my scan, this is a [Language] project using [Frameworks]. It seems to do [Function]."
-2.  **CRITICAL STEP:** Ask the user:
-    * "Is this summary correct?"
-    * "**Which specific directory, module, or service is your primary focus?** (e.g., 'I only work on /services/billing' or 'I am fixing the React frontend')."
+### Phase 2: Domain Alignment (The Handshake)
+**Objective:** Validate the business domains with the user.
+1.  **Report:** Present the "Domain Map":
+    * "Architecture Style: [Monolith/Microservices/Layered/Modular]"
+    * "Detected Bounded Contexts: [List of potential domains, e.g., 'Auth', 'Payment', 'Legacy-Core']"
+2.  **The Ask:** Ask the user:
+    * "Do these Bounded Contexts accurately represent your business domains?"
+    * "**Select your Primary Focus:** Which Context are we working on today? (We will ignore the others to reduce noise)."
 
-### Phase 3: Deep Dive
-**Objective:** Deep scan ONLY the user's focus area.
-1.  Scan the user's specified directory in detail.
-2.  Update `.context/workflow.md` with any testing patterns or conventions found *in that specific area*.
+### Phase 3: Context Deep Dive
+**Objective:** Map ONLY the user's chosen Context.
+1.  **Focused Scan:** Scan only the directories relevant to the selected Bounded Context.
+    * *If Layered:* You may need to look at `controllers/BillingController.ts` and `models/Billing.ts`.
+    * *If Modular:* Scan `services/billing/`.
+2.  **Pattern Discovery:**
+    * Identify the testing strategy *for this specific context*.
+    * Identify the specific database or API patterns *for this specific context*.
+3.  **Document:** Update `workflow.md` and `patterns.md` with findings specific to this domain.
 
 ### Phase 4: Finalization
 1.  Write the final content to `.context/`.
