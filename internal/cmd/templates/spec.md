@@ -1,15 +1,17 @@
 # Track: {{.TrackName}}
 
-## Proposed Changes
+## 1. User Intent
+> [User Input Required]
 
-### ADDED Requirements
-* WHEN [trigger condition], the system SHALL [expected behavior]
-* WHILE [system state], the system SHALL [expected behavior]
-* WHERE [feature/location], the system SHALL [expected behavior]
-* IF [optional condition], THEN the system SHALL [expected behavior]
+## 2. Relevant Context
+> [Agent to Populate during Analysis]
+- \`path/to/relevant/file.ext\`
 
-### MODIFIED Requirements
-* WHEN [trigger condition], the system SHALL [new behavior] (previously: [old behavior])
+## 4. Scenarios
+> [Agent to Draft based on Intent - Gherkin Style Preferred]
+> Feature: {{.TrackName}}
+>   Scenario: Happy Path
+>     Given ...
+>     When ...
+>     Then ...
 
-## Relevant Files
-* `path/to/relevant/file.ext` - Brief description of relevance

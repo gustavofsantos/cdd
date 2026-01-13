@@ -1,4 +1,3 @@
 # Plan for {{.TrackName}}
-[ ] 🔴 Test: (Red)
-[ ] 🟢 Impl: (Green)
-[ ] 🔵 Refactor: (Refactor)
+- [ ] 🗣️ Phase 0: Alignment & Analysis (Fill spec.md)
+- [ ] 📝 Phase 1: Approval (User signs off)
