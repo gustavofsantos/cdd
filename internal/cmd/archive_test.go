@@ -2,9 +2,11 @@ package cmd_test
 
 import (
 	"bytes"
+	"fmt"
 	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"cdd/internal/cmd"
 	"cdd/internal/platform"
@@ -179,5 +181,35 @@ func TestArchiveCmd_InboxCleanupSuggestion(t *testing.T) {
 	output := buf.String()
 	if !strings.Contains(output, "getting large") {
 		t.Errorf("expected inbox cleanup suggestion, but not found in output: %s", output)
+	}
+}
+
+func TestArchiveCmd_TimeTracking(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	trackName := "time-track"
+	trackDir := ".context/tracks/" + trackName
+
+	// Setup track files
+	_ = fs.WriteFile(trackDir+"/spec.md", []byte("Spec Content"), 0644)
+	_ = fs.WriteFile(trackDir+"/plan.md", []byte("- [x] Done"), 0644)
+
+	// Create metadata.json with a timestamp from 1 hour ago
+	startedAt := time.Now().Add(-1 * time.Hour).Format(time.RFC3339)
+	metadataContent := fmt.Sprintf(`{"started_at": "%s"}`, startedAt)
+	_ = fs.WriteFile(trackDir+"/metadata.json", []byte(metadataContent), 0644)
+
+	command := cmd.NewArchiveCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+
+	command.SetArgs([]string{trackName})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	if !strings.Contains(output, "Duration:") {
+		t.Errorf("expected output to contain duration, got: %s", output)
 	}
 }

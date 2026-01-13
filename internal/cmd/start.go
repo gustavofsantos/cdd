@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -79,6 +80,18 @@ Usage: cdd start <track-name>`,
 			scratchContent := fmt.Sprintf("# Scratchpad for %s\n> Dump raw logs here.\n", trackName)
 			if err := fs.WriteFile(filepath.Join(trackDir, "scratchpad.md"), []byte(scratchContent), 0644); err != nil {
 				return fmt.Errorf("failed to write scratchpad.md: %w", err)
+			}
+
+			// Metadata for Time Tracking
+			metadata := map[string]interface{}{
+				"started_at": time.Now().Format(time.RFC3339),
+			}
+			metaBytes, err := json.MarshalIndent(metadata, "", "  ")
+			if err != nil {
+				return fmt.Errorf("failed to marshal metadata: %w", err)
+			}
+			if err := fs.WriteFile(filepath.Join(trackDir, "metadata.json"), metaBytes, 0644); err != nil {
+				return fmt.Errorf("failed to write metadata.json: %w", err)
 			}
 
 			cmd.Printf("Track '%s' initialized.\n", trackName)

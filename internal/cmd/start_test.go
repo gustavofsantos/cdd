@@ -36,6 +36,18 @@ func TestStartCmd_CreatesTrack(t *testing.T) {
 	if _, err := fs.Stat(".context/tracks/test-track/plan.md"); err != nil {
 		t.Errorf("plan.md not created")
 	}
+
+	// Verify Metadata
+	metaPath := ".context/tracks/test-track/metadata.json"
+	if _, err := fs.Stat(metaPath); err != nil {
+		t.Errorf("metadata.json not created")
+	} else {
+		// Verify content
+		content, _ := fs.ReadFile(metaPath)
+		if !bytes.Contains(content, []byte("started_at")) {
+			t.Errorf("metadata.json does not contain started_at")
+		}
+	}
 }
 
 func TestStartCmd_TrackExists(t *testing.T) {

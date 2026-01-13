@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -94,7 +95,25 @@ Constraint: Cannot archive if there are pending tasks ([ ]).`,
 				}
 			}
 
-			// 3. Archive
+			// 3. Time Tracking (Calculate Duration)
+			metaFile := filepath.Join(src, "metadata.json")
+			if _, err := fs.Stat(metaFile); err == nil {
+				content, err := fs.ReadFile(metaFile)
+				if err == nil {
+					var meta map[string]interface{}
+					if err := json.Unmarshal(content, &meta); err == nil {
+						if startStr, ok := meta["started_at"].(string); ok {
+							startTime, err := time.Parse(time.RFC3339, startStr)
+							if err == nil {
+								duration := time.Since(startTime)
+								cmd.Printf("⏱️  Duration: %s\n", duration.Round(time.Second))
+							}
+						}
+					}
+				}
+			}
+
+			// 4. Archive
 			if err := fs.Rename(src, dest); err != nil {
 				return fmt.Errorf("Error archiving track: %v", err)
 			}
