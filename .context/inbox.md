@@ -21,3 +21,11 @@ Added/Updated `prompts/system_test.go` to validate these requirements.
     - `start` now creates `metadata.json` with a `started_at` timestamp.
     - `archive` now calculates and prints the duration of the track.
     - Uses `encoding/json` and `time` packages.
+
+
+## Updates from Track: prompt-integration (Tue Jan 13 10:55:00 -03 2026)
+- Integrated `executor.md` and `planner.md` prompts into the `prompts` package using `go:embed`.
+- Added `--executor-prompt` and `--planner-prompt` flags to the `cdd init` command.
+- Updated `internal/cmd/init.go` to use `cmd.Println` instead of `fmt.Println` to support testing output.
+- Synchronized `prompts/system.md` with `GEMINI.md` to fix failing tests in the `prompts` package.
+- Updated `README.md` to document the new prompt flags.
