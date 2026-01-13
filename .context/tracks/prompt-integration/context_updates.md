@@ -1,2 +1,5 @@
-# Proposed Global Context Updates
-> Add notes here if product.md or tech-stack.md needs updating.
+- Integrated `executor.md` and `planner.md` prompts into the `prompts` package using `go:embed`.
+- Added `--executor-prompt` and `--planner-prompt` flags to the `cdd init` command.
+- Updated `internal/cmd/init.go` to use `cmd.Println` instead of `fmt.Println` to support testing output.
+- Synchronized `prompts/system.md` with `GEMINI.md` to fix failing tests in the `prompts` package.
+- Updated `README.md` to document the new prompt flags.
