@@ -35,3 +35,10 @@ Added/Updated `prompts/system_test.go` to validate these requirements.
 - Integrated the new `calibration.md` prompt into the `prompts` package.
 - Added `--calibration-prompt` flag to the `cdd init` command.
 - Updated `README.md` to document the new flag.
+
+
+## Updates from Track: prompts-command-refactor (Tue Jan 13 11:12:18 -03 2026)
+- Refactored prompt printing: moved logic from flags in the `init` command to a new dedicated `prompts` command.
+- The `prompts` command supports flags: `--system`, `--bootstrap`, `--inbox`, `--executor`, `--planner`, and `--calibration`.
+- Validated that `init` still correctly initializes the `.context` directory structure without prompt flags.
+- Updated `README.md` to reflect the new command usage.
