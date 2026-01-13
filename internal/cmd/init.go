@@ -14,11 +14,15 @@ import (
 var systemPrompt = prompts.System
 var bootstrapPrompt = prompts.Bootstrap
 var inboxPrompt = prompts.Inbox
+var executorPrompt = prompts.Executor
+var plannerPrompt = prompts.Planner
 
 var (
 	showSystemPrompt    bool
 	showBootstrapPrompt bool
 	showInboxPrompt     bool
+	showExecutorPrompt  bool
+	showPlannerPrompt   bool
 )
 
 var initCmd = &cobra.Command{
@@ -29,22 +33,32 @@ var initCmd = &cobra.Command{
 Flags:
   --system-prompt     Output the CDD System Prompt for your AI agent.
   --bootstrap-prompt  Output the Architect Prompt for initial setup.
-  --inbox-prompt      Output the Context Gardener Prompt for processing the inbox.`,
+  --inbox-prompt      Output the Context Gardener Prompt for processing the inbox.
+  --executor-prompt   Output the Executor Prompt for task execution.
+  --planner-prompt    Output the Planner Prompt for high-level planning.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if showSystemPrompt {
-			fmt.Println(systemPrompt)
+			cmd.Println(systemPrompt)
 			return
 		}
 		if showBootstrapPrompt {
-			fmt.Println(bootstrapPrompt)
+			cmd.Println(bootstrapPrompt)
 			return
 		}
 		if showInboxPrompt {
-			fmt.Println(inboxPrompt)
+			cmd.Println(inboxPrompt)
+			return
+		}
+		if showExecutorPrompt {
+			cmd.Println(executorPrompt)
+			return
+		}
+		if showPlannerPrompt {
+			cmd.Println(plannerPrompt)
 			return
 		}
 
-		fmt.Println("Initializing Context-Driven Environment...")
+		cmd.Println("Initializing Context-Driven Environment...")
 		dirs := []string{
 			".context/tracks",
 			".context/archive",
@@ -106,11 +120,11 @@ Flags:
 				fmt.Printf("Error writing scratchpad.md: %v\n", err)
 			}
 
-			fmt.Println("Created 'setup' track.")
+			cmd.Println("Created 'setup' track.")
 		}
 
-		fmt.Println("CDD Initialized.")
-		fmt.Println("👉 Run 'cdd init --bootstrap-prompt' to get the prompt for the next step.")
+		cmd.Println("CDD Initialized.")
+		cmd.Println("👉 Run 'cdd init --bootstrap-prompt' to get the prompt for the next step.")
 	},
 }
 
@@ -118,5 +132,7 @@ func init() {
 	initCmd.Flags().BoolVar(&showSystemPrompt, "system-prompt", false, "Output the CDD System Prompt for your AI agent.")
 	initCmd.Flags().BoolVar(&showBootstrapPrompt, "bootstrap-prompt", false, "Output the Architect Prompt for initial setup.")
 	initCmd.Flags().BoolVar(&showInboxPrompt, "inbox-prompt", false, "Output the Context Gardener Prompt for processing the inbox.")
+	initCmd.Flags().BoolVar(&showExecutorPrompt, "executor-prompt", false, "Output the Executor Prompt for task execution.")
+	initCmd.Flags().BoolVar(&showPlannerPrompt, "planner-prompt", false, "Output the Planner Prompt for high-level planning.")
 	rootCmd.AddCommand(initCmd)
 }

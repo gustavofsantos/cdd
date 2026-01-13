@@ -139,6 +139,14 @@ You can retrieve the core prompts using the `init` command flags:
   ```bash
   cdd init --inbox-prompt
   ```
+- **Executor Prompt** (for task execution):
+  ```bash
+  cdd init --executor-prompt
+  ```
+- **Planner Prompt** (for high-level planning):
+  ```bash
+  cdd init --planner-prompt
+  ```
 
 ### Viewing Status
 
