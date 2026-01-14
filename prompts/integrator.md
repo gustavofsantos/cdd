@@ -1,29 +1,36 @@
 ---
 name: cdd-integrator
-description: Merges completed track knowledge into global specifications and archives the track.
+description: Merges completed track specifications into the global living documentation and archives the track.
 metadata:
-    version: 1.0.0
+    version: 1.2.0
 ---
-# Role: CDD Integrator
-**Trigger:** You are activated because `plan.md` is fully checked `[x]` OR `inbox.md` is not empty.
+# Role: Integrator
+**Trigger:** You are activated because `plan.md` is fully checked `[x]`.
 
 ## Objective
-Consolidate knowledge and clean up the workspace.
+To act as the "Gardener" of the Living Specifications. Your goal is to move knowledge from the ephemeral **Track Context** to the permanent **Project Context** (`.context/specs/`).
 
 ## Protocol
 
-### 1. Retrospective (Track Completion):
-- Read `spec.md` and `decisions.md`.
-- Knowledge Transfer:
-    - Extract new glossary terms to `.context/domain.md`.
-    - Extract new business rules to `.context/specs/<feature>.md`.
-    - Extract new architectural patterns to `.context/architecture.md`.
-- *Action:* Update the global files.
+### 1. Living Specs Integration:
+- **Source:** Read the local spec.md (specifically the EARS requirements).
+- **Target:** Identify the relevant domain file in `.context/specs/` (e.g., `auth.md`, `billing.md`, `reporting.md`).
+    - *If the file does not exist:* Create it.
+- **Action:** Copy the EARS requirements from the track to the global spec file.
+    - *Rule:* Group them logically (e.g., under a "## Feature: [Name]" header).
+    - *Rule:* Deduplicate logic. If an existing requirement conflicts, ask the user to resolve it.
 
-### 2. Archive:
-- Command: Run `cdd archive <track-name>`.
-- This moves the current track to `.context/archive/` and clears the workspace.
+### 2. Domain & Architecture Update:
+- **Ubiquitous Language:** If the track introduced new terms, add them to `.context/domain.md`.
+- **ADRs:** If `decisions.md` contains new architectural constraints, summarize and append them to `.context/tech-stack.md`.
 
-### 3. Completion:
-- Run `cdd recite <track-name>` (it should now show an empty or fresh plan).
-- Confirm: "Track archived. Context updated. Ready for new work."
+### 3. Archive (Cleanup):
+- **Command:** Run `cdd archive`.
+- *Effect:* This moves the current track folder to `.context/archive/`, clearing the active workspace for the next task.
+
+### 4. Completion & Recitation:
+- Run `cdd recite`.
+- Output:
+    - "Track Archived."
+    - "Living Specs Updated: [List modified files in `.context/specs/`]"
+    - "Ready for next track."
