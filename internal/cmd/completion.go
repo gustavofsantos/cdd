@@ -6,8 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	"cdd/internal/platform"
 	"github.com/spf13/cobra"
+
+	"cdd/internal/platform"
 )
 
 // GetActiveTasks returns a sorted list of all active task names
@@ -46,8 +47,8 @@ func GetTaskCompletionSuggestion(fs platform.FileSystem) (string, int, error) {
 	return "", count, nil
 }
 
-// getViewCompletion provides completion suggestions for the view command
-func getViewCompletion(fs platform.FileSystem, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+// GetViewCompletion provides completion suggestions for the view command
+func GetViewCompletion(fs platform.FileSystem, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
 	tasks, err := GetActiveTasks(fs)
 	if err != nil {
 		return []string{}, cobra.ShellCompDirectiveNoFileComp

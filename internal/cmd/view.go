@@ -62,7 +62,7 @@ EXAMPLES:
 			return err
 		},
 		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
-			return getViewCompletion(fs, args, toComplete)
+			return GetViewCompletion(fs, args, toComplete)
 		},
 	}
 
