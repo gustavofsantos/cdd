@@ -9,13 +9,12 @@ import (
 
 func TestSystemPromptIsLean(t *testing.T) {
 	requiredPhrases := []string{
-		"CDD Engine",
-		".context/tracks",
-		"spec.md",
+		"(CDD) Engine",
 		"plan.md",
+		"spec.md",
 		"decisions.md",
-		"THE STATE MACHINE",
-		"PHASE INSTRUCTIONS",
+		"State Machine",
+		"Global Guardrails",
 	}
 
 	for _, phrase := range requiredPhrases {
@@ -27,7 +26,7 @@ func TestSystemPromptIsLean(t *testing.T) {
 
 func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 	requiredPhrases := []string{
-		"Agent Skills",
+		"Agent Skill",
 	}
 
 	for _, phrase := range requiredPhrases {
@@ -56,8 +55,8 @@ func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 
 func TestSystemPromptConstraints(t *testing.T) {
 	requiredPhrases := []string{
-		"GLOBAL CONSTRAINTS",
-		"Atomic Steps:",
+		"Global Guardrails",
+		"The Recitation Protocol",
 	}
 
 	for _, phrase := range requiredPhrases {

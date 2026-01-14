@@ -16,9 +16,3 @@ var Executor string
 
 //go:embed integrator.md
 var Integrator string
-
-//go:embed bootstrap.md
-var Bootstrap string
-
-//go:embed calibration.md
-var Calibration string

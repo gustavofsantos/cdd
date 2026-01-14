@@ -6,8 +6,11 @@ import (
 	"cdd/prompts"
 )
 
-func TestExecutorAndPlannerPrompts(t *testing.T) {
-	if prompts.Calibration == "" {
-		t.Error("Calibration prompt is empty")
+func TestCorePromptsAreLoaded(t *testing.T) {
+	if prompts.System == "" {
+		t.Error("System prompt is empty")
+	}
+	if prompts.Analyst == "" {
+		t.Error("Analyst prompt is empty")
 	}
 }
