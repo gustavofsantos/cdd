@@ -78,3 +78,27 @@ func TestStartCmd_TrackExists(t *testing.T) {
 	// Our refactored code should return error or print to cmd.ErrOrStderr.
 	// Spec says: "Error: Track '%s' exists.\n"
 }
+
+func TestStartCmd_Help(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	command := cmd.NewStartCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+	command.SetErr(buf)
+
+	command.SetArgs([]string{"--help"})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	expected := "Usage:\n  start [track-name] [flags]"
+	if !strings.Contains(output, expected) {
+		t.Errorf("expected help output to contain usage, got %s", output)
+	}
+
+	if !strings.Contains(output, "EXAMPLES:") {
+		t.Errorf("expected help output to contain EXAMPLES section")
+	}
+}

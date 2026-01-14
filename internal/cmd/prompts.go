@@ -15,7 +15,19 @@ var (
 var promptsCmd = &cobra.Command{
 	Use:   "prompts",
 	Short: "Output the various CDD prompts.",
-	Long:  `Retrieve the CDD System, Bootstrap, or Calibration prompts.`,
+	Long: `Output the essential CDD prompts to be shared with AI agents.
+
+CDD relies on specific system instructions to guide AI agents through the 
+protocol. Use this command to retrieve the core prompts.
+
+FLAGS:
+  --system       The primary system instructions for the CDD Engine.
+  --bootstrap    Instructions for the initial state analysis (Phase 0).
+  --calibration  A concise set of rules for continuous alignment.
+
+EXAMPLES:
+  $ cdd prompts --system > .context/SYSTEM_PROMPT.md
+  $ cdd prompts --bootstrap`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if showSysPrompt {
 			cmd.Println(prompts.System)

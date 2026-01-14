@@ -17,7 +17,16 @@ func NewStartCmd(fs platform.FileSystem) *cobra.Command {
 		Use:   "start [track-name]",
 		Short: "Create an isolated workspace (Track).",
 		Long: `Creates an isolated workspace following the Lean CDD v4.1 protocol.
-Usage: cdd start <track-name>`,
+
+A "Track" is an ephemeral directory where you focus on a single unit of work. 
+This command initializes the track directory with the standard 3-file 
+structure: spec.md, plan.md, and decisions.md.
+
+The track name should be a short, kebab-case identifier of the task.
+
+EXAMPLES:
+  $ cdd start user-authentication
+  $ cdd start fix-bug-123`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			trackName := args[0]

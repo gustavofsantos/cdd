@@ -18,7 +18,16 @@ func NewArchiveCmd(fs platform.FileSystem) *cobra.Command {
 		Use:   "archive [track-name]",
 		Short: "Move completed track to history.",
 		Long: `Archives the workspace after successful integration of changes.
-Constraint: Cannot archive if there are pending tasks ([ ]).`,
+
+When a track is archived:
+1. All pending tasks in plan.md must be completed (marked with [x]).
+2. The spec.md content is appended to .context/inbox.md for downstream processing.
+3. Metadata (start/end time) is updated.
+4. The track directory is moved from .context/tracks/ to .context/archive/.
+
+EXAMPLES:
+  $ cdd archive user-authentication
+  $ cdd archive fix-bug-123`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			trackName := args[0]

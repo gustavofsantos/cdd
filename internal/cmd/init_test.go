@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
@@ -78,5 +79,31 @@ func TestInitCommand(t *testing.T) {
 		if _, err := os.Stat(filePath); os.IsNotExist(err) {
 			t.Errorf(".context/tracks/setup/%s was not created", f)
 		}
+	}
+}
+
+func TestInitCmd_Help(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetErr(buf)
+
+	rootCmd.SetArgs([]string{"init", "--help"})
+	err := rootCmd.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	expected := "Usage:\n  cdd init [flags]"
+	if !strings.Contains(output, expected) {
+		// Sometimes in tests it doesn't have the parent name
+		expected = "Usage:\n  init [flags]"
+		if !strings.Contains(output, expected) {
+			t.Errorf("expected help output to contain usage, got %s", output)
+		}
+	}
+
+	if !strings.Contains(output, "EXAMPLES:") {
+		t.Errorf("expected help output to contain EXAMPLES section")
 	}
 }

@@ -13,10 +13,19 @@ import (
 
 func NewDeleteCmd(fs platform.FileSystem) *cobra.Command {
 	return &cobra.Command{
-		Use:   "delete [track]",
+		Use:   "delete [track-name]",
 		Short: "Delete a non-archived track.",
-		Long:  `Delete a non-archived track. This command is intended for user workflow facilitation and should not be used by AI.`,
-		Args:  cobra.ExactArgs(1),
+		Long: `Delete a non-archived track and all of its contents.
+
+This command permanently removes an active track directory from .context/tracks/. 
+It is intended for cleaning up unwanted or experimental tracks. 
+
+WARNING: This action is destructive and cannot be undone.
+
+EXAMPLES:
+  $ cdd delete experimental-feature
+  $ cdd delete typo-track`,
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			track := args[0]
 

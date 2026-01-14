@@ -207,3 +207,27 @@ func TestArchiveCmd_InboxIntegration(t *testing.T) {
 		t.Errorf("expected separator")
 	}
 }
+
+func TestArchiveCmd_Help(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	command := cmd.NewArchiveCmd(fs)
+	buf := new(bytes.Buffer)
+	command.SetOut(buf)
+	command.SetErr(buf)
+
+	command.SetArgs([]string{"--help"})
+	err := command.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	expected := "Usage:\n  archive [track-name] [flags]"
+	if !strings.Contains(output, expected) {
+		t.Errorf("expected help output to contain usage, got %s", output)
+	}
+
+	if !strings.Contains(output, "EXAMPLES:") {
+		t.Errorf("expected help output to contain EXAMPLES section")
+	}
+}

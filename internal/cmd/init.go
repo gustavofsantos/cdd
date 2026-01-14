@@ -12,7 +12,19 @@ import (
 var initCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Bootstrap the CDD environment.",
-	Long:  `Creates the persistent memory structure (.context/) and starts the 'setup' track.`,
+	Long: `Initialize the CDD environment in the current directory.
+
+This command sets up the necessary directory structure and creates the 
+initial global context files:
+1. .context/tracks/ - For active workspaces.
+2. .context/archive/ - For completed tracks.
+3. .context/specs/ - For eternal specifications.
+4. .context/product.md, tech-stack.md, architecture.md - Global context files.
+
+It also creates an initial 'setup' track to guide you through the process.
+
+EXAMPLES:
+  $ cdd init`,
 	Run: func(cmd *cobra.Command, args []string) {
 
 		cmd.Println("Initializing Context-Driven Environment...")

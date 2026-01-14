@@ -13,8 +13,15 @@ func NewReciteCmd(fs platform.FileSystem) *cobra.Command {
 	return &cobra.Command{
 		Use:   "recite [track-name]",
 		Short: "Output the current Plan to the context window.",
-		Long: `Forces the agent to 'attend' to the immediate next step, preventing drift.
-Usage: cdd recite <track-name>`,
+		Long: `Output the current track's plan to focus the agent's attention.
+
+The 'recite' command is a calibration tool used to prevent "context drift". 
+By outputting the plan and reminding the agent of their immediate next task, 
+it ensures that development stays aligned with the intended specification.
+
+EXAMPLES:
+  $ cdd recite user-authentication
+  $ cdd recite fix-bug-123`,
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			trackName := args[0]

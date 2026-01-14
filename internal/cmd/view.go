@@ -25,8 +25,23 @@ func NewViewCmd(fs platform.FileSystem) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "view [track-name]",
 		Short: "Render track details.",
-		Long: `Render track details.
-Usage: 'cdd view' for dashboard, 'cdd view <track>' for details.`,
+		Long: `Render track details and active/archived tracks dashboard.
+
+By default, 'cdd view' displays a dashboard of all active tracks.
+If a track name is provided, it displays the next tasks from that track's plan.
+
+FLAGS:
+  -i, --inbox      Show the current contents of the global inbox.
+  -a, --archived   List archived tracks or view details of an archived track.
+  -s, --spec       Show the track's specification (spec.md) instead of the plan.
+  -p, --plan       Show the full track plan (plan.md).
+  -r, --raw        Disable markdown rendering and output plain text (good for scripting).
+
+EXAMPLES:
+  $ cdd view                  # Show active tracks
+  $ cdd view --inbox          # Show pending changes in inbox
+  $ cdd view fix-bug          # Show next tasks for "fix-bug"
+  $ cdd view --spec fix-bug   # Show spec for "fix-bug"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			markdown, err := buildViewMarkdown(fs, args)
 			if err != nil {

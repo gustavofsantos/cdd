@@ -16,12 +16,21 @@ func NewLogCmd(fs platform.FileSystem) *cobra.Command {
 	return &cobra.Command{
 		Use:   "log [track-name] [message]",
 		Short: "Record a permanent decision or error.",
-		Long: `Record a permanent decision or error.
-'Mask, Don't Remove'. We must keep evidence of failures to avoid repeating them.
-Usage: 
-  cdd log <track-name> <message>
-  cdd log <track-name> << 'EOF'
-  cdd log << 'EOF' (if only one track is active)`,
+		Long: `Record a permanent decision, error, or architectural choice.
+
+The log command appends a timestamped entry to the track's decisions.md file. 
+This file serves as a permanent record of the "Why" behind changes.
+
+You can provide the message as an argument, or pipe it via STDIN. 
+If only one track is active, the track name is optional when using STDIN.
+
+EXAMPLES:
+  $ cdd log user-auth "Switched to JWT for session management"
+  $ cdd log "Fixed intermittent CI failure"
+  $ cdd log << 'EOF'
+    ADR: Use Redis for caching.
+    Reasoning: Performance requirements for the new dashboard.
+    EOF`,
 		Args: cobra.RangeArgs(0, 2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var trackName string

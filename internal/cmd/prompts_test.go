@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 )
 
@@ -41,5 +42,27 @@ func TestPromptsCommand(t *testing.T) {
 			}
 			// Optional: check if output contains the 'want' string
 		})
+	}
+}
+
+func TestPromptsCmd_Help(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetErr(buf)
+
+	rootCmd.SetArgs([]string{"prompts", "--help"})
+	err := rootCmd.Execute()
+	if err != nil {
+		t.Fatalf("expected no error, got %v", err)
+	}
+
+	output := buf.String()
+	expected := "Usage:\n  cdd prompts [flags]"
+	if !strings.Contains(output, expected) {
+		t.Errorf("expected help output to contain usage, got %s", output)
+	}
+
+	if !strings.Contains(output, "EXAMPLES:") {
+		t.Errorf("expected help output to contain EXAMPLES section")
 	}
 }
