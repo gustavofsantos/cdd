@@ -16,10 +16,10 @@ Add "antigravity" as a valid `--target` option in the agents command.
 
 ### Task 2: Create Antigravity skill formatter helper
 Create a function to convert CDD skill content to Antigravity format (with YAML frontmatter).
-- [ ] Extract YAML frontmatter from existing skill content
-- [ ] Add `name` and `description` fields if missing
-- [ ] Validate required Antigravity fields are present
-- [ ] Test formatter with all five CDD skills
+- [x] Extract YAML frontmatter from existing skill content
+- [x] Add `name` and `description` fields if missing
+- [x] Validate required Antigravity fields are present
+- [x] Test formatter with all five CDD skills
 
 ### Task 3: Implement installAntigravitySkill function
 Create a dedicated installation function for Antigravity target (similar to `installSkill` but with Antigravity format validation).

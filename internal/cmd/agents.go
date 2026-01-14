@@ -12,6 +12,31 @@ import (
 	"cdd/prompts"
 )
 
+// validateAntigravitySkill checks that the skill content has required Antigravity SKILL.md fields
+func validateAntigravitySkill(content string) error {
+	if !strings.HasPrefix(content, "---") {
+		return fmt.Errorf("skill content must start with YAML frontmatter (---)")
+	}
+
+	// Extract frontmatter
+	endIdx := strings.Index(content[3:], "---")
+	if endIdx == -1 {
+		return fmt.Errorf("skill content must have closing YAML frontmatter (---)")
+	}
+
+	frontmatter := content[3 : 3+endIdx]
+
+	// Check for required fields: name and description
+	if !strings.Contains(frontmatter, "name:") {
+		return fmt.Errorf("skill frontmatter missing required field: name")
+	}
+	if !strings.Contains(frontmatter, "description:") {
+		return fmt.Errorf("skill frontmatter missing required field: description")
+	}
+
+	return nil
+}
+
 var (
 	installAgentSkill bool
 	installTarget     string
