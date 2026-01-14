@@ -38,8 +38,8 @@ func validateAntigravitySkill(content string) error {
 }
 
 var (
-	installAgentSkill bool
-	installTarget     string
+	installAgentSkill   bool
+	installTarget       string
 	installAllPlatforms bool
 )
 
@@ -109,7 +109,7 @@ func installSkillsForAllPlatforms(cmd *cobra.Command, fs platform.FileSystem, sk
 
 func buildCursorRulesContent(skills []skill) string {
 	var buf strings.Builder
-	
+
 	// Write version metadata header
 	version := "1.0.0"
 	if len(skills) > 0 {
@@ -118,7 +118,7 @@ func buildCursorRulesContent(skills []skill) string {
 	buf.WriteString("---\n")
 	buf.WriteString(fmt.Sprintf("version: %s\n", version))
 	buf.WriteString("---\n\n")
-	
+
 	// Concatenate all skills
 	for i, s := range skills {
 		if i > 0 {
@@ -126,7 +126,7 @@ func buildCursorRulesContent(skills []skill) string {
 		}
 		buf.WriteString(s.content)
 	}
-	
+
 	return buf.String()
 }
 
