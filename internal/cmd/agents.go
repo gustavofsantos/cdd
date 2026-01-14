@@ -240,6 +240,16 @@ EXAMPLES:
 					return
 				}
 
+				// Handle Antigravity target separately
+				if installTarget == "antigravity" {
+					for _, s := range skills {
+						if err := installAntigravitySkill(cmd, fs, s); err != nil {
+							cmd.PrintErrf("%v\n", err)
+						}
+					}
+					return
+				}
+
 				// Handle directory-based targets
 				baseDir := ".agent"
 				switch installTarget {
@@ -247,7 +257,7 @@ EXAMPLES:
 					baseDir = ".claude"
 				case "agents":
 					baseDir = ".agents"
-				case "agent", "antigravity":
+				case "agent":
 					baseDir = ".agent"
 				default:
 					if installTarget != "" {

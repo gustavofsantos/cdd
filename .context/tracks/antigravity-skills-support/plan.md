@@ -31,10 +31,10 @@ Create a dedicated installation function for Antigravity target (similar to `ins
 
 ### Task 4: Wire Antigravity target to installation pipeline
 Connect the new Antigravity handler to the agents command flow.
-- [ ] Update the switch statement to call `installAntigravitySkill` when target is "antigravity"
-- [ ] Ensure all five skills are installed
-- [ ] Test end-to-end: `cdd agents --install --target antigravity`
-- [ ] Verify output messages and file structure
+- [x] Update the switch statement to call `installAntigravitySkill` when target is "antigravity"
+- [x] Ensure all five skills are installed
+- [x] Test end-to-end: `cdd agents --install --target antigravity`
+- [x] Verify output messages and file structure
 
 ### Task 5: Integration and documentation
 Finalize and document the feature.
