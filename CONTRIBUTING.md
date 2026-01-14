@@ -26,13 +26,33 @@ To build the project:
 go build -o cdd cmd/cdd/main.go
 ```
 
-Currently, the project does not have an extensive test suite. We encourage you to add unit tests for any new logic you introduce.
+The project includes a comprehensive test suite. Tests follow the TDD pattern (Red-Green-Refactor) and use the CDD workflow.
 
-To run tests (if you add any):
+To run tests:
 
 ```bash
 go test ./...
 ```
+
+Run tests for a specific package:
+
+```bash
+go test ./internal/cmd
+```
+
+Run a specific test:
+
+```bash
+go test ./internal/cmd -run TestNamePattern
+```
+
+**Testing Agent Skills:**
+When adding support for new agent integrations (like Antigravity), follow the pattern in `internal/cmd/agents.go`:
+
+1. Create a dedicated installation function (e.g., `installAntigravitySkill`)
+2. Add validation for the target format
+3. Write comprehensive tests covering happy path, edge cases, and validation
+4. Wire the handler into the command's switch statement
 
 ## Code Style
 

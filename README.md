@@ -29,7 +29,13 @@ CDD uses **Agent Skills** to orchestrate the AI. Install the skill to your proje
 cdd agents --install
 ```
 
-This will create `.agent/skills/cdd/SKILL.md`. If you are using an AI agent that supports skills (like Antigravity or others following the MCP/Skill protocol), it will automatically pick up the CDD protocol.
+This will create `.agent/skills/` with all CDD skills. If you are using **Antigravity**, you can install skills directly for Antigravity:
+
+```bash
+cdd agents --install --target antigravity
+```
+
+This creates `.agent/skills/` compatible with Antigravity's skill discovery. For other agents that support MCP/Skill protocol, use the default installation or specify the appropriate `--target` (claude, agents, etc.).
 
 ### 3. The Setup Track
 Now that your environment is initialized, you are ready to start. The `setup` track is designed to help the AI map your project and create the initial context files.
@@ -90,7 +96,16 @@ This moves the track to the archive and promotes the findings to the global cont
 
 Manage the AI agent integration:
 
-- **Install CDD Skill**: `cdd agents --install`
+- **Install CDD Skills**: `cdd agents --install [--target <target>]`
+  
+  Installs all five CDD skills (Orchestrator, Analyst, Architect, Executor, Integrator) to the specified target.
+  
+  **Available targets:**
+  - `agent` (default): Creates `.agent/skills/` for local use
+  - `antigravity`: Creates `.agent/skills/` compatible with Google Antigravity
+  - `claude`: Creates `.claude/skills/` for Claude integration
+  - `agents`: Creates `.agents/skills/` for generic agents
+  - `cursor`: Creates `.cursorrules` for Cursor IDE
 
 ### Viewing Status
 

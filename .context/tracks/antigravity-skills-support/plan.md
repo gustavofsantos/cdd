@@ -38,7 +38,7 @@ Connect the new Antigravity handler to the agents command flow.
 
 ### Task 5: Integration and documentation
 Finalize and document the feature.
-- [ ] Update help text with antigravity target example
-- [ ] Add version metadata handling for Antigravity skills
-- [ ] Create a test that verifies skills can be discovered by Antigravity after installation
-- [ ] Document the feature in README or CONTRIBUTING
+- [x] Update help text with antigravity target example
+- [x] Add version metadata handling for Antigravity skills
+- [x] Create a test that verifies skills can be discovered by Antigravity after installation
+- [x] Document the feature in README or CONTRIBUTING
