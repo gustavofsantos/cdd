@@ -10,7 +10,7 @@ func TestAgentsMultiInstall(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	cmd := NewAgentsCmd(fs)
 
-	cmd.SetArgs([]string{"--install"})
+	cmd.SetArgs([]string{"--install", "--target", "agent"})
 	err := cmd.Execute()
 	if err != nil {
 		t.Fatalf("Execute() failed: %v", err)

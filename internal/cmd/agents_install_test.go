@@ -11,7 +11,7 @@ func TestAgentsInstall(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	cmd := NewAgentsCmd(fs)
 
-	cmd.SetArgs([]string{"--install"})
+	cmd.SetArgs([]string{"--install", "--target", "agent"})
 	err := cmd.Execute()
 	if err != nil {
 		t.Fatalf("Execute() failed: %v", err)
@@ -64,7 +64,7 @@ func TestAgentsMigration_Legacy(t *testing.T) {
 		t.Fatalf("failed to write legacy file: %v", err)
 	}
 
-	cmd.SetArgs([]string{"--install"})
+	cmd.SetArgs([]string{"--install", "--target", "agent"})
 	err := cmd.Execute()
 	if err != nil {
 		t.Fatalf("Execute() failed: %v", err)
@@ -98,7 +98,7 @@ func TestAgentsUpToDate(t *testing.T) {
 		t.Fatalf("failed to write current file: %v", err)
 	}
 
-	cmd.SetArgs([]string{"--install"})
+	cmd.SetArgs([]string{"--install", "--target", "agent"})
 	err := cmd.Execute()
 	if err != nil {
 		t.Fatalf("Execute() failed: %v", err)

@@ -40,6 +40,7 @@ func validateAntigravitySkill(content string) error {
 var (
 	installAgentSkill bool
 	installTarget     string
+	installAllPlatforms bool
 )
 
 type skill struct {
@@ -60,6 +61,50 @@ func extractVersion(content string) string {
 
 func (s *skill) getVersion() string {
 	return extractVersion(s.content)
+}
+
+func printTargetRequiredError(cmd *cobra.Command) {
+	cmd.PrintErrf("Error: you must specify a target with --target or use --all to install for all platforms\n\n")
+	cmd.PrintErrf("Available targets: agent, agents, claude, cursor, antigravity\n\n")
+	cmd.PrintErrf("Examples:\n")
+	cmd.PrintErrf("  Install to a specific target:\n")
+	cmd.PrintErrf("    cdd agents --install --target agent\n")
+	cmd.PrintErrf("    cdd agents --install --target claude\n\n")
+	cmd.PrintErrf("  Install to all platforms:\n")
+	cmd.PrintErrf("    cdd agents --install --all\n")
+}
+
+func installSkillsForAllPlatforms(cmd *cobra.Command, fs platform.FileSystem, skills []skill) error {
+	// Install for all directory-based platforms
+	platforms := []struct {
+		name    string
+		baseDir string
+	}{
+		{"agent", ".agent"},
+		{"claude", ".claude"},
+		{"agents", ".agents"},
+	}
+
+	for _, p := range platforms {
+		for _, s := range skills {
+			if err := installSkill(cmd, fs, s, p.baseDir); err != nil {
+				cmd.PrintErrf("%v\n", err)
+			}
+		}
+	}
+
+	// Also install for cursor and antigravity
+	if err := installCursorRules(cmd, fs, skills); err != nil {
+		cmd.PrintErrf("%v\n", err)
+	}
+
+	for _, s := range skills {
+		if err := installAntigravitySkill(cmd, fs, s); err != nil {
+			cmd.PrintErrf("%v\n", err)
+		}
+	}
+
+	return nil
 }
 
 func buildCursorRulesContent(skills []skill) string {
@@ -224,12 +269,26 @@ EXAMPLES:
   $ cdd agents --install --target antigravity`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if installAgentSkill {
+				// Validate that either --all or --target is provided
+				if !installAllPlatforms && installTarget == "" {
+					printTargetRequiredError(cmd)
+					return
+				}
+
 				skills := []skill{
 					{id: "cdd", name: "cdd", description: "Orchestrator", content: prompts.System},
 					{id: "cdd-analyst", name: "cdd-analyst", description: "Analyst", content: prompts.Analyst},
 					{id: "cdd-architect", name: "cdd-architect", description: "Architect", content: prompts.Architect},
 					{id: "cdd-executor", name: "cdd-executor", description: "Executor", content: prompts.Executor},
 					{id: "cdd-integrator", name: "cdd-integrator", description: "Integrator", content: prompts.Integrator},
+				}
+
+				// Handle --all flag for all platforms
+				if installAllPlatforms {
+					if err := installSkillsForAllPlatforms(cmd, fs, skills); err != nil {
+						cmd.PrintErrf("%v\n", err)
+					}
+					return
 				}
 
 				// Handle cursor target separately
@@ -279,7 +338,8 @@ EXAMPLES:
 	}
 
 	agentsCmd.Flags().BoolVar(&installAgentSkill, "install", false, "Install the CDD System Prompt as an Agent Skill.")
-	agentsCmd.Flags().StringVar(&installTarget, "target", "agent", "Target directory for installation (agent, agents, claude, cursor, antigravity).")
+	agentsCmd.Flags().StringVar(&installTarget, "target", "", "Target directory for installation (agent, agents, claude, cursor, antigravity).")
+	agentsCmd.Flags().BoolVar(&installAllPlatforms, "all", false, "Install skills for all supported platforms.")
 
 	return agentsCmd
 }
