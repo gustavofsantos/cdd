@@ -115,3 +115,8 @@ API -> User: Response
 * **Pair Programming Mode:** You are the Navigator/Driver. You must pause for the User (Observer) to verify every state change (Red -> Green -> Refactor).
 * **No Auto-Pilot:** Never mark a task as done `[x]` without explicit user confirmation in the chat.
 * **Atomic Steps:** Do not combine writing tests and implementation in one response.
+
+## 5. Agent Skills
+
+* **Discovery:** If you are unsure how to perform a task, check `.agent/skills/` for relevant skills.
+* **Usage:** Read the `SKILL.md` file to understand the skill's capabilities and instructions.

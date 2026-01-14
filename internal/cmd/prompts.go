@@ -1,11 +1,15 @@
 package cmd
 
 import (
-	"cdd/internal/platform"
-	"cdd/prompts"
+	"fmt"
 	"path/filepath"
+	"regexp"
+	"strconv"
 
 	"github.com/spf13/cobra"
+
+	"cdd/internal/platform"
+	"cdd/prompts"
 )
 
 var (
@@ -43,7 +47,36 @@ EXAMPLES:
 				}
 
 				skillFile := filepath.Join(skillDir, "SKILL.md")
-				frontmatter := "---\nname: cdd\ndescription: Protocol for implementing software features using the Context-Driven Development methodology.\n---\n\n"
+				currentVersion := 2
+
+				// Check existing
+				if info, err := fs.Stat(skillFile); err == nil && !info.IsDir() {
+					existing, err := fs.ReadFile(skillFile)
+					if err == nil {
+						// Check version
+						re := regexp.MustCompile(`version:\s*(\d+)`)
+						match := re.FindSubmatch(existing)
+						installedVersion := 0
+						if len(match) > 1 {
+							installedVersion, _ = strconv.Atoi(string(match[1]))
+						}
+
+						if installedVersion >= currentVersion {
+							cmd.Printf("Skill 'cdd' is up to date (v%d)\n", installedVersion)
+							return
+						}
+
+						// Migrate
+						backupFile := skillFile + ".bak"
+						if err := fs.Rename(skillFile, backupFile); err != nil {
+							cmd.PrintErrf("Error backing up legacy skill: %v\n", err)
+							return
+						}
+						cmd.Printf("Migrated legacy skill to v%d. Backup saved to %s\n", currentVersion, backupFile)
+					}
+				}
+
+				frontmatter := fmt.Sprintf("---\nname: cdd\nversion: %d\ndescription: Protocol for implementing software features using the Context-Driven Development methodology.\n---\n\n", currentVersion)
 				content := frontmatter + prompts.System
 
 				if err := fs.WriteFile(skillFile, []byte(content), 0644); err != nil {

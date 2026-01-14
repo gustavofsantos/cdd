@@ -1,7 +1,3 @@
-
----
-###### Archived at: 2026-01-14 12:29:03 | Track: agent-skill-migration
-
 # Track: agent-skill-migration
 
 ## 1. User Intent
@@ -35,4 +31,3 @@
      Then the existing `SKILL.md` is renamed to `SKILL.md.bak` (or similar backup)
      And the new `SKILL.md` is created with `version: 2`
      And the output confirms "Migrated legacy skill to v2. Backup saved."
-
