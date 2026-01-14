@@ -12,7 +12,7 @@ The CDD Tool Suite is a CLI application that facilitates Context-Driven Developm
 ## 3. Key Capabilities (The "What")
 * **Track Management**: Create isolated workspaces for specific features/tasks to prevent context pollution
 * **Workflow Automation**: Commands to start, archive, and manage development tracks
-* **Prompt Orchestration**: Serve role-specific prompts (System, Bootstrap, Executor, Planner, Integrator) for AI agents
+* **Agent Orchestration**: Coordinate AI agents using **Agent Skills** (via `cdd agents --install`)
 * **Context Engineering**: Maintain living documentation through structured specs and decision logs
 * **Time Tracking**: Automatic capture of track lifecycle timestamps
 
@@ -24,6 +24,7 @@ The CDD Tool Suite is a CLI application that facilitates Context-Driven Developm
 | **Plan** | The task checklist and execution log (`plan.md`) showing workflow progress. |
 | **Decisions** | The Architecture Decision Record journal (`decisions.md`) documenting key choices. |
 | **Inbox** | The staging area (`.context/inbox.md`) for pending context updates awaiting integration. |
+| **Agent Skill** | A set of instructions (in `.agent/skills/`) that tells an AI agent how to follow the CDD protocol. |
 | **Bootstrap** | The initial project mapping phase where the AI scans and documents the codebase. |
 | **Archive** | Completed tracks moved to `.context/archive/` with their specs promoted to global context. |
 
