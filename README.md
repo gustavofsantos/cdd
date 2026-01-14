@@ -121,6 +121,42 @@ Manage the AI agent integration:
   - `--log`: Show the decision log.
   - `--raw`: Output raw text (pipe-friendly).
 
+### Shell Completion (Tab Autocompletion)
+
+The `cdd view` command supports tab autocompletion for track names. To enable this feature, you must set up shell completion:
+
+```bash
+# For bash
+cdd completion bash | sudo tee /etc/bash_completion.d/cdd
+
+# For zsh
+cdd completion zsh | sudo tee /usr/share/zsh/site-functions/_cdd
+
+# For fish
+cdd completion fish | sudo tee /usr/share/fish/vendor_completions.d/cdd.fish
+```
+
+Or, to install for your user only:
+
+```bash
+# For bash (add to ~/.bashrc)
+cdd completion bash | source
+
+# For zsh (add to ~/.zshrc)
+cdd completion zsh | source
+
+# For fish (add to ~/.config/fish/config.fish)
+cdd completion fish | source
+```
+
+After installation, reload your shell:
+
+```bash
+source ~/.bashrc   # or ~/.zshrc, depending on your shell
+```
+
+**Note:** Tab autocompletion only works after running the `cdd completion` command and sourcing the generated script in your shell. The completion function will suggest active task names when you type `cdd view <TAB>`.
+
 ## Project Structure
 
 The tool manages a `.context` directory with the following structure:

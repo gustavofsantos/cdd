@@ -118,3 +118,85 @@ func TestViewCmd_Help(t *testing.T) {
 		t.Errorf("expected help output to contain EXAMPLES section")
 	}
 }
+
+func TestViewCmd_Completion(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+
+	// Setup mock filesystem with active tracks
+	_ = fs.WriteFile(".context/tracks/feature-alpha/plan.md", []byte(""), 0644)
+	_ = fs.WriteFile(".context/tracks/feature-beta/plan.md", []byte(""), 0644)
+
+	t.Run("suggests all active tracks for completion", func(t *testing.T) {
+		command := NewViewCmd(fs)
+		if command.ValidArgsFunction != nil {
+			// Call the function to get suggestions
+			args, _ := command.ValidArgsFunction(command, []string{}, "")
+			if len(args) != 2 {
+				t.Errorf("expected 2 suggestions, got %d: %v", len(args), args)
+			}
+			// Check that both track names are in suggestions
+			expected := map[string]bool{"feature-alpha": false, "feature-beta": false}
+			for _, arg := range args {
+				if _, ok := expected[arg]; ok {
+					expected[arg] = true
+				}
+			}
+			for track, found := range expected {
+				if !found {
+					t.Errorf("expected track '%s' in suggestions", track)
+				}
+			}
+		} else {
+			t.Errorf("expected ValidArgsFunction to be set on view command")
+		}
+	})
+
+	t.Run("filters completion suggestions by prefix", func(t *testing.T) {
+		command := NewViewCmd(fs)
+		if command.ValidArgsFunction != nil {
+			args, _ := command.ValidArgsFunction(command, []string{}, "feature-a")
+			if len(args) != 1 {
+				t.Errorf("expected 1 suggestion for 'feature-a', got %d: %v", len(args), args)
+			}
+			if len(args) > 0 && args[0] != "feature-alpha" {
+				t.Errorf("expected 'feature-alpha', got %s", args[0])
+			}
+		}
+	})
+}
+
+func TestViewCmd_SingleTaskCompletion(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+
+	// Setup mock filesystem with single active track
+	_ = fs.WriteFile(".context/tracks/my-single-task/plan.md", []byte(""), 0644)
+
+	t.Run("suggests single task for completion", func(t *testing.T) {
+		command := NewViewCmd(fs)
+		if command.ValidArgsFunction != nil {
+			args, _ := command.ValidArgsFunction(command, []string{}, "")
+			if len(args) != 1 {
+				t.Errorf("expected 1 suggestion, got %d: %v", len(args), args)
+			}
+			if len(args) > 0 && args[0] != "my-single-task" {
+				t.Errorf("expected 'my-single-task', got %s", args[0])
+			}
+		}
+	})
+}
+
+func TestViewCmd_NoTaskCompletion(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+
+	// No active tracks
+
+	t.Run("returns empty suggestions when no tasks exist", func(t *testing.T) {
+		command := NewViewCmd(fs)
+		if command.ValidArgsFunction != nil {
+			args, _ := command.ValidArgsFunction(command, []string{}, "")
+			if len(args) != 0 {
+				t.Errorf("expected 0 suggestions, got %d: %v", len(args), args)
+			}
+		}
+	})
+}

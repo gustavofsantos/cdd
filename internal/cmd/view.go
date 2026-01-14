@@ -61,6 +61,9 @@ EXAMPLES:
 			_, err = fmt.Fprint(cmd.OutOrStdout(), out)
 			return err
 		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			return getViewCompletion(fs, args, toComplete)
+		},
 	}
 
 	cmd.Flags().BoolVarP(&viewInbox, "inbox", "i", false, "Show context inbox")
