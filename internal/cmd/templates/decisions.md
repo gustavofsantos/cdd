@@ -13,13 +13,12 @@
 <!-- List external systems, APIs, or modules this change interacts with -->
 
 ## Sequence Diagrams
-<!-- Use mermaid or ASCII diagrams to illustrate key interactions -->
+<!-- Use d2 or ASCII diagrams to illustrate key interactions -->
 
 ```mermaid
-sequenceDiagram
-    participant A as Actor
-    participant S as System
-    Note over A,S: Add your sequence diagram here
+shape: sequence_diagram
+User -> API: Request
+API -> User: Response
 ```
 
 ## Implementation Considerations
