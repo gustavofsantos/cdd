@@ -112,7 +112,7 @@ EXAMPLES:
 		}
 
 		cmd.Println("CDD Initialized.")
-		cmd.Println("👉 Run 'cdd prompts --bootstrap' to get the prompt for the next step.")
+		cmd.Println("👉 Run 'cdd agents --install' to configure your AI agent with the CDD Protocol.")
 	},
 }
 

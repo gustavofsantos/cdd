@@ -23,24 +23,19 @@ cdd init
 This command sets up the `.context` directory and automatically starts the `setup` track.
 
 **Setup your AI Agent:**
-You need to provide your AI (LLM) with the **System Prompt**. This defines its role and the rules of engagement.
+CDD uses **Agent Skills** to orchestrate the AI. Install the skill to your project:
 
 ```bash
-cdd prompts --system
+cdd agents --install
 ```
 
-Copy the output of this command and set it as the "System Prompt" or "Custom Instructions" for your AI chat session.
+This will create `.agent/skills/cdd/SKILL.md`. If you are using an AI agent that supports skills (like Antigravity or others following the MCP/Skill protocol), it will automatically pick up the CDD protocol.
 
 ### 3. The Setup Track
 Now that your environment is initialized, you are ready to start. The `setup` track is designed to help the AI map your project and create the initial context files.
 
-**Get the Bootstrap Prompt:**
-
-```bash
-cdd prompts --bootstrap
-```
-
-Copy the output and paste it as your first message to the AI. This will instruct the AI to begin the setup process.
+**Start the AI mapping:**
+Once the skill is installed, your agent will know how to proceed. Start by asking it to analyze the current state of the project.
 
 ### 4. The Workflow Loop
 The AI will now guide you through the **CDD Loop**. Your job is to be the conduit between the AI and the terminal.
@@ -91,17 +86,11 @@ This moves the track to the archive and promotes the findings to the global cont
 
 
 
-### Prompt Commands
+### Agent Commands
 
-You can retrieve the core prompts using the dedicated `prompts` command:
+Manage the AI agent integration:
 
-- **System Prompt**: `cdd prompts --system`
-- **Bootstrap Prompt**: `cdd prompts --bootstrap`
-- **Inbox Prompt** (Context Gardener): `cdd prompts --inbox`
-- **Executor Prompt**: `cdd prompts --executor`
-- **Planner Prompt**: `cdd prompts --planner`
-- **Calibration Prompt**: `cdd prompts --calibration`
-- **Integrator Prompt**: `cdd prompts --integrator`
+- **Install CDD Skill**: `cdd agents --install`
 
 ### Viewing Status
 

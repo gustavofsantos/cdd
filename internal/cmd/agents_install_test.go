@@ -7,9 +7,9 @@ import (
 	"cdd/internal/platform"
 )
 
-func TestPromptsInstall(t *testing.T) {
+func TestAgentsInstall(t *testing.T) {
 	fs := platform.NewMockFileSystem()
-	cmd := NewPromptsCmd(fs)
+	cmd := NewAgentsCmd(fs)
 
 	cmd.SetArgs([]string{"--install"})
 	err := cmd.Execute()
@@ -50,9 +50,9 @@ func TestPromptsInstall(t *testing.T) {
 	}
 }
 
-func TestPromptsMigration_Legacy(t *testing.T) {
+func TestAgentsMigration_Legacy(t *testing.T) {
 	fs := platform.NewMockFileSystem()
-	cmd := NewPromptsCmd(fs)
+	cmd := NewAgentsCmd(fs)
 
 	// Setup legacy file (no version)
 	skillDir := ".agent/skills/cdd"
@@ -84,17 +84,16 @@ func TestPromptsMigration_Legacy(t *testing.T) {
 	}
 }
 
-func TestPromptsUpToDate(t *testing.T) {
+func TestAgentsUpToDate(t *testing.T) {
 	fs := platform.NewMockFileSystem()
-	cmd := NewPromptsCmd(fs)
+	cmd := NewAgentsCmd(fs)
 
-	// Setup current file (simulate current version - assuming 2 for now as target)
+	// Setup current file (simulate current version)
 	skillDir := ".agent/skills/cdd"
 	if err := fs.MkdirAll(skillDir, 0755); err != nil {
 		t.Fatalf("failed to create skill directory: %v", err)
 	}
 	currentPath := skillDir + "/SKILL.md"
-	// We'll catch up the implementation to match this '2' or whatever constant we pick
 	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nversion: 2\n---\nNew Content"), 0644); err != nil {
 		t.Fatalf("failed to write current file: %v", err)
 	}
