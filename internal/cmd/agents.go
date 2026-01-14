@@ -13,6 +13,7 @@ import (
 
 var (
 	installAgentSkill bool
+	installTarget     string
 )
 
 type skill struct {
@@ -31,8 +32,8 @@ func (s *skill) getVersion() string {
 	return "0.0.0"
 }
 
-func installSkill(cmd *cobra.Command, fs platform.FileSystem, s skill) error {
-	skillDir := filepath.Join(".agent/skills", s.id)
+func installSkill(cmd *cobra.Command, fs platform.FileSystem, s skill, baseDir string) error {
+	skillDir := filepath.Join(baseDir, "skills", s.id)
 	if err := fs.MkdirAll(skillDir, 0755); err != nil {
 		return fmt.Errorf("error creating skill directory %s: %w", skillDir, err)
 	}
@@ -86,11 +87,27 @@ it follows the Context-Driven Development methodology.
 
 FLAGS:
   --install      Install all CDD Agent Skills (Orchestrator, Analyst, Architect, Executor, Integrator).
+  --target       Target directory for installation (agent, agents, claude). Defaults to agent.
 
 EXAMPLES:
-  $ cdd agents --install`,
+  $ cdd agents --install
+  $ cdd agents --install --target claude`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if installAgentSkill {
+				baseDir := ".agent"
+				switch installTarget {
+				case "claude":
+					baseDir = ".claude"
+				case "agents":
+					baseDir = ".agents"
+				case "agent":
+					baseDir = ".agent"
+				default:
+					if installTarget != "" {
+						cmd.PrintErrf("Warning: unknown target '%s', defaulting to '.agent'\n", installTarget)
+					}
+				}
+
 				skills := []skill{
 					{id: "cdd", name: "cdd", description: "Orchestrator", content: prompts.System},
 					{id: "cdd-analyst", name: "cdd-analyst", description: "Analyst", content: prompts.Analyst},
@@ -100,7 +117,7 @@ EXAMPLES:
 				}
 
 				for _, s := range skills {
-					if err := installSkill(cmd, fs, s); err != nil {
+					if err := installSkill(cmd, fs, s, baseDir); err != nil {
 						cmd.PrintErrf("%v\n", err)
 					}
 				}
@@ -113,6 +130,7 @@ EXAMPLES:
 	}
 
 	agentsCmd.Flags().BoolVar(&installAgentSkill, "install", false, "Install the CDD System Prompt as an Agent Skill.")
+	agentsCmd.Flags().StringVar(&installTarget, "target", "agent", "Target directory for installation (agent, agents, claude).")
 
 	return agentsCmd
 }
