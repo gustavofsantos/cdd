@@ -94,7 +94,7 @@ func TestAgentsUpToDate(t *testing.T) {
 		t.Fatalf("failed to create skill directory: %v", err)
 	}
 	currentPath := skillDir + "/SKILL.md"
-	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nversion: 2\n---\nNew Content"), 0644); err != nil {
+	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nmetadata:\n  version: \"2\"\n---\nNew Content"), 0644); err != nil {
 		t.Fatalf("failed to write current file: %v", err)
 	}
 

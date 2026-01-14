@@ -46,7 +46,7 @@ EXAMPLES:
 					existing, err := fs.ReadFile(skillFile)
 					if err == nil {
 						// Check version
-						re := regexp.MustCompile(`version:\s*(\d+)`)
+						re := regexp.MustCompile(`version:\s*["']?(\d+)["']?`)
 						match := re.FindSubmatch(existing)
 						installedVersion := 0
 						if len(match) > 1 {
@@ -68,7 +68,7 @@ EXAMPLES:
 					}
 				}
 
-				frontmatter := fmt.Sprintf("---\nname: cdd\nversion: %d\ndescription: Protocol for implementing software features using the Context-Driven Development methodology.\n---\n\n", currentVersion)
+				frontmatter := fmt.Sprintf("---\nname: cdd\ndescription: Protocol for implementing software features using the Context-Driven Development methodology.\nmetadata:\n  version: \"%d\"\n---\n\n", currentVersion)
 				content := frontmatter + prompts.System
 
 				if err := fs.WriteFile(skillFile, []byte(content), 0644); err != nil {
