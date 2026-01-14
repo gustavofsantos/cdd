@@ -156,6 +156,54 @@ func installSkill(cmd *cobra.Command, fs platform.FileSystem, s skill, baseDir s
 	return nil
 }
 
+func installAntigravitySkill(cmd *cobra.Command, fs platform.FileSystem, s skill) error {
+	// Validate skill content before installation
+	if err := validateAntigravitySkill(s.content); err != nil {
+		return fmt.Errorf("invalid skill content: %w", err)
+	}
+
+	skillDir := filepath.Join(".agent", "skills", s.id)
+	if err := fs.MkdirAll(skillDir, 0755); err != nil {
+		return fmt.Errorf("error creating skill directory %s: %w", skillDir, err)
+	}
+
+	skillFile := filepath.Join(skillDir, "SKILL.md")
+	currentVersion := s.getVersion()
+
+	// Check existing
+	if info, err := fs.Stat(skillFile); err == nil && !info.IsDir() {
+		existing, err := fs.ReadFile(skillFile)
+		if err == nil {
+			installedVersion := extractVersion(string(existing))
+
+			if installedVersion == currentVersion {
+				if cmd != nil {
+					cmd.Printf("Agent Skill '%s' is up to date (v%s)\n", s.id, installedVersion)
+				}
+				return nil
+			}
+
+			// Upgrade: backup and overwrite
+			backupFile := skillFile + ".bak"
+			if err := fs.Rename(skillFile, backupFile); err != nil {
+				return fmt.Errorf("error backing up skill %s: %w", s.id, err)
+			}
+			if cmd != nil {
+				cmd.Printf("Updated Agent Skill '%s' to v%s. Backup saved to %s\n", s.id, currentVersion, backupFile)
+			}
+		}
+	}
+
+	if err := fs.WriteFile(skillFile, []byte(s.content), 0644); err != nil {
+		return fmt.Errorf("error writing skill file %s: %w", s.id, err)
+	}
+
+	if cmd != nil {
+		cmd.Printf("Agent Skill '%s' installed at %s\n", s.id, skillFile)
+	}
+	return nil
+}
+
 func NewAgentsCmd(fs platform.FileSystem) *cobra.Command {
 	agentsCmd := &cobra.Command{
 		Use:   "agents",

@@ -23,11 +23,11 @@ Create a function to convert CDD skill content to Antigravity format (with YAML 
 
 ### Task 3: Implement installAntigravitySkill function
 Create a dedicated installation function for Antigravity target (similar to `installSkill` but with Antigravity format validation).
-- [ ] Create `installAntigravitySkill` function in agents.go
-- [ ] Create `.agent/` directory if it doesn't exist
-- [ ] Write skill to `.agent/skills/{skill-id}/SKILL.md` with proper formatting
-- [ ] Handle existing skill overwrite scenarios with user feedback
-- [ ] Test installation creates correct directory structure
+- [x] Create `installAntigravitySkill` function in agents.go
+- [x] Create `.agent/` directory if it doesn't exist
+- [x] Write skill to `.agent/skills/{skill-id}/SKILL.md` with proper formatting
+- [x] Handle existing skill overwrite scenarios with user feedback
+- [x] Test installation creates correct directory structure
 
 ### Task 4: Wire Antigravity target to installation pipeline
 Connect the new Antigravity handler to the agents command flow.
