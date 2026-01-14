@@ -52,7 +52,7 @@ EXAMPLES:
 		}{
 			{".context/product.md", "init_product.md"},
 			{".context/tech-stack.md", "init_tech-stack.md"},
-			{".context/architecture.md", "init_architecture.md"},
+			{".context/domain.md", "init_domain.md"},
 		}
 
 		for _, f := range files {
@@ -99,7 +99,7 @@ EXAMPLES:
 			}
 
 			// Decisions
-			decisionsContent, err := renderTrackTemplate("decisions.md", "decisions.md", data)
+			decisionsContent, err := renderTrackTemplate("decisions.md", "setup_decisions.md", data)
 			if err != nil {
 				fmt.Printf("Error rendering decisions.md: %v\n", err)
 			} else {

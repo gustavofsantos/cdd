@@ -54,7 +54,7 @@ func TestInitCommand(t *testing.T) {
 	globalFiles := []string{
 		".context/product.md",
 		".context/tech-stack.md",
-		".context/architecture.md",
+		".context/domain.md",
 	}
 	for _, f := range globalFiles {
 		if _, err := os.Stat(filepath.Join(tmpDir, f)); os.IsNotExist(err) {
