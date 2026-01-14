@@ -1,17 +1,27 @@
 # Track: {{.TrackName}}
 
 ## 1. User Intent
-> [User Input Required]
+[User Input Required]
 
 ## 2. Relevant Context
-> [Agent to Populate during Analysis]
-- \`path/to/relevant/file.ext\`
+[Agent to Populate during Analysis]
+- `path/to/relevant/file.ext`
 
-## 4. Scenarios
-> [Agent to Draft based on Intent - Gherkin Style Preferred]
-> Feature: {{.TrackName}}
->   Scenario: Happy Path
->     Given ...
->     When ...
->     Then ...
+## 3. Requirements (EARS)
+[Agent to Draft using EARS Notation]
 
+Patterns:
+    Ubiquitous: The <system> shall <response>
+    Event-driven: When <trigger>, the <system> shall <response>
+    State-driven: While <state>, the <system> shall <response>
+    Unwanted: If <condition>, then the <system> shall <response>
+    Optional: Where <feature>, the <system> shall <response>
+
+<!--
+Example:
+- The system shall encrypt all data at rest.
+- When the user clicks 'Submit', the system shall validate the payload.
+- While the offline mode is active, the system shall queue all requests locally.
+- If the API returns a 500 error, then the system shall retry up to 3 times.
+- Where the 'Beta' flag is enabled, the system shall display the new dashboard.
+--->
