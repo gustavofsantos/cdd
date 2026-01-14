@@ -19,7 +19,7 @@ initial global context files:
 1. .context/tracks/ - For active workspaces.
 2. .context/archive/ - For completed tracks.
 3. .context/specs/ - For eternal specifications.
-4. .context/product.md, tech-stack.md, architecture.md - Global context files.
+4. .context/product.md, tech-stack.md, domain.md - Global context files.
 
 It also creates an initial 'setup' track to guide you through the process.
 

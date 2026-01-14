@@ -1,18 +1,12 @@
-# Product Vision & Strategy
+# Product Vision
 
-## 1. Core Value Proposition
-> [Bootstrap: Insert high-level elevator pitch here]
+## 1. Elevator Pitch
+**Format:** For [Target Customer], who has [Need/Problem], [Product Name] is a [Market Category] that [Key Benefit]. Unlike [Competitor/Alternative], the product [Unique Differentiator].
 
-## 2. Target Audience / Personas
-* **[Persona Name]**: [Description]
+## 2. Target Audience (Personas)
+* **Primary Persona:** [Name/Role] - [Main Goal]
+* **Secondary Persona:** [Name/Role] - [Main Goal]
 
-## 3. Key Capabilities (The "What")
-* [Capability 1]
-* [Capability 2]
-
-## 4. Ubiquitous Language (Domain Glossary)
-| Term | Definition |
-| :--- | :--- |
-| **User** | A registered account holder with active subscription. |
-| **Guest** | An unauthenticated visitor. |
-
+## 3. Strategic Goals (OKRs)
+* Objective: [High-level goal]
+    * Key Result: [Measurable outcome]
