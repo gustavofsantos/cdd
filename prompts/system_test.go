@@ -27,12 +27,24 @@ func TestSystemPromptIsLean(t *testing.T) {
 
 func TestSystemPromptCommandsAndOverrides(t *testing.T) {
 	requiredPhrases := []string{
-		"AGENTS.local.md",
+		"Agent Skills",
 	}
 
 	for _, phrase := range requiredPhrases {
 		if !strings.Contains(prompts.System, phrase) {
-			t.Errorf("System prompt missing command/override phase: %q", phrase)
+			t.Errorf("System prompt missing phrase: %q", phrase)
+		}
+	}
+
+	forbiddenPhrases := []string{
+		"AGENTS.local.md",
+		"GEMINI.md",
+		"CLAUDE.md",
+	}
+
+	for _, phrase := range forbiddenPhrases {
+		if strings.Contains(prompts.System, phrase) {
+			t.Errorf("System prompt contains forbidden external reference: %q", phrase)
 		}
 	}
 
