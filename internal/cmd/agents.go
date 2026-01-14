@@ -142,12 +142,13 @@ it follows the Context-Driven Development methodology.
 
 FLAGS:
   --install      Install all CDD Agent Skills (Orchestrator, Analyst, Architect, Executor, Integrator).
-  --target       Target directory for installation (agent, agents, claude, cursor). Defaults to agent.
+  --target       Target directory for installation (agent, agents, claude, cursor, antigravity). Defaults to agent.
 
 EXAMPLES:
   $ cdd agents --install
   $ cdd agents --install --target claude
-  $ cdd agents --install --target cursor`,
+  $ cdd agents --install --target cursor
+  $ cdd agents --install --target antigravity`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if installAgentSkill {
 				skills := []skill{
@@ -173,7 +174,7 @@ EXAMPLES:
 					baseDir = ".claude"
 				case "agents":
 					baseDir = ".agents"
-				case "agent":
+				case "agent", "antigravity":
 					baseDir = ".agent"
 				default:
 					if installTarget != "" {
@@ -195,7 +196,7 @@ EXAMPLES:
 	}
 
 	agentsCmd.Flags().BoolVar(&installAgentSkill, "install", false, "Install the CDD System Prompt as an Agent Skill.")
-	agentsCmd.Flags().StringVar(&installTarget, "target", "agent", "Target directory for installation (agent, agents, claude, cursor).")
+	agentsCmd.Flags().StringVar(&installTarget, "target", "agent", "Target directory for installation (agent, agents, claude, cursor, antigravity).")
 
 	return agentsCmd
 }

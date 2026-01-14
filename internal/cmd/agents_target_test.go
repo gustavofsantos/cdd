@@ -41,3 +41,21 @@ func TestAgentsInstallPluralAgents(t *testing.T) {
 		t.Fatalf("failed to stat skill directory: %v", err)
 	}
 }
+
+func TestAgentsInstallAntigravity(t *testing.T) {
+	fs := platform.NewMockFileSystem()
+	cmd := NewAgentsCmd(fs)
+
+	cmd.SetArgs([]string{"--install", "--target", "antigravity"})
+	err := cmd.Execute()
+	if err != nil {
+		t.Fatalf("Execute() failed: %v", err)
+	}
+
+	// Verify directory creation in .agent/skills
+	skillDir := ".agent/skills/cdd"
+	_, err = fs.Stat(skillDir)
+	if err != nil {
+		t.Fatalf("failed to stat skill directory: %v", err)
+	}
+}
