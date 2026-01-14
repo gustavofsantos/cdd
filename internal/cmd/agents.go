@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"path/filepath"
 	"regexp"
-	"strconv"
 
 	"github.com/spf13/cobra"
 
@@ -16,6 +15,66 @@ var (
 	installAgentSkill bool
 )
 
+type skill struct {
+	id          string
+	name        string
+	description string
+	content     string
+}
+
+func (s *skill) getVersion() string {
+	re := regexp.MustCompile(`version:\s*["']?([^"'\s]+)["']?`)
+	match := re.FindStringSubmatch(s.content)
+	if len(match) > 1 {
+		return match[1]
+	}
+	return "0.0.0"
+}
+
+func installSkill(cmd *cobra.Command, fs platform.FileSystem, s skill) error {
+	skillDir := filepath.Join(".agent/skills", s.id)
+	if err := fs.MkdirAll(skillDir, 0755); err != nil {
+		return fmt.Errorf("error creating skill directory %s: %w", skillDir, err)
+	}
+
+	skillFile := filepath.Join(skillDir, "SKILL.md")
+	currentVersion := s.getVersion()
+
+	// Check existing
+	if info, err := fs.Stat(skillFile); err == nil && !info.IsDir() {
+		existing, err := fs.ReadFile(skillFile)
+		if err == nil {
+			// Check version
+			re := regexp.MustCompile(`version:\s*["']?([^"'\s]+)["']?`)
+			match := re.FindStringSubmatch(string(existing))
+			installedVersion := "0.0.0"
+			if len(match) > 1 {
+				installedVersion = match[1]
+			}
+
+			if installedVersion == currentVersion {
+				cmd.Printf("Agent Skill '%s' is up to date (v%s)\n", s.id, installedVersion)
+				return nil
+			}
+
+			// Migrate / Upgrade (Simple string equality check for now, can be improved to semver)
+			// If different, we backup and overwrite.
+			backupFile := skillFile + ".bak"
+			if err := fs.Rename(skillFile, backupFile); err != nil {
+				return fmt.Errorf("error backing up legacy skill %s: %w", s.id, err)
+			}
+			cmd.Printf("Updated Agent Skill '%s' to v%s. Backup saved to %s\n", s.id, currentVersion, backupFile)
+		}
+	}
+
+	if err := fs.WriteFile(skillFile, []byte(s.content), 0644); err != nil {
+		return fmt.Errorf("error writing skill file %s: %w", s.id, err)
+	}
+
+	cmd.Printf("Agent Skill '%s' installed at %s\n", s.id, skillFile)
+	return nil
+}
+
 func NewAgentsCmd(fs platform.FileSystem) *cobra.Command {
 	agentsCmd := &cobra.Command{
 		Use:   "agents",
@@ -26,57 +85,25 @@ Agent Skills are the primary way to extend the AI's capabilities and ensure
 it follows the Context-Driven Development methodology.
 
 FLAGS:
-  --install      Install the CDD System Prompt as an Agent Skill (.agent/skills/cdd/SKILL.md).
+  --install      Install all CDD Agent Skills (Orchestrator, Analyst, Architect, Executor, Integrator).
 
 EXAMPLES:
   $ cdd agents --install`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if installAgentSkill {
-				skillDir := ".agent/skills/cdd"
-				if err := fs.MkdirAll(skillDir, 0755); err != nil {
-					cmd.PrintErrf("Error creating skill directory: %v\n", err)
-					return
+				skills := []skill{
+					{id: "cdd", name: "cdd", description: "Orchestrator", content: prompts.System},
+					{id: "cdd-analyst", name: "cdd-analyst", description: "Analyst", content: prompts.Analyst},
+					{id: "cdd-architect", name: "cdd-architect", description: "Architect", content: prompts.Architect},
+					{id: "cdd-executor", name: "cdd-executor", description: "Executor", content: prompts.Executor},
+					{id: "cdd-integrator", name: "cdd-integrator", description: "Integrator", content: prompts.Integrator},
 				}
 
-				skillFile := filepath.Join(skillDir, "SKILL.md")
-				currentVersion := 2
-
-				// Check existing
-				if info, err := fs.Stat(skillFile); err == nil && !info.IsDir() {
-					existing, err := fs.ReadFile(skillFile)
-					if err == nil {
-						// Check version
-						re := regexp.MustCompile(`version:\s*["']?(\d+)["']?`)
-						match := re.FindSubmatch(existing)
-						installedVersion := 0
-						if len(match) > 1 {
-							installedVersion, _ = strconv.Atoi(string(match[1]))
-						}
-
-						if installedVersion >= currentVersion {
-							cmd.Printf("Agent Skill 'cdd' is up to date (v%d)\n", installedVersion)
-							return
-						}
-
-						// Migrate
-						backupFile := skillFile + ".bak"
-						if err := fs.Rename(skillFile, backupFile); err != nil {
-							cmd.PrintErrf("Error backing up legacy skill: %v\n", err)
-							return
-						}
-						cmd.Printf("Migrated legacy Agent Skill to v%d. Backup saved to %s\n", currentVersion, backupFile)
+				for _, s := range skills {
+					if err := installSkill(cmd, fs, s); err != nil {
+						cmd.PrintErrf("%v\n", err)
 					}
 				}
-
-				frontmatter := fmt.Sprintf("---\nname: cdd\ndescription: Protocol for implementing software features using the Context-Driven Development methodology.\nmetadata:\n  version: \"%d\"\n---\n\n", currentVersion)
-				content := frontmatter + prompts.System
-
-				if err := fs.WriteFile(skillFile, []byte(content), 0644); err != nil {
-					cmd.PrintErrf("Error writing skill file: %v\n", err)
-					return
-				}
-
-				cmd.Printf("Agent Skill 'cdd' installed at %s\n", skillFile)
 				return
 			}
 

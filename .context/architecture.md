@@ -8,10 +8,11 @@ A standalone CLI application written in Go that manages a file-based state machi
 - **Version Control**: Integrates with Git for change tracking
 
 ## 2. Architectural Pattern
-**Command Pattern + File-Based State Machine**
+**Command Pattern + File-Based State Machine + Agent Skills**
 - CLI commands implemented using Cobra framework
 - Each command encapsulates a specific operation (start, archive, recite, log, etc.)
 - State is persisted entirely through markdown files and JSON metadata
+- **Agent Skills**: Modular prompt packages (Orchestrator, Analyst, Architect, Executor, Integrator) that guide the AI through specific phases of the CDD protocol.
 - No database or external services required
 
 ## 3. Core Components (Container Diagram level)

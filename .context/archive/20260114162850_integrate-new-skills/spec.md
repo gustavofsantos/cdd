@@ -1,7 +1,3 @@
-
----
-###### Archived at: 2026-01-14 16:28:50 | Track: integrate-new-skills
-
 # Track: integrate-new-skills
 
 ## 1. User Intent

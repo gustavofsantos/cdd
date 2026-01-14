@@ -39,12 +39,12 @@ func TestAgentsInstall(t *testing.T) {
 		t.Errorf("expected frontmatter to contain '%s', got:\n%s", expectedFrontmatter, string(content))
 	}
 
-	expectedDescription := "Protocol for implementing software features using the Context-Driven Development methodology."
+	expectedDescription := "The Orchestrator that analyzes the plan and delegates to the appropriate Agent Skill."
 	if !strings.Contains(string(content), expectedDescription) {
 		t.Errorf("expected description to contain '%s'", expectedDescription)
 	}
 
-	expectedRole := "**Role:** You are the CDD Engine."
+	expectedRole := "# Role: Orchestrator"
 	if !strings.Contains(string(content), expectedRole) {
 		t.Errorf("expected role to be present in content")
 	}
@@ -94,7 +94,7 @@ func TestAgentsUpToDate(t *testing.T) {
 		t.Fatalf("failed to create skill directory: %v", err)
 	}
 	currentPath := skillDir + "/SKILL.md"
-	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nmetadata:\n  version: \"2\"\n---\nNew Content"), 0644); err != nil {
+	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nmetadata:\n  version: \"1.0.0\"\n---\nNew Content"), 0644); err != nil {
 		t.Fatalf("failed to write current file: %v", err)
 	}
 
