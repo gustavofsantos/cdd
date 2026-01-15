@@ -23,9 +23,9 @@ The `agents` command manages the integration between the CDD CLI and AI agents. 
 - **Error Handling**: If neither `--target` nor `--all` is specified, the command shall return an error message with examples of correct usage.
 
 ### 2.1.1 Antigravity Target
-- The command `cdd agents --install --target antigravity` must install all five CDD skills to `.agent/skills/` in Antigravity-compatible format.
-- **Location**: Creates `.agent/skills/{skill-id}/SKILL.md` for each of the five skills.
-- **Skill IDs**: `cdd`, `cdd-analyst`, `cdd-architect`, `cdd-executor`, `cdd-integrator`.
+- The command `cdd agents --install --target antigravity` must install all six CDD skills to `.agent/skills/` in Antigravity-compatible format.
+- **Location**: Creates `.agent/skills/{skill-id}/SKILL.md` for each of the six skills.
+- **Skill IDs**: `cdd`, `cdd-surveyor`, `cdd-analyst`, `cdd-architect`, `cdd-executor`, `cdd-integrator`.
 - **Format Validation**: Each skill must be validated to contain required YAML frontmatter fields:
   - `name`: The unique identifier for the skill (lowercase, hyphens for spaces)
   - `description`: Clear description of what the skill does and when to use it
@@ -37,7 +37,7 @@ The `agents` command manages the integration between the CDD CLI and AI agents. 
 ### 2.2 Cursor Rules Installation
 - The command `cdd agents --install --target cursor` must generate a `.cursorrules` file in the project root.
 - **Rationale**: Cursor does not support Agent Skills directly; it requires a flat rules file.
-- **Content**: The `.cursorrules` file concatenates all five CDD agent skills with clear section separators.
+- **Content**: The `.cursorrules` file concatenates all six CDD agent skills with clear section separators.
 - **Format**: Markdown with YAML frontmatter containing version metadata at the top.
 - **Features**:
   - Idempotent: Second install with same version skips overwrite
@@ -45,7 +45,7 @@ The `agents` command manages the integration between the CDD CLI and AI agents. 
   - Backup on update: Creates `.cursorrules.bak` when upgrading
 
 ### 2.3 Multi-Platform Installation (`--all` Flag)
-- The command `cdd agents --install --all` shall install skills for all supported platforms in a single invocation.
+- The command `cdd agents --install --all` shall install all six CDD skills for all supported platforms in a single invocation.
 - **Platforms Covered**: The `--all` flag installs skills for all directory-based targets (`agent`, `agents`, `claude`) plus special targets (`cursor`, `antigravity`).
 - **Idempotent**: Each platform installation follows its respective idempotent rules (version checking, backups on update).
 - **Behavior**: When `--all` is used, it overrides any `--target` specification.
@@ -58,10 +58,10 @@ The `agents` command manages the integration between the CDD CLI and AI agents. 
 
 ## 3. Relevant Context
 - `internal/cmd/agents.go`: Implementation of the `agents` command.
-- `prompts/system.md`, `prompts/analyst.md`, `prompts/architect.md`, `prompts/executor.md`, `prompts/integrator.md`: Source of skill content.
-- `.agent/skills/cdd/SKILL.md` and other skill directories: Directory-based installations.
+- `prompts/system.md`, `prompts/surveyor.md`, `prompts/analyst.md`, `prompts/architect.md`, `prompts/executor.md`, `prompts/integrator.md`: Source of skill content.
+- `.agents/skills/cdd-surveyor/SKILL.md` and other skill directories: Directory-based installations.
 - `.cursorrules`: Cursor rules file generated for Cursor editor integration.
-- Tests: `agents_install_test.go`, `agents_cursor_test.go`, `agents_target_cursor_test.go`, `agents_antigravity_e2e_test.go`, `agents_install_antigravity_test.go`, `agents_antigravity_discovery_test.go`, `agents_all_flag_test.go`, `agents_all_platforms_test.go`, `agents_no_default_target_test.go`, `agents_target_validation_test.go`, `agents_all_platforms_integration_test.go`
+- Tests: `prompts/integration_test.go`, `prompts/surveyor_test.go`, `agents_install_test.go`, `agents_cursor_test.go`, `agents_target_cursor_test.go`, `agents_antigravity_e2e_test.go`, `agents_install_antigravity_test.go`, `agents_antigravity_discovery_test.go`, `agents_all_flag_test.go`, `agents_all_platforms_test.go`, `agents_no_default_target_test.go`, `agents_target_validation_test.go`, `agents_all_platforms_integration_test.go`
 - Google Antigravity Documentation: https://antigravity.google/docs/skills
 
 ## 4. Breaking Changes

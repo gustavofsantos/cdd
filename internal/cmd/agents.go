@@ -275,6 +275,7 @@ EXAMPLES:
 
 				skills := []skill{
 					{id: "cdd", name: "cdd", description: "Orchestrator", content: prompts.System},
+					{id: "cdd-surveyor", name: "cdd-surveyor", description: "Surveyor", content: prompts.Surveyor},
 					{id: "cdd-analyst", name: "cdd-analyst", description: "Analyst", content: prompts.Analyst},
 					{id: "cdd-architect", name: "cdd-architect", description: "Architect", content: prompts.Architect},
 					{id: "cdd-executor", name: "cdd-executor", description: "Executor", content: prompts.Executor},

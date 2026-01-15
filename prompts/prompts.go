@@ -5,6 +5,9 @@ import _ "embed"
 //go:embed system.md
 var System string
 
+//go:embed surveyor.md
+var Surveyor string
+
 //go:embed analyst.md
 var Analyst string
 
