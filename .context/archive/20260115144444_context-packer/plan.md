@@ -29,15 +29,15 @@
 - [x] Test error handling when no specs are found
 
 ### 2.4 Output Formatting
-- [ ] Implement markdown rendering output (using existing glamour pattern)
-- [ ] Implement `--raw` flag for plain text output
-- [ ] Implement "no matches found" message
-- [ ] Write tests for both output formats
-- [ ] Add output tests for empty result cases
+- [x] Implement markdown rendering output (using existing glamour pattern)
+- [x] Implement `--raw` flag for plain text output
+- [x] Implement "no matches found" message
+- [x] Write tests for both output formats
+- [x] Add output tests for empty result cases
 
 ### 2.5 Integration & Polish
-- [ ] Register pack command in root.go
-- [ ] Add pack command to help documentation
-- [ ] Write end-to-end test simulating real workflow
-- [ ] Test with existing `.context/specs/` files
-- [ ] Add shell completion support for pack command
+- [x] Register pack command in root.go
+- [x] Add pack command to help documentation
+- [x] Write end-to-end test simulating real workflow
+- [x] Test with existing `.context/specs/` files
+- [x] Add shell completion support for pack command

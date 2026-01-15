@@ -22,6 +22,7 @@ The following tools are available:
 | `cdd-archive` | Archive a completed track and move it to history | `track_name` (required) |
 | `cdd-view` | Display track details or dashboard | `track_name` (optional), `spec`, `plan`, `log`, `raw`, `archived`, `inbox` (all boolean flags) |
 | `cdd-agents` | Manage AI agent integration and skills | `install` (bool), `target` (string), `all` (bool) |
+| `cdd-pack` | Extract and compress relevant specs by topic focus | `focus` (required), `raw` (optional boolean) |
 | `cdd-delete` | Destructively remove an active track | `track_name` (required) |
 | `cdd-version` | Display the version of the cdd CLI | None |
 
@@ -53,6 +54,7 @@ The following tools are available:
    go build -o ~/.cdd/toolbox/cdd-archive ./cmd/toolbox/archive/main.go
    go build -o ~/.cdd/toolbox/cdd-view ./cmd/toolbox/view/main.go
    go build -o ~/.cdd/toolbox/cdd-agents ./cmd/toolbox/agents/main.go
+   go build -o ~/.cdd/toolbox/cdd-pack ./cmd/toolbox/pack/main.go
    go build -o ~/.cdd/toolbox/cdd-delete ./cmd/toolbox/delete/main.go
    go build -o ~/.cdd/toolbox/cdd-version ./cmd/toolbox/version/main.go
    ```
@@ -89,6 +91,8 @@ Amp will automatically discover all CDD tools and make them available. You can t
 - "What's the current plan?" → Uses `cdd-recite`
 - "Record this decision: we're using PostgreSQL" → Uses `cdd-log`
 - "Archive the current track" → Uses `cdd-archive`
+- "Find all the documentation about authentication" → Uses `cdd-pack --focus authentication`
+- "Show me logging-related specs" → Uses `cdd-pack --focus log`
 
 ## How It Works
 
@@ -106,24 +110,46 @@ Each tool wrapper is a small executable that:
 - All toolbox wrapper binaries must be executable (`chmod +x`)
 - The `cdd` CLI must be version 0.1.0 or later
 
+## Tool Examples
+
+### Using cdd-pack to Find Specification Topics
+
+The `cdd-pack` tool is especially useful for AI agents working in large projects with comprehensive specifications. Examples:
+
+```bash
+# Find all paragraphs related to "log" in the specifications
+echo '{"focus":"log"}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Same query but with raw text output (no markdown rendering)
+echo '{"focus":"log","raw":true}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Search for authentication-related content
+echo '{"focus":"authentication"}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Explore command documentation
+echo '{"focus":"command"}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+```
+
+This tool helps Amp agents quickly locate relevant specifications without having to read entire specification files, significantly reducing context window usage.
+
 ## Troubleshooting
 
 ### Tools not appearing in Amp
 
 1. Check that `AMP_TOOLBOX` is set:
-   ```bash
-   echo $AMP_TOOLBOX
-   ```
+    ```bash
+    echo $AMP_TOOLBOX
+    ```
 
 2. Verify the binaries exist and are executable:
-   ```bash
-   ls -la $AMP_TOOLBOX/cdd-*
-   ```
+    ```bash
+    ls -la $AMP_TOOLBOX/cdd-*
+    ```
 
 3. Test a tool manually:
-   ```bash
-   TOOLBOX_ACTION=describe $AMP_TOOLBOX/cdd-init
-   ```
+    ```bash
+    TOOLBOX_ACTION=describe $AMP_TOOLBOX/cdd-init
+    ```
 
 ### Tools fail with "cdd binary not found"
 

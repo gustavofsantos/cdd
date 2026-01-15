@@ -39,6 +39,9 @@ EXAMPLES:
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runPackCmd(cmd, fs)
 		},
+		ValidArgsFunction: func(cmd *cobra.Command, args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+			return GetPackCompletion(args, toComplete)
+		},
 	}
 
 	cmd.Flags().StringVarP(&packFocus, "focus", "f", "", "Topic to search for (required)")
@@ -146,6 +149,48 @@ func getSortedSpecNames(groups map[string][]ParagraphMatch) []string {
 		}
 	}
 	return names
+}
+
+// GetPackCompletionTopics returns a list of suggested topics for pack command completion
+func GetPackCompletionTopics() []string {
+	return []string{
+		"log",
+		"view",
+		"command",
+		"specification",
+		"requirement",
+		"authentication",
+		"authorization",
+		"tracking",
+		"decision",
+		"architecture",
+		"testing",
+		"deployment",
+		"configuration",
+		"error",
+		"validation",
+	}
+}
+
+// GetPackCompletion provides shell completion suggestions for the pack command
+func GetPackCompletion(args []string, toComplete string) ([]string, cobra.ShellCompDirective) {
+	topics := GetPackCompletionTopics()
+
+	// Filter topics that start with toComplete (case-insensitive)
+	toLower := strings.ToLower(toComplete)
+	var filtered []string
+	for _, topic := range topics {
+		if strings.HasPrefix(strings.ToLower(topic), toLower) {
+			filtered = append(filtered, topic)
+		}
+	}
+
+	// Always return a slice, not nil
+	if filtered == nil {
+		filtered = []string{}
+	}
+
+	return filtered, cobra.ShellCompDirectiveNoFileComp
 }
 
 func init() {
