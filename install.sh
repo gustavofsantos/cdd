@@ -45,78 +45,107 @@ echo "════════════════════════�
 echo "        Context-Driven Development (CDD) Installer"
 echo "═══════════════════════════════════════════════════════════════"
 
-# Check for go
-if ! command -v go &> /dev/null; then
-    echo "Error: 'go' is not installed. Please install Go to build CDD from source."
-    echo "Visit https://golang.org/doc/install for instructions."
-    exit 1
-fi
-
-# Determine if we are in the repo or need to clone
-if [ ! -f "cmd/cdd/main.go" ]; then
-    if ! command -v git &> /dev/null; then
-        echo "Error: 'git' is not installed. Please install git to download CDD source."
+# Determine if we are in the repo or need to download
+if [ -f "cmd/cdd/main.go" ]; then
+    echo "Running from CDD repository. Building from source..."
+    
+    # Check for go
+    if ! command -v go &> /dev/null; then
+        echo "Error: 'go' is not installed. Please install Go to build CDD from source."
+        echo "Visit https://golang.org/doc/install for instructions."
         exit 1
     fi
-    echo "Not in the CDD repository. Cloning to temporary directory..."
-    TEMP_DIR=$(mktemp -d)
-    git clone --depth 1 "$REPO_URL" "$TEMP_DIR"
-    cd "$TEMP_DIR"
-    trap 'rm -rf "$TEMP_DIR"' EXIT
-fi
 
-echo "Building CDD..."
-go build -o cdd cmd/cdd/main.go
+    echo "Building CDD..."
+    go build -o cdd cmd/cdd/main.go
 
-echo "Installing CDD to $INSTALL_DIR..."
-# Check if sudo is needed
-if [ -w "$INSTALL_DIR" ]; then
-    mv cdd "$INSTALL_DIR/cdd"
-else
-    echo "Need sudo permissions to install to $INSTALL_DIR"
-    sudo mv cdd "$INSTALL_DIR/cdd"
-fi
+    echo "Installing CDD to $INSTALL_DIR..."
+    if [ -w "$INSTALL_DIR" ]; then
+        mv cdd "$INSTALL_DIR/cdd"
+    else
+        echo "Need sudo permissions to install to $INSTALL_DIR"
+        sudo mv cdd "$INSTALL_DIR/cdd"
+    fi
+    chmod +x "$INSTALL_DIR/cdd"
 
-chmod +x "$INSTALL_DIR/cdd"
-
-echo "CDD installed successfully to $INSTALL_DIR/cdd"
-
-# Install Amp Toolbox wrappers (Optional)
-if [ "$INSTALL_TOOLBOX" = true ]; then
-    echo ""
-    echo "Building Amp toolbox wrappers..."
-
-    # Create toolbox directory
-    if [ ! -d "$TOOLBOX_DIR" ]; then
-        if [ -w "$INSTALL_DIR" ]; then
-            mkdir -p "$TOOLBOX_DIR"
-        else
-            sudo mkdir -p "$TOOLBOX_DIR"
-            sudo chown "$(whoami)" "$TOOLBOX_DIR"
+    if [ "$INSTALL_TOOLBOX" = true ]; then
+        echo ""
+        echo "Building Amp toolbox wrappers..."
+        if [ ! -d "$TOOLBOX_DIR" ]; then
+            if [ -w "$INSTALL_DIR" ]; then mkdir -p "$TOOLBOX_DIR"; else sudo mkdir -p "$TOOLBOX_DIR"; sudo chown "$(whoami)" "$TOOLBOX_DIR"; fi
         fi
+        TOOLBOX_TOOLS=("init" "start" "recite" "log" "archive" "view" "agents" "delete" "version" "pack")
+        for tool in "${TOOLBOX_TOOLS[@]}"; do
+            echo "  Building cdd-$tool..."
+            go build -o "cdd-$tool" "./cmd/toolbox/$tool/main.go"
+            if [ -w "$TOOLBOX_DIR" ]; then mv "cdd-$tool" "$TOOLBOX_DIR/cdd-$tool"; else sudo mv "cdd-$tool" "$TOOLBOX_DIR/cdd-$tool"; fi
+            chmod +x "$TOOLBOX_DIR/cdd-$tool"
+        done
+    fi
+else
+    echo "Not in the CDD repository. Downloading pre-built binary..."
+    
+    OS=$(uname -s)
+    ARCH=$(uname -m)
+    
+    case "$OS" in
+        Darwin)  OS_NAME="Darwin" ;;
+        Linux)   OS_NAME="Linux" ;;
+        *)       echo "Unsupported OS: $OS"; exit 1 ;;
+    esac
+
+    case "$ARCH" in
+        x86_64) ARCH_NAME="x86_64" ;;
+        arm64|aarch64) ARCH_NAME="arm64" ;;
+        *)      echo "Unsupported architecture: $ARCH"; exit 1 ;;
+    esac
+
+    BINARY_NAME="cdd_${OS_NAME}_${ARCH_NAME}.tar.gz"
+    DOWNLOAD_URL="https://github.com/gustavofsantos/cdd/releases/latest/download/${BINARY_NAME}"
+
+    echo "Downloading CDD for ${OS_NAME} ${ARCH_NAME}..."
+    TEMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TEMP_DIR"' EXIT
+
+    if ! curl -L -f -o "$TEMP_DIR/$BINARY_NAME" "$DOWNLOAD_URL"; then
+        echo "Error: Failed to download binary from $DOWNLOAD_URL"
+        echo "Please check if a release exists for your platform."
+        exit 1
     fi
 
-    # Build and install each toolbox wrapper
-    TOOLBOX_TOOLS=("init" "start" "recite" "log" "archive" "view" "agents" "delete" "version" "pack")
+    echo "Extracting..."
+    tar -xzf "$TEMP_DIR/$BINARY_NAME" -C "$TEMP_DIR"
 
-    for tool in "${TOOLBOX_TOOLS[@]}"; do
-        echo "  Building cdd-$tool..."
-        go build -o "cdd-$tool" "./cmd/toolbox/$tool/main.go"
-        
-        if [ -w "$TOOLBOX_DIR" ]; then
-            mv "cdd-$tool" "$TOOLBOX_DIR/cdd-$tool"
-        else
-            sudo mv "cdd-$tool" "$TOOLBOX_DIR/cdd-$tool"
+    echo "Installing CDD to $INSTALL_DIR..."
+    if [ -w "$INSTALL_DIR" ]; then
+        mv "$TEMP_DIR/cdd" "$INSTALL_DIR/cdd"
+    else
+        echo "Need sudo permissions to install to $INSTALL_DIR"
+        sudo mv "$TEMP_DIR/cdd" "$INSTALL_DIR/cdd"
+    fi
+    chmod +x "$INSTALL_DIR/cdd"
+
+    if [ "$INSTALL_TOOLBOX" = true ]; then
+        echo "Installing Amp toolbox wrappers..."
+        if [ ! -d "$TOOLBOX_DIR" ]; then
+            if [ -w "$INSTALL_DIR" ]; then mkdir -p "$TOOLBOX_DIR"; else sudo mkdir -p "$TOOLBOX_DIR"; sudo chown "$(whoami)" "$TOOLBOX_DIR"; fi
         fi
         
-        chmod +x "$TOOLBOX_DIR/cdd-$tool"
-    done
-
-    echo "Amp toolbox installed successfully to $TOOLBOX_DIR"
-else
-    echo ""
-    echo "Skipping Amp toolbox installation. Use --amp-toolbox to include it."
+        # Move all cdd-* files found in the archive
+        find "$TEMP_DIR" -maxdepth 1 -name "cdd-*" -type f -exec bash -c '
+            FILE=$1
+            DEST=$2
+            if [ -w $(dirname "$DEST") ]; then
+                mv "$FILE" "$DEST/$(basename "$FILE")"
+            else
+                sudo mv "$FILE" "$DEST/$(basename "$FILE")"
+            fi
+            chmod +x "$DEST/$(basename "$FILE")"
+        ' -- {} "$TOOLBOX_DIR" \;
+    fi
 fi
+
+echo "CDD installed successfully!"
 
 # Shell configuration check
 if [[ ":$PATH:" != *":$INSTALL_DIR:"* ]]; then

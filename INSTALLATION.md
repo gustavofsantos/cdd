@@ -2,7 +2,7 @@
 
 ## Installation via Script (Recommended)
 
-If you have Go installed, you can use the one-line installation script. This will clone the repository to a temporary directory, build the `cdd` binary and its toolbox wrappers, and install them to `/usr/local/bin`.
+If you have `curl` and `tar` installed, you can use the one-line installation script. This script will automatically download the latest pre-compiled binary for your system (macOS or Linux) and install it to `/usr/local/bin`. If you run the script from within the CDD source repository, it will build from source instead.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)"

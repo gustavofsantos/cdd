@@ -139,6 +139,19 @@ builds:
       - amd64
       - arm64
 
+  - id: toolbox-pack
+    binary: cdd-pack
+    main: ./cmd/toolbox/pack/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+
 archives:
   - format: tar.gz
     # this name template makes the OS and Arch compatible with the results of `uname`.
