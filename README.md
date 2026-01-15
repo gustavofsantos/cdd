@@ -37,6 +37,16 @@ cdd agents --install --target antigravity
 
 This creates `.agent/skills/` compatible with Antigravity's skill discovery. For other agents that support MCP/Skill protocol, use the default installation or specify the appropriate `--target` (claude, agents, etc.).
 
+**Optional: Enable Amp Integration**
+
+CDD is fully compatible with [Amp's toolbox system](https://ampcode.com/manual#toolboxes). To use CDD commands directly in Amp:
+
+```bash
+export AMP_TOOLBOX=$(which cdd | xargs dirname)/toolbox
+```
+
+Then start Amp and it will automatically discover all CDD tools. See [AMP_TOOLBOX.md](AMP_TOOLBOX.md) for detailed setup instructions.
+
 ### 3. The Setup Track
 Now that your environment is initialized, you are ready to start. The `setup` track is designed to help the AI map your project and create the initial context files.
 
@@ -156,6 +166,26 @@ source ~/.bashrc   # or ~/.zshrc, depending on your shell
 ```
 
 **Note:** Tab autocompletion only works after running the `cdd completion` command and sourcing the generated script in your shell. The completion function will suggest active task names when you type `cdd view <TAB>`.
+
+### Amp Integration
+
+CDD is compatible with [Amp](https://ampcode.com), an AI coding agent. All commands are available as toolbox tools:
+
+```bash
+# Set up Amp integration
+export AMP_TOOLBOX=/usr/local/bin/toolbox
+
+# Start Amp
+amp
+```
+
+Then you can ask Amp to use CDD commands naturally, like:
+- "Create a new track called feature-x"
+- "Show me the current plan"
+- "Record this decision in the log"
+- "Archive the track"
+
+See [AMP_TOOLBOX.md](AMP_TOOLBOX.md) for complete setup instructions.
 
 ## Project Structure
 
