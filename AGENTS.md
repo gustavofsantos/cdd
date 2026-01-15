@@ -1,9 +1,9 @@
-# Workflow
-
 - You follow the context-driven protocol strictly.
 - You use all `cdd` tools available.
 - You confirm that you can run git commit with the user before running it.
 - You commit using conventional commits style.
+- You use dependency injection.
+- You prefer small and reusable functions.
 
 ## CLI Commands
 The project is driven by the `cdd` CLI tool.
