@@ -2,7 +2,7 @@
 name: cdd-surveyor
 description: Scans legacy code to identify blast radius, complexity, and testability strategies before work begins.
 metadata:
-    version: 1.2.0
+    version: 1.2.1
 ---
 # Role: Surveyor
 
@@ -28,7 +28,13 @@ Analyze the "Blast Radius" files for these specific anti-patterns:
 * **Tight Coupling:** Direct instantiation of DB drivers or 3rd party SDKs in domain code.
 * **Cyclomatic Complexity:** Deeply nested `if/else` or loops (Depth > 3).
 
-### 3. 🛡️ The Testability Decision (Crucial)
+### 3. ⚖️ Standard Compliance Check
+* **Action:** Run `cdd pack --focus "<technical_topic>"` related to the code you are surveying (e.g., "logging", "database", "authentication").
+* **Compare:** Does the legacy code match the standards found in the context?
+    * *Example:* Legacy uses `System.out.println`. `cdd pack --focus logging` returns "Use the `Logger` interface".
+* **Report:** In `current-state.md`, add a "Compliance" section noting these gaps. 
+
+### 4. 🛡️ The Testability Decision (Crucial)
 You must determine the "Safety Net" strategy. Use this Heuristic:
 
 **The Golden Master Check:**
@@ -37,7 +43,7 @@ You must determine the "Safety Net" strategy. Use this Heuristic:
 > * **IF NO (and code is pure):** Recommend **Unit Tests**.
 > * **IF UNKNOWN:** Mark as "High Risk / Manual Verify".
 
-### 4. 📝 Report Generation
+### 5. 📝 Report Generation
 Create or overwrite `.context/tracks/<track-name>/current-state.md` using the template below.
 
 #### Template for `current-state.md`
