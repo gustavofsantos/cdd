@@ -29,6 +29,7 @@ func describe() {
 		"args": map[string][2]string{
 			"focus": {"string", "topic to search for (required). E.g., 'log', 'command', 'authentication'"},
 			"raw":   {"boolean", "output plain text without markdown rendering (optional)"},
+			"limit": {"integer", "maximum paragraphs to return (optional, default: no limit). Use 0 to show count only"},
 		},
 	}
 
@@ -60,6 +61,15 @@ func execute() {
 		}
 	}
 
+	limit := -1
+	if l, ok := args["limit"]; ok {
+		if n, ok := l.(float64); ok {
+			limit = int(n)
+		} else if s, ok := l.(string); ok {
+			fmt.Sscanf(s, "%d", &limit)
+		}
+	}
+
 	if focus == "" {
 		fmt.Fprintf(os.Stderr, "Error: focus argument is required\n")
 		os.Exit(1)
@@ -72,10 +82,13 @@ func execute() {
 		os.Exit(1)
 	}
 
-	// Build command: cdd pack --focus <topic> [--raw]
+	// Build command: cdd pack --focus <topic> [--raw] [--limit N]
 	cmdArgs := []string{"pack", "--focus", focus}
 	if raw {
 		cmdArgs = append(cmdArgs, "--raw")
+	}
+	if limit >= 0 {
+		cmdArgs = append(cmdArgs, "--limit", fmt.Sprintf("%d", limit))
 	}
 
 	cmd := exec.Command(cddBin, cmdArgs...)

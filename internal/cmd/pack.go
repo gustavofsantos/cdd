@@ -16,6 +16,7 @@ import (
 var (
 	packFocus string
 	packRaw   bool
+	packLimit int
 )
 
 func NewPackCmd(fs platform.FileSystem) *cobra.Command {
@@ -31,11 +32,13 @@ only the paragraphs that match your topic, ranked by relevance.
 FLAGS:
   -f, --focus <topic>   Topic to search for (required). E.g., 'log', 'command', 'auth'.
   -r, --raw            Output plain text without markdown rendering.
+  -l, --limit <number>  Maximum paragraphs to return (default: no limit, use -1 for no limit).
 
 EXAMPLES:
   $ cdd pack --focus log             # Find log-related content
   $ cdd pack --focus command         # Find command documentation
-  $ cdd pack --focus auth --raw      # Raw output on authentication topics`,
+  $ cdd pack --focus auth --raw      # Raw output on authentication topics
+  $ cdd pack --focus log --limit 5   # Limit results to 5 paragraphs`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return runPackCmd(cmd, fs)
 		},
@@ -46,6 +49,7 @@ EXAMPLES:
 
 	cmd.Flags().StringVarP(&packFocus, "focus", "f", "", "Topic to search for (required)")
 	cmd.Flags().BoolVarP(&packRaw, "raw", "r", false, "Output plain text without markdown rendering")
+	cmd.Flags().IntVarP(&packLimit, "limit", "l", -1, "Maximum paragraphs to return (default: no limit)")
 
 	return cmd
 }
@@ -75,16 +79,22 @@ func runPackCmd(cmd *cobra.Command, fs platform.FileSystem) error {
 
 	// Filter paragraphs by topic with a reasonable threshold
 	minScore := 0.5
-	matches := FilterParagraphs(specs, packFocus, minScore)
+	allMatches := FilterParagraphs(specs, packFocus, minScore)
 
-	if len(matches) == 0 {
+	if len(allMatches) == 0 {
 		fmt.Fprintf(cmd.OutOrStdout(), "No matches found for topic: %q\n", packFocus)
 		fmt.Fprintf(cmd.OutOrStdout(), "Try other topics or check available specs with: cdd view\n")
 		return nil
 	}
 
-	// Build markdown output
-	markdown := buildPackMarkdown(matches, packFocus)
+	// Apply limit if specified
+	matches, err := LimitResults(allMatches, packLimit)
+	if err != nil {
+		return fmt.Errorf("error applying limit: %v", err)
+	}
+
+	// Build markdown output (pass total count for truncation message)
+	markdown := buildPackMarkdownWithLimit(matches, packFocus, len(allMatches))
 
 	// Output: raw or rendered
 	isTerminal := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
@@ -108,10 +118,23 @@ func runPackCmd(cmd *cobra.Command, fs platform.FileSystem) error {
 
 // buildPackMarkdown constructs markdown output from filtered matches
 func buildPackMarkdown(matches []ParagraphMatch, topic string) string {
+	return buildPackMarkdownWithLimit(matches, topic, len(matches))
+}
+
+// buildPackMarkdownWithLimit constructs markdown output with limit information
+func buildPackMarkdownWithLimit(matches []ParagraphMatch, topic string, totalCount int) string {
 	var sb strings.Builder
 
 	sb.WriteString(fmt.Sprintf("# Context Pack: %q\n\n", topic))
-	sb.WriteString(fmt.Sprintf("Found %d relevant paragraphs across specs.\n\n", len(matches)))
+	
+	// Show if results were truncated
+	if len(matches) == 0 && totalCount > 0 {
+		sb.WriteString(fmt.Sprintf("Found %d relevant paragraphs across specs (showing 0 matches).\n\n", totalCount))
+	} else if len(matches) < totalCount {
+		sb.WriteString(fmt.Sprintf("Found %d relevant paragraphs across specs (showing %d of %d).\n\n", totalCount, len(matches), totalCount))
+	} else {
+		sb.WriteString(fmt.Sprintf("Found %d relevant paragraphs across specs.\n\n", len(matches)))
+	}
 
 	// Group by spec file
 	specGroups := make(map[string][]ParagraphMatch)
@@ -191,6 +214,30 @@ func GetPackCompletion(args []string, toComplete string) ([]string, cobra.ShellC
 	}
 
 	return filtered, cobra.ShellCompDirectiveNoFileComp
+}
+
+// LimitResults returns the first N items from a slice of ParagraphMatch.
+// If limit is negative, returns all matches.
+// If limit is zero, returns an empty slice.
+// If limit is greater than available items, returns all items.
+func LimitResults(matches []ParagraphMatch, limit int) ([]ParagraphMatch, error) {
+	// If limit is negative, return all matches
+	if limit < 0 {
+		return matches, nil
+	}
+
+	// If limit is 0, return empty slice
+	if limit == 0 {
+		return []ParagraphMatch{}, nil
+	}
+
+	// If limit is greater than available, return all
+	if limit >= len(matches) {
+		return matches, nil
+	}
+
+	// Return first N matches
+	return matches[:limit], nil
 }
 
 func init() {

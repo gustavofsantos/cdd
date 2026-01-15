@@ -9,6 +9,7 @@ The `pack` command compresses global specifications by extracting only paragraph
 - The command shall be invoked as `cdd pack --focus <topic>` where `<topic>` is the search term.
 - The `--focus` flag is required; the command shall return an error if it is missing.
 - The `--raw` flag is optional; when provided, output shall be plain text without markdown rendering.
+- The `--limit <number>` flag is optional; when provided, it constrains the maximum number of paragraphs returned (default: -1 for no limit).
 
 ### 2.2 Specification Discovery
 - The command shall discover all `.md` files in the `.context/specs/` directory.
@@ -37,11 +38,19 @@ The `pack` command compresses global specifications by extracting only paragraph
 - If no paragraphs match the search topic, the system shall output a helpful message indicating this.
 - The message shall suggest exploring different topics or checking available specifications.
 
-### 2.7 Shell Completion
+### 2.7 Output Limiting
+- When `--limit N` is specified (where N >= 0), the command shall return at most N paragraphs.
+- The limit shall be applied after ranking by relevance, returning the top N highest-scoring matches.
+- When `--limit 0` is specified, the command shall display only the match count header without paragraph content.
+- When results are truncated due to limit, the output header shall indicate "(showing X of Y)" where X is returned count and Y is total matches.
+- Negative limit values (e.g., -1) shall mean "no limit" and return all matching paragraphs.
+
+### 2.8 Shell Completion
 - The `pack` command shall support shell completion for common topics.
 - Completion suggestions shall include topics such as: log, view, command, specification, requirement, authentication, authorization, tracking, decision, architecture, testing, deployment, configuration, error, validation.
 - Completion shall be case-insensitive.
 - Completion shall filter suggestions based on the user's partial input.
+- The `--limit` flag shall support integer completion.
 
 ## 3. Relevant Files
 - `internal/cmd/pack.go`: Implementation of the pack command

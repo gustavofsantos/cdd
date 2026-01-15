@@ -22,7 +22,7 @@ The following tools are available:
 | `cdd-archive` | Archive a completed track and move it to history | `track_name` (required) |
 | `cdd-view` | Display track details or dashboard | `track_name` (optional), `spec`, `plan`, `log`, `raw`, `archived`, `inbox` (all boolean flags) |
 | `cdd-agents` | Manage AI agent integration and skills | `install` (bool), `target` (string), `all` (bool) |
-| `cdd-pack` | Extract and compress relevant specs by topic focus | `focus` (required), `raw` (optional boolean) |
+| `cdd-pack` | Extract and compress relevant specs by topic focus | `focus` (required), `raw` (optional boolean), `limit` (optional integer) |
 | `cdd-delete` | Destructively remove an active track | `track_name` (required) |
 | `cdd-version` | Display the version of the cdd CLI | None |
 
@@ -128,9 +128,18 @@ echo '{"focus":"authentication"}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
 
 # Explore command documentation
 echo '{"focus":"command"}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Limit results to reduce context window usage
+echo '{"focus":"log","limit":5}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Show only match count (limit=0)
+echo '{"focus":"command","limit":0}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
+
+# Combine limit with raw output for efficiency
+echo '{"focus":"authentication","limit":3,"raw":true}' | TOOLBOX_ACTION=execute $AMP_TOOLBOX/cdd-pack
 ```
 
-This tool helps Amp agents quickly locate relevant specifications without having to read entire specification files, significantly reducing context window usage.
+This tool helps Amp agents quickly locate relevant specifications without having to read entire specification files, significantly reducing context window usage. Use the `limit` parameter to constrain results when searching for broad topics that might return many matches.
 
 ## Troubleshooting
 
