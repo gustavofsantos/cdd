@@ -24,17 +24,9 @@ The `view` command provides a dashboard for monitoring active development tracks
 
 ### 2.4 Tab Autocompletion
 - When a user presses TAB while typing a task argument for the `view` command, the system shall provide shell completion suggestions.
-- Ubiquitous: The `view` command shall support tab autocompletion for task arguments.
-- Event-driven: When the user presses TAB while typing a task argument for the `view` command, the system shall trigger autocompletion logic.
-- State-driven: While exactly one task is active, the system shall automatically complete the task argument with that task's name.
-- State-driven: While multiple tasks are active, the system shall present a selection menu listing all active tasks for the user to choose from.
-- Unwanted: If no tasks are active, then the system shall not autocomplete or display a selection menu.
-- Completion filtering: When a user provides a partial task name (e.g., `cdd view feat`), the system shall filter suggestions to only those starting with the provided prefix.
-- **Setup Requirement**: Autocompletion only works after the user runs `cdd completion <shell>` and sources the generated script in their shell configuration file (e.g., `~/.bashrc`, `~/.zshrc`, `~/.config/fish/config.fish`).
-
-## 3. Relevant Files
-- `internal/cmd/view.go`
-- `internal/cmd/completion.go`
-- `.context/inbox.md`
-- `.context/tracks/`
-- `.context/archive/`
+- The `view` command shall support tab autocompletion for task arguments.
+- When the user presses TAB while typing a task argument for the `view` command, the system shall trigger autocompletion logic.
+- While exactly one task is active, the system shall automatically complete the task argument with that task's name.
+- While multiple tasks are active, the system shall present a selection menu listing all active tasks for the user to choose from.
+- If no tasks are active, then the system shall not autocomplete or display a selection menu.
+- When a user provides a partial task name (e.g., `cdd view feat`), the system shall filter suggestions to only those starting with the provided prefix.

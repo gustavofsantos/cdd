@@ -6,18 +6,13 @@ The `log` command records permanent decisions or errors to the `decisions.md` fi
 ## 2. Requirements
 
 ### 2.1 Stdin Support
-- `cdd log` shall accept the message content from standard input (stdin) if provided.
-- This allows for multiline messages and piping from other commands.
+- When message content is provided via standard input (stdin), `cdd log` shall accept and use it as the log entry.
 
 ### 2.2 Track Inference
-- If the track name is omitted AND there is exactly one active track in `.context/tracks/`, `cdd` shall infer the track name automatically.
-- If multiple tracks are active and no track name is provided, `cdd log` must return an error asking the user to specify the track.
+- When the track name is omitted and there is exactly one active track in `.context/tracks/`, the system shall infer the track name automatically.
+- When multiple tracks are active and no track name is provided, the system shall return an error asking the user to specify the track.
 
 ### 2.3 Argument Modes
-- **Explicit Track & Message**: `cdd log <track> <message>` (Traditional usage).
-- **Explicit Track & Stdin**: `cdd log <track>` (Message read from stdin).
-- **Implicit Track & Stdin**: `cdd log` (Track inferred from context, Message read from stdin).
-
-## 3. Relevant Files
-- `internal/cmd/log.go`
-- `.context/tracks/<track>/decisions.md`
+- When invoked as `cdd log <track> <message>`, the system shall log the provided message to the specified track.
+- When invoked as `cdd log <track>` with content in stdin, the system shall log the stdin content to the specified track.
+- When invoked as `cdd log` with content in stdin, the system shall log the stdin content to the inferred active track.
