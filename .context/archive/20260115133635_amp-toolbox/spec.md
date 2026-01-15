@@ -1,7 +1,3 @@
-
----
-###### Archived at: 2026-01-15 13:36:35 | Track: amp-toolbox
-
 # Track: amp-toolbox
 
 ## 1. User Intent

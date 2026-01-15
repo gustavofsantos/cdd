@@ -20,6 +20,124 @@ builds:
       - arm64
     ldflags:
       - -s -w -X cdd/internal/cmd.Version={{.Version}}
+  
+  # Toolbox wrappers for Amp integration
+  - id: toolbox-init
+    binary: cdd-init
+    main: ./cmd/toolbox/init/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-start
+    binary: cdd-start
+    main: ./cmd/toolbox/start/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-recite
+    binary: cdd-recite
+    main: ./cmd/toolbox/recite/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-log
+    binary: cdd-log
+    main: ./cmd/toolbox/log/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-archive
+    binary: cdd-archive
+    main: ./cmd/toolbox/archive/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-view
+    binary: cdd-view
+    main: ./cmd/toolbox/view/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-agents
+    binary: cdd-agents
+    main: ./cmd/toolbox/agents/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-delete
+    binary: cdd-delete
+    main: ./cmd/toolbox/delete/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+  
+  - id: toolbox-version
+    binary: cdd-version
+    main: ./cmd/toolbox/version/main.go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
 
 archives:
   - format: tar.gz
