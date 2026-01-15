@@ -2,23 +2,26 @@ package cmd
 
 import (
 	"bytes"
+	"cdd/internal/platform"
 	"strings"
 	"testing"
 )
 
 func TestAgentsCmd_Help(t *testing.T) {
 	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
+	mockFS := platform.NewMockFileSystem()
+	agentsCmd := NewAgentsCmd(mockFS)
+	agentsCmd.SetOut(buf)
+	agentsCmd.SetErr(buf)
 
-	rootCmd.SetArgs([]string{"agents", "--help"})
-	err := rootCmd.Execute()
+	agentsCmd.SetArgs([]string{"--help"})
+	err := agentsCmd.Execute()
 	if err != nil {
 		t.Fatalf("expected no error, got %v", err)
 	}
 
 	output := buf.String()
-	expected := "Usage:\n  cdd agents [flags]"
+	expected := "Usage:\n  agents [flags]"
 	if !strings.Contains(output, expected) {
 		t.Errorf("expected help output to contain usage, got %s", output)
 	}

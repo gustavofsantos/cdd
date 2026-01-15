@@ -37,12 +37,6 @@ func validateAntigravitySkill(content string) error {
 	return nil
 }
 
-var (
-	installAgentSkill   bool
-	installTarget       string
-	installAllPlatforms bool
-)
-
 type skill struct {
 	id          string
 	name        string
@@ -248,6 +242,12 @@ func installAntigravitySkill(cmd *cobra.Command, fs platform.FileSystem, s skill
 }
 
 func NewAgentsCmd(fs platform.FileSystem) *cobra.Command {
+	var (
+		installAgentSkill   bool
+		installTarget       string
+		installAllPlatforms bool
+	)
+
 	agentsCmd := &cobra.Command{
 		Use:   "agents",
 		Short: "Manage Agent Skills.",

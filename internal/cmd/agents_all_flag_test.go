@@ -2,17 +2,20 @@ package cmd
 
 import (
 	"bytes"
+	"cdd/internal/platform"
 	"strings"
 	"testing"
 )
 
 func TestAgentsCmd_AllFlagIsRecognized(t *testing.T) {
+	mockFS := platform.NewMockFileSystem()
+	agentsCmd := NewAgentsCmd(mockFS)
 	buf := new(bytes.Buffer)
-	rootCmd.SetOut(buf)
-	rootCmd.SetErr(buf)
+	agentsCmd.SetOut(buf)
+	agentsCmd.SetErr(buf)
 
-	rootCmd.SetArgs([]string{"agents", "--install", "--all"})
-	err := rootCmd.Execute()
+	agentsCmd.SetArgs([]string{"--install", "--all"})
+	err := agentsCmd.Execute()
 	if err != nil {
 		t.Fatalf("expected no error with --all flag, got %v", err)
 	}
