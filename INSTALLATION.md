@@ -1,6 +1,42 @@
 # Installation
 
-## Installation via Binary
+## Installation via Script (Recommended)
+
+If you have Go installed, you can use the one-line installation script. This will clone the repository to a temporary directory, build the `cdd` binary and its toolbox wrappers, and install them to `/usr/local/bin`.
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)"
+```
+
+To also install the Amp toolbox wrappers, use the `--amp-toolbox` flag:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)" -- --amp-toolbox
+```
+
+To install CDD to a different directory (e.g., `~/bin`), use the `--install-dir` flag:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)" -- --install-dir ~/bin
+```
+
+To install the Amp toolbox to a specific path, use the `--amp-toolbox-dir` flag:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)" -- --amp-toolbox --amp-toolbox-dir ~/.amp/toolbox
+```
+
+### Advanced Script Installation
+
+You can also specify a custom installation directory:
+
+```bash
+git clone https://github.com/gustavofsantos/cdd.git
+cd cdd
+./install.sh /custom/bin/path
+```
+
+## Installation via Binary (Alternative)
 
 You can download the pre-compiled binary for your platform from the [Releases](https://github.com/gustavofsantos/cdd/releases) page.
 
@@ -36,17 +72,3 @@ Expand-Archive -Path "cdd.zip" -DestinationPath "."
 Move-Item -Path "cdd.exe" -Destination "C:\Windows\System32\cdd.exe"
 Remove-Item "cdd.zip"
 ```
-
-## Installation via Script (Recommended for Source)
-
-If you have Go installed, you can use the installation script:
-
-```bash
-git clone https://github.com/gustavofsantos/cdd.git
-cd cdd
-./install.sh [/optional/target/path]
-```
-
-By default, it installs to `/usr/local/bin`.
-
-## Build from Source (Manual)

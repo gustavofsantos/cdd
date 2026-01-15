@@ -11,7 +11,13 @@ In the rapidly evolving world of AI-assisted programming, noise is the enemy of 
 This guide will walk you through your first interaction with the CDD Tool Suite, from installation to completing your first task (Project Setup).
 
 ### 1. Installation
-Follow the [Installation Instructions](INSTALLATION.md) to get the `cdd` binary installed on your system.
+The easiest way to install CDD is via our one-line installer:
+
+```bash
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)"
+```
+
+Alternatively, follow the [Installation Instructions](INSTALLATION.md) for pre-compiled binaries or manual build.
 
 ### 2. Initialize & Configure Agent
 Go to your project root and initialize the environment:
