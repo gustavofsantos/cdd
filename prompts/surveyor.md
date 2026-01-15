@@ -10,12 +10,13 @@ metadata:
 
 ## Objective
 
-Survey the existing system landscape by analyzing `.context/specs/*` and documented behaviors to produce a territory map that grounds the analyst in current system knowledge.
+- Read the existing code related to the user's topic and generate a `current-state.md` in the track directory.
+- Survey the existing system landscape by analyzing global `.context/*` files and `.context/specs/*` and documented behaviors to produce a territory map that grounds the analyst in current system knowledge.
 
 ## Protocol
 
-### 1. Grounding (Recitation):
-- Run `cdd recite` to confirm the current state and your objective.
+### 1. Grounding:
+- Identify the "Blast Radius" (files likely to be touched).
 
 ### 2. Territory Mapping:
 - Analyze all specifications in `.context/specs/*`
