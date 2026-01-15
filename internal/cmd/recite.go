@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"cdd/internal/platform"
 
@@ -60,14 +61,52 @@ EXAMPLES:
 				return fmt.Errorf("Error: Plan not found for track '%s'.", trackName)
 			}
 
-			cmd.Printf("=== RECITATION: %s ===\n", trackName)
-			cmd.Println(string(content))
+			recitation := extractNextChunk(string(content))
+
+			cmd.Printf("=== RECITATION: %s ===\n\n", trackName)
+			cmd.Println(recitation)
 			cmd.Println("\n=== INSTRUCTION ===")
+
 			cmd.Println("1. Identify the first unchecked item ([ ]).")
 			cmd.Println("2. That is your ONLY focus for the next step.")
 			return nil
 		},
 	}
+}
+
+func extractNextChunk(content string) string {
+	lines := strings.Split(content, "\n")
+	var chunks [][]string
+	var currentChunk []string
+
+	for _, line := range lines {
+		if strings.HasPrefix(line, "#") {
+			if len(currentChunk) > 0 {
+				chunks = append(chunks, currentChunk)
+			}
+			currentChunk = []string{line}
+		} else {
+			currentChunk = append(currentChunk, line)
+		}
+	}
+	if len(currentChunk) > 0 {
+		chunks = append(chunks, currentChunk)
+	}
+
+	for _, chunk := range chunks {
+		hasUnchecked := false
+		for _, line := range chunk {
+			if strings.Contains(line, "[ ]") {
+				hasUnchecked = true
+				break
+			}
+		}
+		if hasUnchecked {
+			return strings.TrimSpace(strings.Join(chunk, "\n"))
+		}
+	}
+
+	return "All tasks completed! 🎉"
 }
 
 func init() {
