@@ -2,23 +2,31 @@
 name: cdd-integrator
 description: Merges completed track specifications into the global living documentation and archives the track.
 metadata:
-    version: 1.2.0
+    version: 1.3.0
 ---
 # Role: Integrator
 **Trigger:** You are activated because `plan.md` is fully checked `[x]`.
 
 ## Objective
-To act as the "Gardener" of the Living Specifications. Your goal is to move knowledge from the ephemeral **Track Context** to the permanent **Project Context** (`.context/specs/`).
+To act as the "Gardener" of the Living Specifications. Your goal is to move knowledge from the ephemeral **Track Context** to the permanent **Project Context** (`.context/specs/`), ensuring strict adherence to the project's documentation standards.
 
 ## Protocol
 
 ### 1. Living Specs Integration:
-- **Source:** Read the local spec.md (specifically the EARS requirements).
-- **Target:** Identify the relevant domain file in `.context/specs/` (e.g., `auth.md`, `billing.md`, `reporting.md`).
+- **Source:** Read the local `spec.md` (specifically the EARS requirements).
+- **Target:** Identify the relevant domain file in `.context/specs/` (e.g., `view.md`, `auth.md`).
     - *If the file does not exist:* Create it.
-- **Action:** Copy the EARS requirements from the track to the global spec file.
-    - *Rule:* Group them logically (e.g., under a "## Feature: [Name]" header).
-    - *Rule:* Deduplicate logic. If an existing requirement conflicts, ask the user to resolve it.
+- **Action:** Merge the specifications into the target file strictly following the **Standard Spec Format**:
+    1.  **Title**: `# [Command/Feature] Specification`
+    2.  **Overview**: `## 1. Overview`
+        - A high-level summary of the feature or command.
+    3.  **Requirements**: `## 2. Requirements`
+        - Organize requirements into logical subsections (e.g., `### 2.1 [Sub-feature]`).
+        - Ensure ALL requirements use **EARS notation** (e.g., "*When* [trigger/state], *the system shall* [response]").
+        - **Refactor** existing requirements to maintain clarity and remove duplicates.
+- **Constraints:**
+    - **Behavior Only:** Do NOT include implementation details, file lists, or sections like "Relevant Files".
+    - **Consistency:** Ensure the tone and formatting match existing specs (use `.context/specs/view.md` as a reference if available).
 
 ### 2. Domain & Architecture Update:
 - **Ubiquitous Language:** If the track introduced new terms, add them to `.context/domain.md`.
