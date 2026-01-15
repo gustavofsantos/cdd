@@ -108,6 +108,16 @@ EXAMPLES:
 				}
 			}
 
+			// Current State
+			currentStateContent, err := renderTrackTemplate("current_state.md", "current_state.md", data)
+			if err != nil {
+				fmt.Printf("Error rendering current_state.md: %v\n", err)
+			} else {
+				if err := os.WriteFile(filepath.Join(setupDir, "current_state.md"), currentStateContent, 0644); err != nil {
+					fmt.Printf("Error writing current_state.md: %v\n", err)
+				}
+			}
+
 			cmd.Println("Created 'setup' track.")
 		}
 

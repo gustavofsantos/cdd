@@ -19,8 +19,8 @@ func NewStartCmd(fs platform.FileSystem) *cobra.Command {
 		Long: `Creates an isolated workspace following the Lean CDD v4.1 protocol.
 
 A "Track" is an ephemeral directory where you focus on a single unit of work. 
-This command initializes the track directory with the standard 3-file 
-structure: spec.md, plan.md, and decisions.md.
+This command initializes the track directory with the standard 4-file 
+structure: spec.md, plan.md, current_state.md and decisions.md.
 
 The track name should be a short, kebab-case identifier of the task.
 
@@ -63,6 +63,15 @@ EXAMPLES:
 				return fmt.Errorf("failed to write plan.md: %w", err)
 			}
 
+			// Current State Survey
+			currentStateContent, err := renderTrackTemplate("current_state.md", "current_state.md", data)
+			if err != nil {
+				return err
+			}
+			if err := fs.WriteFile(filepath.Join(trackDir, "current_state.md"), currentStateContent, 0644); err != nil {
+				return fmt.Errorf("failed to write current_state.md: %w", err)
+			}
+
 			// Decisions Log
 			decisionsContent, err := renderTrackTemplate("decisions.md", "decisions.md", data)
 			if err != nil {
@@ -84,7 +93,7 @@ EXAMPLES:
 				return fmt.Errorf("failed to write metadata.json: %w", err)
 			}
 
-			cmd.Printf("Track '%s' initialized.\n活跃 (Active) Track created with 3-file structure.\n", trackName)
+			cmd.Printf("Track '%s' initialized.\n(Active) Track created with 4-file structure.\n", trackName)
 			return nil
 		},
 	}

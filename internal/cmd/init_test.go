@@ -72,6 +72,7 @@ func TestInitCommand(t *testing.T) {
 	trackFiles := []string{
 		"spec.md",
 		"plan.md",
+		"current_state.md",
 		"decisions.md",
 	}
 	for _, f := range trackFiles {
