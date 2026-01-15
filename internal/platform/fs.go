@@ -73,3 +73,8 @@ func (fs *RealFileSystem) Remove(name string) error {
 func (fs *RealFileSystem) RemoveAll(path string) error {
 	return os.RemoveAll(path)
 }
+
+// EndsWithString checks if a string ends with a suffix
+func EndsWithString(s, suffix string) bool {
+	return len(s) >= len(suffix) && s[len(s)-len(suffix):] == suffix
+}
