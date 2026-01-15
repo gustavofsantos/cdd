@@ -16,7 +16,9 @@ func TestPackOutputMarkdownRendering(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 	// Don't set raw flag, should render
 
 	err := cmd.RunE(cmd, []string{})
@@ -43,8 +45,12 @@ func TestPackOutputRawFormat(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -75,7 +81,9 @@ func TestPackOutputNoMatchesMessage(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "xyz999notarealword")
+	if err := cmd.Flags().Set("focus", "xyz999notarealword"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -108,7 +116,9 @@ func TestPackOutputEmptyResultsHandling(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Use topic with no realistic matches
-	cmd.Flags().Set("focus", "abcdefghijklmnop")
+	if err := cmd.Flags().Set("focus", "abcdefghijklmnop"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -136,8 +146,12 @@ func TestPackOutputStructure(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -174,8 +188,12 @@ func TestPackOutputMatchInfo(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -208,18 +226,28 @@ func TestPackOutputRawVsRendered(t *testing.T) {
 	cmdRaw := NewPackCmd(fs)
 	var outRaw bytes.Buffer
 	cmdRaw.SetOut(&outRaw)
-	cmdRaw.Flags().Set("focus", "log")
-	cmdRaw.Flags().Set("raw", "true")
-	cmdRaw.RunE(cmdRaw, []string{})
+	if err := cmdRaw.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmdRaw.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
+	if err := cmdRaw.RunE(cmdRaw, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	rawOutput := outRaw.String()
 
 	// Get rendered output
 	cmdRendered := NewPackCmd(fs)
 	var outRendered bytes.Buffer
 	cmdRendered.SetOut(&outRendered)
-	cmdRendered.Flags().Set("focus", "log")
+	if err := cmdRendered.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 	// raw flag defaults to false
-	cmdRendered.RunE(cmdRendered, []string{})
+	if err := cmdRendered.RunE(cmdRendered, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	renderedOutput := outRendered.String()
 
 	// Both should have content
@@ -256,8 +284,12 @@ func TestPackOutputMultipleSpecsSeparation(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "command")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "command"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -294,8 +326,12 @@ func TestPackOutputRelevanceOrdering(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -315,8 +351,8 @@ func TestPackOutputRelevanceOrdering(t *testing.T) {
 				scoreStr := strings.TrimSpace(parts[1])
 				scoreStr = strings.Split(scoreStr, " ")[0]
 				// Simple parsing - just check if scores are present
-				if strings.Contains(scoreStr, ".") {
-					// Score is formatted, this is good
+				if !strings.Contains(scoreStr, ".") {
+					t.Errorf("Score should contain a decimal point: %s", scoreStr)
 				}
 			}
 		}

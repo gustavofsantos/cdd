@@ -13,13 +13,13 @@ import (
 // Trailing/leading whitespace is stripped from the entire input and each paragraph.
 func ExtractParagraphs(text string) []string {
 	lines := strings.Split(text, "\n")
-	
+
 	var paragraphs []string
 	var currentParagraph []string
-	
+
 	for _, line := range lines {
 		trimmed := strings.TrimSpace(line)
-		
+
 		if trimmed == "" {
 			// Blank line: end current paragraph if it exists
 			if len(currentParagraph) > 0 {
@@ -31,12 +31,12 @@ func ExtractParagraphs(text string) []string {
 			currentParagraph = append(currentParagraph, line)
 		}
 	}
-	
+
 	// Don't forget the last paragraph
 	if len(currentParagraph) > 0 {
 		paragraphs = append(paragraphs, strings.Join(currentParagraph, "\n"))
 	}
-	
+
 	return paragraphs
 }
 

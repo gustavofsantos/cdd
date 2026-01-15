@@ -66,7 +66,10 @@ func execute() {
 		if n, ok := l.(float64); ok {
 			limit = int(n)
 		} else if s, ok := l.(string); ok {
-			fmt.Sscanf(s, "%d", &limit)
+			if _, err := fmt.Sscanf(s, "%d", &limit); err != nil {
+				// If parsing fails, use default limit (-1)
+				limit = -1
+			}
 		}
 	}
 

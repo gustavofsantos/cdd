@@ -82,8 +82,12 @@ func runPackCmd(cmd *cobra.Command, fs platform.FileSystem) error {
 	allMatches := FilterParagraphs(specs, packFocus, minScore)
 
 	if len(allMatches) == 0 {
-		fmt.Fprintf(cmd.OutOrStdout(), "No matches found for topic: %q\n", packFocus)
-		fmt.Fprintf(cmd.OutOrStdout(), "Try other topics or check available specs with: cdd view\n")
+		if _, err := fmt.Fprintf(cmd.OutOrStdout(), "No matches found for topic: %q\n", packFocus); err != nil {
+			return err
+		}
+		if _, err := fmt.Fprintf(cmd.OutOrStdout(), "Try other topics or check available specs with: cdd view\n"); err != nil {
+			return err
+		}
 		return nil
 	}
 
@@ -100,25 +104,20 @@ func runPackCmd(cmd *cobra.Command, fs platform.FileSystem) error {
 	isTerminal := isatty.IsTerminal(os.Stdout.Fd()) || isatty.IsCygwinTerminal(os.Stdout.Fd())
 	if packRaw || !isTerminal {
 		// Plain text output
-		fmt.Fprint(cmd.OutOrStdout(), markdown)
-		return nil
+		_, err := fmt.Fprint(cmd.OutOrStdout(), markdown)
+		return err
 	}
 
 	// Rendered markdown output
 	rendered, err := glamour.Render(markdown, "dark")
 	if err != nil {
 		// Fall back to raw if rendering fails
-		fmt.Fprint(cmd.OutOrStdout(), markdown)
-		return nil
+		_, err := fmt.Fprint(cmd.OutOrStdout(), markdown)
+		return err
 	}
 
-	fmt.Fprint(cmd.OutOrStdout(), rendered)
-	return nil
-}
-
-// buildPackMarkdown constructs markdown output from filtered matches
-func buildPackMarkdown(matches []ParagraphMatch, topic string) string {
-	return buildPackMarkdownWithLimit(matches, topic, len(matches))
+	_, err = fmt.Fprint(cmd.OutOrStdout(), rendered)
+	return err
 }
 
 // buildPackMarkdownWithLimit constructs markdown output with limit information
@@ -126,7 +125,7 @@ func buildPackMarkdownWithLimit(matches []ParagraphMatch, topic string, totalCou
 	var sb strings.Builder
 
 	sb.WriteString(fmt.Sprintf("# Context Pack: %q\n\n", topic))
-	
+
 	// Show if results were truncated
 	if len(matches) == 0 && totalCount > 0 {
 		sb.WriteString(fmt.Sprintf("Found %d relevant paragraphs across specs (showing 0 matches).\n\n", totalCount))

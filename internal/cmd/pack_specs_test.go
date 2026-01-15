@@ -30,7 +30,7 @@ func TestDiscoverSpecs(t *testing.T) {
 		if spec.Name == "" {
 			t.Errorf("Spec name should not be empty")
 		}
-		if spec.Content == nil || len(spec.Content) == 0 {
+		if len(spec.Content) == 0 {
 			t.Errorf("Spec content should not be empty for %s", spec.Name)
 		}
 	}
@@ -67,7 +67,7 @@ func TestDiscoverSpecsFileNotFound(t *testing.T) {
 	if err == nil {
 		t.Errorf("DiscoverSpecs() should return error for nonexistent directory")
 	}
-	if specs != nil && len(specs) > 0 {
+	if len(specs) > 0 {
 		t.Errorf("DiscoverSpecs() should return empty specs for nonexistent directory")
 	}
 }

@@ -11,8 +11,8 @@ func TestExtractParagraphs(t *testing.T) {
 		expected []string
 	}{
 		{
-			name: "single paragraph",
-			input: `This is a paragraph.`,
+			name:     "single paragraph",
+			input:    `This is a paragraph.`,
 			expected: []string{"This is a paragraph."},
 		},
 		{
@@ -53,8 +53,8 @@ Second paragraph.
 			},
 		},
 		{
-			name: "empty input",
-			input: ``,
+			name:     "empty input",
+			input:    ``,
 			expected: []string{},
 		},
 		{
@@ -104,7 +104,7 @@ Next paragraph.`,
 			},
 		},
 		{
-			name: "code block with triple backticks",
+			name:  "code block with triple backticks",
 			input: "Here is some code:\n\n```go\nfunc main() {\n    fmt.Println(\"hello\")\n}\n```\n\nMore text after code.",
 			expected: []string{
 				"Here is some code:",
@@ -113,7 +113,7 @@ Next paragraph.`,
 			},
 		},
 		{
-			name: "inline code in paragraph",
+			name:  "inline code in paragraph",
 			input: "The `extract` function works well.\n\nNext paragraph.",
 			expected: []string{
 				"The `extract` function works well.",

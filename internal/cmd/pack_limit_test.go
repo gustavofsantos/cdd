@@ -6,11 +6,11 @@ import (
 
 func TestLimitResults(t *testing.T) {
 	tests := []struct {
-		name          string
-		matches       []ParagraphMatch
-		limit         int
-		expectCount   int
-		expectError   bool
+		name        string
+		matches     []ParagraphMatch
+		limit       int
+		expectCount int
+		expectError bool
 	}{
 		{
 			name: "no limit (negative)",

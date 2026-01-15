@@ -16,7 +16,7 @@ func TestPackToolboxDescribeIncludesLimit(t *testing.T) {
 	// Check that limit flag exists
 	limitFlag := fs.Flags().Lookup("limit")
 	if limitFlag == nil {
-		t.Errorf("limit flag not found in pack command")
+		t.Fatalf("limit flag not found in pack command")
 	}
 
 	// Check flag short name

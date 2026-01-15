@@ -20,7 +20,7 @@ func TestPackLimitFlag(t *testing.T) {
 	// Check for --limit flag
 	limitFlag := cmd.Flags().Lookup("limit")
 	if limitFlag == nil {
-		t.Errorf("--limit flag not found")
+		t.Fatalf("--limit flag not found")
 	}
 
 	// Should be an integer flag
@@ -55,8 +55,12 @@ func TestPackWithValidLimit(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Set both focus and limit flags
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "5")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "5"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -77,8 +81,12 @@ func TestPackWithLimitZero(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "0")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "0"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -104,8 +112,12 @@ func TestPackLimitNegativeValue(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "-999")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "-999"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -126,8 +138,12 @@ func TestPackLimitHighValue(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "999999")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "999999"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -153,8 +169,10 @@ func TestPackInvalidLimit(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+
 	// Try to set invalid limit value
 	err := cmd.Flags().Set("limit", "not-a-number")
 	if err == nil {
@@ -170,9 +188,15 @@ func TestPackLimitWithRawFlag(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "command")
-	cmd.Flags().Set("limit", "3")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "command"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "3"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {

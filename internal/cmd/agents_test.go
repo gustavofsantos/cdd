@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"bytes"
-	"cdd/internal/platform"
 	"strings"
 	"testing"
+
+	"cdd/internal/platform"
 )
 
 func TestAgentsCmd_Help(t *testing.T) {

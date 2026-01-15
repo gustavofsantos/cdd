@@ -20,7 +20,9 @@ func TestPackE2EWorkflow(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// User searches for "log" topic
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	// Execute the command
 	err := cmd.RunE(cmd, []string{})
@@ -65,7 +67,9 @@ func TestPackE2EMultipleQueries(t *testing.T) {
 		var out bytes.Buffer
 		cmd.SetOut(&out)
 
-		cmd.Flags().Set("focus", query)
+		if err := cmd.Flags().Set("focus", query); err != nil {
+			t.Fatalf("Failed to set focus flag: %v", err)
+		}
 
 		err := cmd.RunE(cmd, []string{})
 		if err != nil {
@@ -92,8 +96,12 @@ func TestPackE2ERawAndFormattedOutput(t *testing.T) {
 	cmdRaw := NewPackCmd(fs)
 	var outRaw bytes.Buffer
 	cmdRaw.SetOut(&outRaw)
-	cmdRaw.Flags().Set("focus", "log")
-	cmdRaw.Flags().Set("raw", "true")
+	if err := cmdRaw.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmdRaw.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmdRaw.RunE(cmdRaw, []string{})
 	if err != nil {
@@ -104,7 +112,9 @@ func TestPackE2ERawAndFormattedOutput(t *testing.T) {
 	cmdFormatted := NewPackCmd(fs)
 	var outFormatted bytes.Buffer
 	cmdFormatted.SetOut(&outFormatted)
-	cmdFormatted.Flags().Set("focus", "log")
+	if err := cmdFormatted.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err = cmdFormatted.RunE(cmdFormatted, []string{})
 	if err != nil {
@@ -154,7 +164,9 @@ func TestPackE2EErrorHandling(t *testing.T) {
 	cmd2 := NewPackCmd(fs)
 	var out2 bytes.Buffer
 	cmd2.SetOut(&out2)
-	cmd2.Flags().Set("focus", "")
+	if err := cmd2.Flags().Set("focus", ""); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err = cmd2.RunE(cmd2, []string{})
 	if err == nil {
@@ -165,7 +177,9 @@ func TestPackE2EErrorHandling(t *testing.T) {
 	cmd3 := NewPackCmd(fs)
 	var out3 bytes.Buffer
 	cmd3.SetOut(&out3)
-	cmd3.Flags().Set("focus", "zzz999kkk")
+	if err := cmd3.Flags().Set("focus", "zzz999kkk"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err = cmd3.RunE(cmd3, []string{})
 	if err != nil {
@@ -202,7 +216,9 @@ func TestPackE2ESpecsIntegration(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Use a broad query that should match across specs
-	cmd.Flags().Set("focus", "command")
+	if err := cmd.Flags().Set("focus", "command"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err = cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -229,7 +245,9 @@ func TestPackE2EPerformance(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	// Should complete reasonably quickly (< 500ms)
 	done := make(chan error, 1)
@@ -264,8 +282,12 @@ func TestPackE2EOutputConsistency(t *testing.T) {
 		var out bytes.Buffer
 		cmd.SetOut(&out)
 
-		cmd.Flags().Set("focus", "view")
-		cmd.Flags().Set("raw", "true")
+		if err := cmd.Flags().Set("focus", "view"); err != nil {
+			t.Fatalf("Failed to set focus flag: %v", err)
+		}
+		if err := cmd.Flags().Set("raw", "true"); err != nil {
+			t.Fatalf("Failed to set raw flag: %v", err)
+		}
 
 		err := cmd.RunE(cmd, []string{})
 		if err != nil {
@@ -303,7 +325,9 @@ func TestPackE2EInteractiveUsage(t *testing.T) {
 			var out bytes.Buffer
 			cmd.SetOut(&out)
 
-			cmd.Flags().Set("focus", topic.query)
+			if err := cmd.Flags().Set("focus", topic.query); err != nil {
+				t.Fatalf("Failed to set focus flag: %v", err)
+			}
 
 			err := cmd.RunE(cmd, []string{})
 			if err != nil {

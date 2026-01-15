@@ -74,7 +74,9 @@ func TestPackCmdWithFocus(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Set focus flag
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -95,8 +97,12 @@ func TestPackCmdRawFlag(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -119,7 +125,9 @@ func TestPackCmdEmptyResults(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Use an extremely unlikely topic
-	cmd.Flags().Set("focus", "xyzzynotarealword123456")
+	if err := cmd.Flags().Set("focus", "xyzzynotarealword123456"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	// Should not error, but should handle no results gracefully

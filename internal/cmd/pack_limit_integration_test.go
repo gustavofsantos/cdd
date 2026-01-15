@@ -16,8 +16,12 @@ func TestPackIntegrationWithLimit(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "3")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "3"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -44,8 +48,12 @@ func TestPackIntegrationLimitZeroShowsCountOnly(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "0")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "0"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -73,8 +81,12 @@ func TestPackIntegrationTruncationMessage(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "command")
-	cmd.Flags().Set("limit", "2")
+	if err := cmd.Flags().Set("focus", "command"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "2"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -102,18 +114,30 @@ func TestPackIntegrationLimitNoLimit(t *testing.T) {
 	cmd1 := NewPackCmd(fs)
 	var out1 bytes.Buffer
 	cmd1.SetOut(&out1)
-	cmd1.Flags().Set("focus", "log")
-	cmd1.Flags().Set("limit", "-1")
-	cmd1.RunE(cmd1, []string{})
+	if err := cmd1.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd1.Flags().Set("limit", "-1"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd1.RunE(cmd1, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	allCount := strings.Count(out1.String(), "**[Match")
 
 	// Then get with limit
 	cmd2 := NewPackCmd(fs)
 	var out2 bytes.Buffer
 	cmd2.SetOut(&out2)
-	cmd2.Flags().Set("focus", "log")
-	cmd2.Flags().Set("limit", "5")
-	cmd2.RunE(cmd2, []string{})
+	if err := cmd2.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd2.Flags().Set("limit", "5"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd2.RunE(cmd2, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	limitCount := strings.Count(out2.String(), "**[Match")
 
 	if allCount < limitCount {
@@ -133,8 +157,12 @@ func TestPackIntegrationLimitPreservesRanking(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "view")
-	cmd.Flags().Set("limit", "2")
+	if err := cmd.Flags().Set("focus", "view"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "2"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -163,9 +191,15 @@ func TestPackIntegrationLimitWithRaw(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("limit", "4")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("limit", "4"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -194,18 +228,30 @@ func TestPackIntegrationLimitVeryHigh(t *testing.T) {
 	cmd1 := NewPackCmd(fs)
 	var out1 bytes.Buffer
 	cmd1.SetOut(&out1)
-	cmd1.Flags().Set("focus", "log")
-	cmd1.Flags().Set("limit", "-1")
-	cmd1.RunE(cmd1, []string{})
+	if err := cmd1.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd1.Flags().Set("limit", "-1"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd1.RunE(cmd1, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	allCount := strings.Count(out1.String(), "**[Match")
 
 	// Get with very high limit
 	cmd2 := NewPackCmd(fs)
 	var out2 bytes.Buffer
 	cmd2.SetOut(&out2)
-	cmd2.Flags().Set("focus", "log")
-	cmd2.Flags().Set("limit", "999999")
-	cmd2.RunE(cmd2, []string{})
+	if err := cmd2.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd2.Flags().Set("limit", "999999"); err != nil {
+		t.Fatalf("Failed to set limit flag: %v", err)
+	}
+	if err := cmd2.RunE(cmd2, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 	highCount := strings.Count(out2.String(), "**[Match")
 
 	// Should return same number

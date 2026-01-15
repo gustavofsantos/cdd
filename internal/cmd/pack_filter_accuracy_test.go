@@ -34,17 +34,17 @@ When viewing archived tracks, show the archive status.`),
 	}
 
 	tests := []struct {
-		topic        string
-		minScore     float64
+		topic         string
+		minScore      float64
 		expectFromLog bool
-		minMatches   int // At least this many
+		minMatches    int // At least this many
 	}{
-		{"log", 0.5, true, 2},      // Should find log-related content
-		{"view", 0.5, false, 2},    // Should find view-related content
-		{"command", 0.5, true, 2},  // Should find both (both are commands)
-		{"decision", 0.5, true, 1}, // Should find decision-related (only in log)
+		{"log", 0.5, true, 2},        // Should find log-related content
+		{"view", 0.5, false, 2},      // Should find view-related content
+		{"command", 0.5, true, 2},    // Should find both (both are commands)
+		{"decision", 0.5, true, 1},   // Should find decision-related (only in log)
 		{"dashboard", 0.5, false, 1}, // Should find dashboard (only in view)
-		{"track", 0.5, true, 1},    // "track" in view content
+		{"track", 0.5, true, 1},      // "track" in view content
 	}
 
 	for _, tt := range tests {

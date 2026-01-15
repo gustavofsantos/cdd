@@ -16,7 +16,9 @@ func TestPackCmdIntegrationBasic(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -47,7 +49,9 @@ func TestPackCmdIntegrationMultipleMatches(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "command")
+	if err := cmd.Flags().Set("focus", "command"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -80,7 +84,9 @@ func TestPackCmdIntegrationScoreDisplay(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -103,8 +109,12 @@ func TestPackCmdIntegrationRawOutput(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "view")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "view"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -133,7 +143,9 @@ func TestPackCmdIntegrationNoMatchesMessage(t *testing.T) {
 	cmd.SetOut(&out)
 
 	// Use a topic unlikely to match anything
-	cmd.Flags().Set("focus", "xyzzyzzzzqqqq9999")
+	if err := cmd.Flags().Set("focus", "xyzzyzzzzqqqq9999"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -168,7 +180,9 @@ func TestPackCmdIntegrationTopicVariations(t *testing.T) {
 			var out bytes.Buffer
 			cmd.SetOut(&out)
 
-			cmd.Flags().Set("focus", tt.topic)
+			if err := cmd.Flags().Set("focus", tt.topic); err != nil {
+				t.Fatalf("Failed to set focus flag: %v", err)
+			}
 
 			err := cmd.RunE(cmd, []string{})
 			if err != nil {
@@ -196,8 +210,12 @@ func TestPackCmdIntegrationOutputFormatting(t *testing.T) {
 	var out bytes.Buffer
 	cmd.SetOut(&out)
 
-	cmd.Flags().Set("focus", "log")
-	cmd.Flags().Set("raw", "true")
+	if err := cmd.Flags().Set("focus", "log"); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd.Flags().Set("raw", "true"); err != nil {
+		t.Fatalf("Failed to set raw flag: %v", err)
+	}
 
 	err := cmd.RunE(cmd, []string{})
 	if err != nil {
@@ -226,14 +244,22 @@ func TestPackCmdIntegrationConsistency(t *testing.T) {
 	var out1 bytes.Buffer
 	cmd1 := NewPackCmd(fs)
 	cmd1.SetOut(&out1)
-	cmd1.Flags().Set("focus", topic)
-	cmd1.RunE(cmd1, []string{})
+	if err := cmd1.Flags().Set("focus", topic); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd1.RunE(cmd1, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 
 	var out2 bytes.Buffer
 	cmd2 := NewPackCmd(fs)
 	cmd2.SetOut(&out2)
-	cmd2.Flags().Set("focus", topic)
-	cmd2.RunE(cmd2, []string{})
+	if err := cmd2.Flags().Set("focus", topic); err != nil {
+		t.Fatalf("Failed to set focus flag: %v", err)
+	}
+	if err := cmd2.RunE(cmd2, []string{}); err != nil {
+		t.Errorf("pack command failed: %v", err)
+	}
 
 	output1 := out1.String()
 	output2 := out2.String()
@@ -271,7 +297,9 @@ func TestPackCmdIntegrationRealWorldScenario(t *testing.T) {
 			var out bytes.Buffer
 			cmd.SetOut(&out)
 
-			cmd.Flags().Set("focus", scenario.topic)
+			if err := cmd.Flags().Set("focus", scenario.topic); err != nil {
+				t.Fatalf("Failed to set focus flag: %v", err)
+			}
 
 			err := cmd.RunE(cmd, []string{})
 			if err != nil {

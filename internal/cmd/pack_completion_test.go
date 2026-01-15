@@ -5,8 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"cdd/internal/platform"
 	"github.com/spf13/cobra"
+
+	"cdd/internal/platform"
 )
 
 func TestPackCompletion(t *testing.T) {
@@ -65,10 +66,10 @@ func TestGetPackCompletionTopicsFiltering(t *testing.T) {
 		prefix        string
 		expectMatches int
 	}{
-		{"log", 1},      // Should match "log"
-		{"vi", 1},       // Should match "view"
-		{"command", 1},  // Should match "command"
-		{"xyz", 0},      // Should not match anything
+		{"log", 1},        // Should match "log"
+		{"vi", 1},         // Should match "view"
+		{"command", 1},    // Should match "command"
+		{"xyz", 0},        // Should not match anything
 		{"", len(topics)}, // Empty prefix should match all
 	}
 
