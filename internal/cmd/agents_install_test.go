@@ -88,13 +88,13 @@ func TestAgentsUpToDate(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	cmd := NewAgentsCmd(fs)
 
-	// Setup current file (simulate current version)
+	// Setup current file (simulate current version - must match prompts.System version)
 	skillDir := ".agent/skills/cdd"
 	if err := fs.MkdirAll(skillDir, 0755); err != nil {
 		t.Fatalf("failed to create skill directory: %v", err)
 	}
 	currentPath := skillDir + "/SKILL.md"
-	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nmetadata:\n  version: \"1.0.0\"\n---\nNew Content"), 0644); err != nil {
+	if err := fs.WriteFile(currentPath, []byte("---\nname: cdd\nmetadata:\n  version: \"1.2.0\"\n---\nNew Content"), 0644); err != nil {
 		t.Fatalf("failed to write current file: %v", err)
 	}
 

@@ -1,6 +1,6 @@
 ---
 name: cdd-workflow
-description: The root orchestrator that enforces the CDD protocol. It automatically detects the project state from plan.md and activates the correct sub-skill.
+description: The Orchestrator that analyzes the plan and delegates to the appropriate Agent Skill.
 metadata:
   version: 1.2.0
 ---
@@ -19,6 +19,7 @@ metadata:
 **Command Reference:**
 - `cdd start <track>`: Creates a new track.
 - `cdd recite <track>`: Displays the next step in the plan.
+- `cdd log <track>`: Log decisions to decisions.md.
 - `cdd archive <track>`: Archive the track, adding its spec to the inbox to be later processed.
 
 **IMMEDIATE ACTION REQUIRED:** If this is the start of a session, you MUST run `cdd recite` immediately to load the project state. Do not say "Hello". Do not ask "How can I help". Just run the command.
@@ -38,18 +39,29 @@ You are a dynamic router. Your behavior is determined *exclusively* by the conte
 | Unchecked \- \[ \] (Phase 2+) | **Executor** | TDD Loop (Red/Green/Refactor). |
 | All tasks checked \[x\] | **Integrator** | Merge Specs & Archive Track. |
 
-## Operational Guardrails
+## Global Guardrails
+
+These constraints apply across all Agent Skill personas:
 
 1. **The Silent Handover:**
    * Once you identify your Persona, **adopt it immediately**.
    * Do not announce: "I am becoming the Executor."
    * Just start the work defined by that Persona's protocol.
-2. **The Recitation Loop:**
-   * **Rule:** Every time you complete a task (write to file), you must run cdd recite.
-   * **Why:** This keeps your context window fresh and aligned.
+
+2. **The Recitation Protocol:**
+   * **Rule:** Every time you complete a task (write to file), you must run `cdd recite`.
+   * **Why:** This keeps your context window fresh and aligned with the plan.
+   * **Frequency:** After each file modification or significant work block.
+
 3. **Strict File Authority:**
    * You do not have a memory outside of `plan.md`, `spec.md`, and `decisions.md`.
    * If it's not in the file, it doesn't exist.
+   * These are your source of truth.
+
+4. **(CDD) Engine Constraints:**
+   * All work flows through the CDD protocol.
+   * Do not skip phases or jump ahead.
+   * Respect the plan structure absolutely.
 
 ## Bootstrap Sequence (Start Here)
 
