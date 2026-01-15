@@ -17,7 +17,7 @@ To also install the Amp toolbox wrappers, use the `--amp-toolbox` flag:
 To install CDD to a different directory (e.g., `~/bin`), use the `--install-dir` flag:
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)" -- --install-dir ~/bin
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/gustavofsantos/cdd/main/install.sh)" -- --install-dir ~/.bin
 ```
 
 To install the Amp toolbox to a specific path, use the `--amp-toolbox-dir` flag:
