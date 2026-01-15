@@ -14,7 +14,6 @@ import (
 )
 
 var (
-	viewInbox    bool
 	viewArchived bool
 	viewSpec     bool
 	viewPlan     bool
@@ -31,7 +30,6 @@ By default, 'cdd view' displays a dashboard of all active tracks.
 If a track name is provided, it displays the next tasks from that track's plan.
 
 FLAGS:
-  -i, --inbox      Show the current contents of the global inbox.
   -a, --archived   List archived tracks or view details of an archived track.
   -s, --spec       Show the track's specification (spec.md) instead of the plan.
   -p, --plan       Show the full track plan (plan.md).
@@ -39,7 +37,6 @@ FLAGS:
 
 EXAMPLES:
   $ cdd view                  # Show active tracks
-  $ cdd view --inbox          # Show pending changes in inbox
   $ cdd view fix-bug          # Show next tasks for "fix-bug"
   $ cdd view --spec fix-bug   # Show spec for "fix-bug"`,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -66,7 +63,6 @@ EXAMPLES:
 		},
 	}
 
-	cmd.Flags().BoolVarP(&viewInbox, "inbox", "i", false, "Show context inbox")
 	cmd.Flags().BoolVarP(&viewArchived, "archived", "a", false, "Show archived tracks")
 	cmd.Flags().BoolVarP(&viewSpec, "spec", "s", false, "Show track specification")
 	cmd.Flags().BoolVarP(&viewPlan, "plan", "p", false, "Show track plan")
@@ -81,16 +77,7 @@ func buildViewMarkdown(fs platform.FileSystem, args []string) (string, error) {
 
 	if len(args) == 0 {
 		// Dashboard Mode
-		if viewInbox {
-			if !isRaw {
-				contentBuilder.WriteString("# 📥 Context Inbox (Pending Updates)\n\n")
-			}
-			if content, err := fs.ReadFile(".context/inbox.md"); err == nil {
-				contentBuilder.Write(content)
-			} else if !isRaw {
-				contentBuilder.WriteString("_Inbox empty._\n")
-			}
-		} else if viewArchived {
+		if viewArchived {
 			if !isRaw {
 				contentBuilder.WriteString("# 📦 Archived Tracks\n\n")
 			}

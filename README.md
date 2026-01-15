@@ -84,7 +84,7 @@ This moves the track to the archive and promotes the findings to the global cont
   ```bash
   cdd archive <track-name>
   ```
-  Moves the track to `.context/archive` and promotes the specification to the Inbox.
+  Moves the track to `.context/archive` and stores it in history.
 
 ### Working in a Track
 
@@ -122,7 +122,7 @@ Manage the AI agent integration:
 ### Viewing Status / Dashboard
 
 - **Dashboard**: `cdd view` 
-  Shows active tracks. Use `--archived` to see history. Use `--inbox` to see pending updates.
+  Shows active tracks. Use `--archived` to see history.
 
 - **Track Details**: `cdd view <track-name> [flags]`
   **Flags:**
@@ -197,5 +197,5 @@ The tool manages a `.context` directory with the following structure:
 - `product.md`: Product vision and global goals.
 - `tech-stack.md`: Technology stack and constraints.
 - `architecture.md`: High-level architecture and boundaries.
-- `inbox.md`: Pending context updates waiting to be integrated.
+
 

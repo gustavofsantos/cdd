@@ -19,19 +19,18 @@ results into the global project context.
 CORE PRINCIPLES:
 1. Tracks are Ephemeral: Work happens in isolated folders under .context/tracks/.
 2. Specs are Eternal: The source of truth is maintained in .context/specs/.
-3. The Inbox is the Gateway: Completed work flows through .context/inbox.md 
-   for review and integration.
+
 
 WORKFLOW:
 1. start: Create a new track for a specific feature or bugfix.
 2. analyze: (Developer/Agent) Fill in the spec.md and plan.md.
 3. execute: (Developer/Agent) Implement changes following the plan.
-4. archive: Move the track to history and send the delta to the inbox.
+4. archive: Move the track to history.
 
 EXAMPLES:
   $ cdd init                 # Initialize a new project with CDD
   $ cdd start user-auth      # Start a new track for "user-auth"
-  $ cdd view --inbox        # View pending changes in the inbox
+
   $ cdd archive user-auth    # Complete the track and move to history`,
 }
 

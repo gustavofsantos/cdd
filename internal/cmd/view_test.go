@@ -19,10 +19,8 @@ func TestBuildViewMarkdown(t *testing.T) {
 	_ = fs.MkdirAll(".context/archive/20260101120000_old-feat", 0755)
 	_ = fs.WriteFile(".context/archive/20260101120000_old-feat/plan.md", []byte("# Plan\n- [x] Done"), 0644)
 
-	_ = fs.WriteFile(".context/inbox.md", []byte("Pending changes"), 0644)
-
 	t.Run("Default Dashboard (Markdown)", func(t *testing.T) {
-		viewInbox = false
+
 		viewArchived = false
 		viewRaw = false // Forces TTY simulation in tests if we want markdown
 		md, err := buildViewMarkdown(fs, []string{})
@@ -64,7 +62,7 @@ func TestBuildViewMarkdown(t *testing.T) {
 
 	t.Run("Track Plan (Default)", func(t *testing.T) {
 		viewRaw = false
-		viewInbox = false
+
 		viewArchived = false
 		viewSpec = false
 		md, err := buildViewMarkdown(fs, []string{"feature-1"})
