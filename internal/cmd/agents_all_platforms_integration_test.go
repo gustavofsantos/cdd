@@ -43,8 +43,8 @@ func TestAgentsCmd_AllFlagIntegration(t *testing.T) {
 	verifyPlatformInstallations(t, output, expectedPlatforms, skills)
 
 	// Verify cursor and antigravity installations
-	if !strings.Contains(output, ".cursorrules") {
-		t.Errorf("expected cursor rules installation, but not found in output")
+	if !strings.Contains(output, ".cursor/rules") {
+		t.Errorf("expected cursor rules installation in .cursor/rules, but not found in output")
 	}
 
 	if !strings.Contains(output, ".agent/skills") {

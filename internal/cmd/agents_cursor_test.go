@@ -1,52 +1,12 @@
 package cmd
 
 import (
+	"path/filepath"
 	"strings"
 	"testing"
 
 	"cdd/internal/platform"
 )
-
-func TestBuildCursorRulesContent(t *testing.T) {
-	skills := []skill{
-		{id: "cdd", name: "cdd", description: "Orchestrator", content: "---\nname: cdd\nversion: 1.0.0\n---\n# CDD Orchestrator"},
-		{id: "cdd-analyst", name: "cdd-analyst", description: "Analyst", content: "---\nname: cdd-analyst\nversion: 1.0.0\n---\n# CDD Analyst"},
-	}
-
-	content := buildCursorRulesContent(skills)
-
-	// Verify all skills are included
-	if !strings.Contains(content, "# CDD Orchestrator") {
-		t.Error("expected orchestrator content in cursor rules")
-	}
-	if !strings.Contains(content, "# CDD Analyst") {
-		t.Error("expected analyst content in cursor rules")
-	}
-
-	// Verify version metadata is present
-	if !strings.Contains(content, "version:") {
-		t.Error("expected version metadata in cursor rules")
-	}
-
-	// Verify structure with separators
-	if !strings.Contains(content, "---") {
-		t.Error("expected markdown separators in cursor rules")
-	}
-}
-
-func TestBuildCursorRulesContentEmpty(t *testing.T) {
-	skills := []skill{}
-	content := buildCursorRulesContent(skills)
-
-	if content == "" {
-		t.Error("expected non-empty content even for empty skills")
-	}
-
-	// Should still have version metadata
-	if !strings.Contains(content, "version:") {
-		t.Error("expected version metadata even for empty skills")
-	}
-}
 
 func TestInstallCursorRules(t *testing.T) {
 	fs := platform.NewMockFileSystem()
@@ -62,21 +22,34 @@ func TestInstallCursorRules(t *testing.T) {
 		t.Fatalf("installCursorRules failed: %v", err)
 	}
 
-	// Verify .cursorrules file exists
-	cursorRulesFile := ".cursorrules"
-	_, err = fs.Stat(cursorRulesFile)
+	// Verify .cursor/rules directory exists
+	rulesDir := filepath.Join(".cursor", "rules")
+	_, err = fs.Stat(rulesDir)
 	if err != nil {
-		t.Errorf("expected .cursorrules file to exist: %v", err)
+		t.Errorf("expected .cursor/rules directory to exist: %v", err)
+	}
+
+	// Verify individual rule files exist
+	cddRuleFile := filepath.Join(rulesDir, "cdd.mdc")
+	_, err = fs.Stat(cddRuleFile)
+	if err != nil {
+		t.Errorf("expected cdd.mdc rule file to exist: %v", err)
+	}
+
+	analystRuleFile := filepath.Join(rulesDir, "cdd-analyst.mdc")
+	_, err = fs.Stat(analystRuleFile)
+	if err != nil {
+		t.Errorf("expected cdd-analyst.mdc rule file to exist: %v", err)
 	}
 
 	// Verify content
-	content, err := fs.ReadFile(cursorRulesFile)
+	content, err := fs.ReadFile(cddRuleFile)
 	if err != nil {
-		t.Fatalf("failed to read .cursorrules: %v", err)
+		t.Fatalf("failed to read cdd.mdc: %v", err)
 	}
 
 	if !strings.Contains(string(content), "# CDD Orchestrator") {
-		t.Error("expected orchestrator content in .cursorrules")
+		t.Error("expected orchestrator content in cdd.mdc")
 	}
 }
 
@@ -101,7 +74,7 @@ func TestInstallCursorRulesIdempotent(t *testing.T) {
 	}
 
 	// Should NOT create backup
-	backupPath := ".cursorrules.bak"
+	backupPath := filepath.Join(".cursor", "rules", "cdd.mdc.bak")
 	_, err = fs.Stat(backupPath)
 	if err == nil {
 		t.Error("expected NO backup file when version is same")
@@ -111,10 +84,15 @@ func TestInstallCursorRulesIdempotent(t *testing.T) {
 func TestInstallCursorRulesUpdate(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 
-	// Setup old version
-	cursorRulesFile := ".cursorrules"
-	if err := fs.WriteFile(cursorRulesFile, []byte("---\nversion: 0.5.0\n---\nOld content"), 0644); err != nil {
-		t.Fatalf("failed to write old .cursorrules: %v", err)
+	rulesDir := filepath.Join(".cursor", "rules")
+	cddRuleFile := filepath.Join(rulesDir, "cdd.mdc")
+
+	// Create rules directory and setup old version
+	if err := fs.MkdirAll(rulesDir, 0755); err != nil {
+		t.Fatalf("failed to create rules directory: %v", err)
+	}
+	if err := fs.WriteFile(cddRuleFile, []byte("---\nname: cdd\nversion: 0.5.0\n---\nOld content"), 0644); err != nil {
+		t.Fatalf("failed to write old cdd.mdc: %v", err)
 	}
 
 	skills := []skill{
@@ -130,19 +108,19 @@ func TestInstallCursorRulesUpdate(t *testing.T) {
 	}
 
 	// Verify backup created
-	backupPath := ".cursorrules.bak"
+	backupPath := filepath.Join(rulesDir, "cdd.mdc.bak")
 	_, err = fs.Stat(backupPath)
 	if err != nil {
-		t.Errorf("expected backup file .cursorrules.bak: %v", err)
+		t.Errorf("expected backup file cdd.mdc.bak: %v", err)
 	}
 
 	// Verify new content
-	content, err := fs.ReadFile(cursorRulesFile)
+	content, err := fs.ReadFile(cddRuleFile)
 	if err != nil {
-		t.Fatalf("failed to read .cursorrules: %v", err)
+		t.Fatalf("failed to read cdd.mdc: %v", err)
 	}
 
 	if !strings.Contains(string(content), "# CDD Orchestrator") {
-		t.Error("expected new content in .cursorrules")
+		t.Error("expected new content in cdd.mdc")
 	}
 }

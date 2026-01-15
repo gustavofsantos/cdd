@@ -97,15 +97,15 @@ This moves the track to the archive and promotes the findings to the global cont
 Manage the AI agent integration:
 
 - **Install CDD Skills**: `cdd agents --install [--target <target>]`
-  
-  Installs all five CDD skills (Orchestrator, Analyst, Architect, Executor, Integrator) to the specified target.
-  
-  **Available targets:**
-  - `agent` (default): Creates `.agent/skills/` for local use
-  - `antigravity`: Creates `.agent/skills/` compatible with Google Antigravity
-  - `claude`: Creates `.claude/skills/` for Claude integration
-  - `agents`: Creates `.agents/skills/` for generic agents
-  - `cursor`: Creates `.cursorrules` for Cursor IDE
+   
+   Installs all five CDD skills (Orchestrator, Analyst, Architect, Executor, Integrator) to the specified target.
+   
+   **Available targets:**
+   - `agent` (default): Creates `.agent/skills/` for local use
+   - `antigravity`: Creates `.agent/skills/` compatible with Google Antigravity
+   - `claude`: Creates `.claude/skills/` for Claude integration
+   - `agents`: Creates `.agents/skills/` for generic agents
+   - `cursor`: Creates `.cursor/rules/` for Cursor IDE (following the [current Cursor rules format](https://cursor.com/docs/context/rules))
 
 ### Viewing Status
 

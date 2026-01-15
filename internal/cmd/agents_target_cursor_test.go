@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"path/filepath"
 	"strings"
 	"testing"
 
@@ -17,24 +18,30 @@ func TestAgentsInstallCursorTarget(t *testing.T) {
 		t.Fatalf("Execute() failed: %v", err)
 	}
 
-	// Verify .cursorrules file exists
-	cursorRulesFile := ".cursorrules"
-	_, err = fs.Stat(cursorRulesFile)
+	// Verify .cursor/rules directory exists
+	rulesDir := filepath.Join(".cursor", "rules")
+	_, err = fs.Stat(rulesDir)
 	if err != nil {
-		t.Errorf("expected .cursorrules file to exist: %v", err)
+		t.Errorf("expected .cursor/rules directory to exist: %v", err)
 	}
 
-	// Verify content has all skills
-	content, err := fs.ReadFile(cursorRulesFile)
-	if err != nil {
-		t.Fatalf("failed to read .cursorrules: %v", err)
-	}
-
-	contentStr := string(content)
+	// Verify each skill has its own rule file
 	expectedSkills := []string{"cdd", "cdd-analyst", "cdd-architect", "cdd-executor", "cdd-integrator"}
 	for _, skill := range expectedSkills {
-		if !strings.Contains(contentStr, skill) {
-			t.Errorf("expected skill '%s' in .cursorrules content", skill)
+		ruleFile := filepath.Join(rulesDir, skill+".mdc")
+		_, err = fs.Stat(ruleFile)
+		if err != nil {
+			t.Errorf("expected rule file %s to exist: %v", ruleFile, err)
+		}
+
+		// Verify content contains the skill
+		content, err := fs.ReadFile(ruleFile)
+		if err != nil {
+			t.Fatalf("failed to read %s: %v", ruleFile, err)
+		}
+
+		if !strings.Contains(string(content), skill) {
+			t.Errorf("expected skill '%s' in %s content", skill, ruleFile)
 		}
 	}
 }

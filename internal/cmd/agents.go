@@ -107,59 +107,57 @@ func installSkillsForAllPlatforms(cmd *cobra.Command, fs platform.FileSystem, sk
 	return nil
 }
 
-func buildCursorRulesContent(skills []skill) string {
-	var buf strings.Builder
-
-	// Write version metadata header
-	version := "1.0.0"
-	if len(skills) > 0 {
-		version = skills[0].getVersion()
-	}
-	buf.WriteString("---\n")
-	buf.WriteString(fmt.Sprintf("version: %s\n", version))
-	buf.WriteString("---\n\n")
-
-	// Concatenate all skills
-	for i, s := range skills {
-		if i > 0 {
-			buf.WriteString("\n---\n\n")
-		}
-		buf.WriteString(s.content)
-	}
-
-	return buf.String()
-}
-
 func installCursorRules(cmd *cobra.Command, fs platform.FileSystem, skills []skill) error {
-	cursorRulesFile := ".cursorrules"
-	content := buildCursorRulesContent(skills)
-	currentVersion := extractVersion(content)
+	rulesDir := filepath.Join(".cursor", "rules")
 
-	// Check if file exists
-	if info, err := fs.Stat(cursorRulesFile); err == nil && !info.IsDir() {
-		existing, err := fs.ReadFile(cursorRulesFile)
-		if err == nil {
-			installedVersion := extractVersion(string(existing))
+	// Create .cursor/rules directory
+	if err := fs.MkdirAll(rulesDir, 0755); err != nil {
+		return fmt.Errorf("error creating cursor rules directory %s: %w", rulesDir, err)
+	}
 
-			if installedVersion == currentVersion {
-				cmd.Printf("Cursor rules file '%s' is up to date (v%s)\n", cursorRulesFile, installedVersion)
-				return nil
+	// Install each skill as individual rule file
+	for _, s := range skills {
+		ruleFile := filepath.Join(rulesDir, s.id+".mdc")
+		currentVersion := extractVersion(s.content)
+
+		// Check if file exists
+		if info, err := fs.Stat(ruleFile); err == nil && !info.IsDir() {
+			existing, err := fs.ReadFile(ruleFile)
+			if err == nil {
+				installedVersion := extractVersion(string(existing))
+
+				if installedVersion == currentVersion {
+					cmd.Printf("Cursor rule '%s' is up to date (v%s)\n", s.id, installedVersion)
+					continue
+				}
+
+				// Upgrade: backup and overwrite
+				backupFile := ruleFile + ".bak"
+				if err := fs.Rename(ruleFile, backupFile); err != nil {
+					return fmt.Errorf("error backing up legacy cursor rule %s: %w", s.id, err)
+				}
+				cmd.Printf("Updated cursor rule '%s' to v%s. Backup saved to %s\n", s.id, currentVersion, backupFile)
 			}
+		}
 
-			// Upgrade: backup and overwrite
-			backupFile := cursorRulesFile + ".bak"
-			if err := fs.Rename(cursorRulesFile, backupFile); err != nil {
-				return fmt.Errorf("error backing up legacy cursor rules %s: %w", cursorRulesFile, err)
-			}
-			cmd.Printf("Updated cursor rules to v%s. Backup saved to %s\n", currentVersion, backupFile)
+		if err := fs.WriteFile(ruleFile, []byte(s.content), 0644); err != nil {
+			return fmt.Errorf("error writing cursor rule file %s: %w", ruleFile, err)
+		}
+
+		cmd.Printf("Cursor rule '%s' installed at %s\n", s.id, ruleFile)
+	}
+
+	// Migrate legacy .cursorrules file if it exists
+	legacyFile := ".cursorrules"
+	if info, err := fs.Stat(legacyFile); err == nil && !info.IsDir() {
+		backupFile := filepath.Join(rulesDir, ".cursorrules.legacy.bak")
+		if err := fs.Rename(legacyFile, backupFile); err != nil {
+			cmd.PrintErrf("Warning: could not migrate legacy .cursorrules file: %v\n", err)
+		} else {
+			cmd.Printf("Migrated legacy .cursorrules to %s\n", backupFile)
 		}
 	}
 
-	if err := fs.WriteFile(cursorRulesFile, []byte(content), 0644); err != nil {
-		return fmt.Errorf("error writing cursor rules file %s: %w", cursorRulesFile, err)
-	}
-
-	cmd.Printf("Cursor rules installed at %s\n", cursorRulesFile)
 	return nil
 }
 
