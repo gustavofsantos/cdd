@@ -120,6 +120,7 @@ Manage the AI agent integration:
    - `agent` (default): Creates `.agent/skills/` for local use
    - `antigravity`: Creates `.agent/skills/` compatible with Google Antigravity
    - `claude`: Creates `.claude/skills/` for Claude integration
+   - `gemini`: Creates `.gemini/skills/` for Gemini CLI integration
    - `agents`: Creates `.agents/skills/` for generic agents
    - `cursor`: Creates `.cursor/rules/` for Cursor IDE (following the [current Cursor rules format](https://cursor.com/docs/context/rules))
 

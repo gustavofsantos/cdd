@@ -61,7 +61,7 @@ func (s *skill) getVersion() string {
 
 func printTargetRequiredError(cmd *cobra.Command) {
 	cmd.PrintErrf("Error: you must specify a target with --target or use --all to install for all platforms\n\n")
-	cmd.PrintErrf("Available targets: agent, agents, claude, cursor, antigravity\n\n")
+	cmd.PrintErrf("Available targets: agent, agents, claude, cursor, antigravity, gemini\n\n")
 	cmd.PrintErrf("Examples:\n")
 	cmd.PrintErrf("  Install to a specific target:\n")
 	cmd.PrintErrf("    cdd agents --install --target agent\n")
@@ -79,6 +79,7 @@ func installSkillsForAllPlatforms(cmd *cobra.Command, fs platform.FileSystem, sk
 		{"agent", ".agent"},
 		{"claude", ".claude"},
 		{"agents", ".agents"},
+		{"gemini", ".gemini"},
 	}
 
 	for _, p := range platforms {
@@ -260,13 +261,14 @@ it follows the Context-Driven Development methodology.
 
 FLAGS:
   --install      Install all CDD Agent Skills (Orchestrator, Analyst, Architect, Executor, Integrator).
-  --target       Target directory for installation (agent, agents, claude, cursor, antigravity). Defaults to agent.
+  --target       Target directory for installation (agent, agents, claude, cursor, antigravity, gemini). Defaults to agent.
 
 EXAMPLES:
   $ cdd agents --install
   $ cdd agents --install --target claude
   $ cdd agents --install --target cursor
-  $ cdd agents --install --target antigravity`,
+  $ cdd agents --install --target antigravity
+  $ cdd agents --install --target gemini`,
 		Run: func(cmd *cobra.Command, args []string) {
 			if installAgentSkill {
 				// Validate that either --all or --target is provided
@@ -317,6 +319,8 @@ EXAMPLES:
 					baseDir = ".claude"
 				case "agents":
 					baseDir = ".agents"
+				case "gemini":
+					baseDir = ".gemini"
 				case "agent":
 					baseDir = ".agent"
 				default:
@@ -339,7 +343,7 @@ EXAMPLES:
 	}
 
 	agentsCmd.Flags().BoolVar(&installAgentSkill, "install", false, "Install the CDD System Prompt as an Agent Skill.")
-	agentsCmd.Flags().StringVar(&installTarget, "target", "", "Target directory for installation (agent, agents, claude, cursor, antigravity).")
+	agentsCmd.Flags().StringVar(&installTarget, "target", "", "Target directory for installation (agent, agents, claude, cursor, antigravity, gemini).")
 	agentsCmd.Flags().BoolVar(&installAllPlatforms, "all", false, "Install skills for all supported platforms.")
 
 	return agentsCmd
