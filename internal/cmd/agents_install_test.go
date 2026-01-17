@@ -95,10 +95,9 @@ func TestAgentsUpToDate(t *testing.T) {
 	if err := fs.MkdirAll(skillDir, 0755); err != nil {
 		t.Fatalf("failed to create skill directory: %v", err)
 	}
-	
+
 	currentVersion := extractVersion(prompts.System)
 	content := fmt.Sprintf("---\nname: cdd\nmetadata:\n  version: %q\n---\nNew Content", currentVersion)
-	
 	currentPath := skillDir + "/SKILL.md"
 	if err := fs.WriteFile(currentPath, []byte(content), 0644); err != nil {
 		t.Fatalf("failed to write current file: %v", err)
