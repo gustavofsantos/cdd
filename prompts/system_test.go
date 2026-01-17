@@ -9,7 +9,7 @@ import (
 
 func TestSystemPromptIsLean(t *testing.T) {
 	requiredPhrases := []string{
-		"(CDD) Engine",
+		"# Role: Orchestrator",
 		"plan.md",
 		"spec.md",
 		"decisions.md",
