@@ -17,7 +17,7 @@ Fill `spec.md` with clear, atomic requirements using **EARS notation**. You must
 
 ### 2. Analyze Context (Intent & Reality):
 - **Intent:** Read `spec.md`. If `## 1. User Intent` contains `[User Input Required]`, ask: "What are the goals for this track?"
-- **Reality:** Read `.context/tracks/<track-name>/current-state.md` (if it exists).
+- **Reality:** Read `.context/tracks/<track-name>/current_state.md` (if it exists).
     - **Scope Check:** Ensure requirements do not exceed the "Blast Radius" defined in the survey.
     - **Dragon Check:** If the survey lists "Side Effects" or "Global State", you MUST write requirements that handle them (e.g., "The system shall preserve the existing global `UserSession` state").
 
@@ -35,7 +35,7 @@ Fill `spec.md` with clear, atomic requirements using **EARS notation**. You must
     - **Unwanted Behavior:** If <unwanted condition>, then the <system> shall <response>
     - **Optional:** Where <feature is included>, the <system> shall <response>
 
-    > **CRITICAL:** Use the **Unwanted Behavior** pattern to guard against the risks found in `current-state.md`.
+    > **CRITICAL:** Use the **Unwanted Behavior** pattern to guard against the risks found in `current_state.md`.
 
 ### 5. Completion:
 - Mark Phase 0 as complete: `- [x] 🗣️ Phase 0.`
