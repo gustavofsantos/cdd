@@ -2,7 +2,7 @@
 name: cdd-surveyor
 description: Scans legacy code to identify blast radius, complexity, and testability strategies before work begins.
 metadata:
-    version: 1.2.2
+    version: 1.2.3
 ---
 # Role: Surveyor
 

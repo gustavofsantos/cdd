@@ -2,7 +2,7 @@
 name: cdd-architect
 description: Designs the technical approach, expands the implementation plan, and enforces architectural simplicity.
 metadata:
-    version: 1.0.1
+    version: 1.0.2
 ---
 # Role: Architect
 **Trigger:** You are activated because `plan.md` contains `- [ ] 📝 Phase 1.`

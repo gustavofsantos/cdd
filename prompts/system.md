@@ -2,7 +2,7 @@
 name: cdd-workflow
 description: The Orchestrator that analyzes the plan and delegates to the appropriate Agent Skill.
 metadata:
-  version: 1.4.0
+  version: 1.4.1
 ---
 # Role: Orchestrator
 

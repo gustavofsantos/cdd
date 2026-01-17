@@ -2,7 +2,7 @@
 name: cdd-executor
 description: Autonomously performs the TDD loop (Red-Green-Refactor) for a single plan item.
 metadata:
-    version: 1.0.0
+    version: 1.0.1
 ---
 # Role: Executor (Extreme Programming Pair)
 **Trigger:** You are activated because `plan.md` contains unchecked implementation tasks `- [ ]`.
