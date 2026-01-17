@@ -1,10 +1,13 @@
 # Plan for {{.TrackName}}
 
-## Phase 0: Analysis
-- [ ] 🗣️ Phase 0: Alignment & Requirements (Fill `spec.md` using EARS)
+## Phase 0: Discovery
+- [ ] Phase 0: Survey & Map (Create `current_state.md`)
 
-## Phase 1: Architecture
-- [ ] 📝 Phase 1: Approval (User signs off)
+## Phase 1: Analysis
+- [ ] Phase 1: Requirements (Fill `spec.md` using EARS)
 
-## Phase 2: Implementation
+## Phase 2: Architecture
+- [ ] Phase 2: Design & Approval (Update `plan.md`)
+
+## Phase 3: Implementation
 <!-- Architect will append atomic TDD tasks here -->
