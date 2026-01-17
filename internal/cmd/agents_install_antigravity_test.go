@@ -7,7 +7,7 @@ import (
 	"cdd/prompts"
 )
 
-func TestInstallAntigravitySkill(t *testing.T) {
+func TestInstallAntigravityWorkflow(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 
 	s := skill{
@@ -17,29 +17,29 @@ func TestInstallAntigravitySkill(t *testing.T) {
 		content:     prompts.System,
 	}
 
-	err := installAntigravitySkill(nil, fs, s)
+	err := installAntigravityWorkflow(nil, fs, s)
 	if err != nil {
-		t.Fatalf("installAntigravitySkill() failed: %v", err)
+		t.Fatalf("installAntigravityWorkflow() failed: %v", err)
 	}
 
-	// Verify file was created in .agent/skills/cdd-system/SKILL.md
-	skillFile := ".agent/skills/cdd-system/SKILL.md"
-	_, err = fs.Stat(skillFile)
+	// Verify file was created in .agent/workflows/cdd-system.md
+	workflowFile := ".agent/workflows/cdd-system.md"
+	_, err = fs.Stat(workflowFile)
 	if err != nil {
-		t.Fatalf("failed to stat skill file: %v", err)
+		t.Fatalf("failed to stat workflow file: %v", err)
 	}
 
 	// Verify content was written
-	content, err := fs.ReadFile(skillFile)
+	content, err := fs.ReadFile(workflowFile)
 	if err != nil {
-		t.Fatalf("failed to read skill file: %v", err)
+		t.Fatalf("failed to read workflow file: %v", err)
 	}
 	if len(content) == 0 {
-		t.Fatal("skill file is empty")
+		t.Fatal("workflow file is empty")
 	}
 }
 
-func TestInstallAntigravitySkill_CreatesDirectory(t *testing.T) {
+func TestInstallAntigravityWorkflow_CreatesDirectory(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 
 	s := skill{
@@ -49,44 +49,44 @@ func TestInstallAntigravitySkill_CreatesDirectory(t *testing.T) {
 		content:     prompts.Analyst,
 	}
 
-	err := installAntigravitySkill(nil, fs, s)
+	err := installAntigravityWorkflow(nil, fs, s)
 	if err != nil {
-		t.Fatalf("installAntigravitySkill() failed: %v", err)
+		t.Fatalf("installAntigravityWorkflow() failed: %v", err)
 	}
 
 	// Verify directory was created
-	skillDir := ".agent/skills/cdd-analyst"
-	info, err := fs.Stat(skillDir)
+	workflowDir := ".agent/workflows"
+	info, err := fs.Stat(workflowDir)
 	if err != nil {
-		t.Fatalf("failed to stat skill directory: %v", err)
+		t.Fatalf("failed to stat workflow directory: %v", err)
 	}
 	if !info.IsDir() {
-		t.Fatalf("expected %s to be a directory", skillDir)
+		t.Fatalf("expected %s to be a directory", workflowDir)
 	}
 }
 
-func TestInstallAntigravitySkill_ValidatesContent(t *testing.T) {
+func TestInstallAntigravityWorkflow_ValidatesContent(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 
-	// Create a skill with invalid content (no frontmatter)
+	// Create a workflow with invalid content (no frontmatter)
 	s := skill{
-		id:          "bad-skill",
-		name:        "bad-skill",
+		id:          "bad-workflow",
+		name:        "bad-workflow",
 		description: "Bad",
 		content:     "This is not valid YAML frontmatter",
 	}
 
-	err := installAntigravitySkill(nil, fs, s)
+	err := installAntigravityWorkflow(nil, fs, s)
 	if err == nil {
-		t.Fatal("expected installAntigravitySkill() to fail with invalid content")
+		t.Fatal("expected installAntigravityWorkflow() to fail with invalid content")
 	}
 
-	if err.Error() != "invalid skill content: skill content must start with YAML frontmatter (---)" {
+	if err.Error() != "invalid workflow content: workflow content must start with YAML frontmatter (---)" {
 		t.Errorf("unexpected error message: %v", err)
 	}
 }
 
-func TestInstallAntigravitySkill_ExistingFile(t *testing.T) {
+func TestInstallAntigravityWorkflow_ExistingFile(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 
 	s := skill{
@@ -97,21 +97,21 @@ func TestInstallAntigravitySkill_ExistingFile(t *testing.T) {
 	}
 
 	// Install once
-	err := installAntigravitySkill(nil, fs, s)
+	err := installAntigravityWorkflow(nil, fs, s)
 	if err != nil {
 		t.Fatalf("first install failed: %v", err)
 	}
 
 	// Install again (same version should skip)
-	err = installAntigravitySkill(nil, fs, s)
+	err = installAntigravityWorkflow(nil, fs, s)
 	if err != nil {
 		t.Fatalf("second install failed: %v", err)
 	}
 
 	// Verify file still exists
-	skillFile := ".agent/skills/cdd-test/SKILL.md"
-	_, err = fs.Stat(skillFile)
+	workflowFile := ".agent/workflows/cdd-test.md"
+	_, err = fs.Stat(workflowFile)
 	if err != nil {
-		t.Fatalf("skill file missing after second install: %v", err)
+		t.Fatalf("workflow file missing after second install: %v", err)
 	}
 }

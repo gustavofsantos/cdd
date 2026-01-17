@@ -7,55 +7,50 @@ import (
 	"cdd/internal/platform"
 )
 
-func TestAntigravitySkillsAreDiscoverable(t *testing.T) {
+func TestAntigravityWorkflowsAreDiscoverable(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	cmd := NewAgentsCmd(fs)
 
-	// Install skills
+	// Install skills (as workflows for antigravity)
 	cmd.SetArgs([]string{"--install", "--target", "antigravity"})
 	err := cmd.Execute()
 	if err != nil {
 		t.Fatalf("installation failed: %v", err)
 	}
 
-	// Simulate Antigravity discovery by checking that all skill folders contain valid SKILL.md
-	skillIDs := []string{"cdd", "cdd-analyst", "cdd-architect", "cdd-executor", "cdd-integrator"}
+	// Simulate Antigravity discovery by checking that all workflow files exist and have valid content
+	workflowIDs := []string{"cdd", "cdd-analyst", "cdd-architect", "cdd-executor", "cdd-integrator"}
 
-	for _, skillID := range skillIDs {
-		skillDir := filepath.Join(".agent", "skills", skillID)
+	for _, workflowID := range workflowIDs {
+		workflowFile := filepath.Join(".agent", "workflows", workflowID+".md")
 
-		// Check directory exists
-		info, err := fs.Stat(skillDir)
+		// Check file exists
+		_, err := fs.Stat(workflowFile)
 		if err != nil {
-			t.Errorf("skill directory %s does not exist: %v", skillDir, err)
-			continue
-		}
-		if !info.IsDir() {
-			t.Errorf("expected %s to be a directory", skillDir)
+			t.Errorf("workflow file %s does not exist: %v", workflowFile, err)
 			continue
 		}
 
-		// Check SKILL.md exists
-		skillFile := filepath.Join(skillDir, "SKILL.md")
-		content, err := fs.ReadFile(skillFile)
+		// Check content exists
+		content, err := fs.ReadFile(workflowFile)
 		if err != nil {
-			t.Errorf("SKILL.md not found in %s: %v", skillDir, err)
+			t.Errorf("file not found in %s: %v", workflowFile, err)
 			continue
 		}
 
 		// Verify it has valid Antigravity format
-		err = validateAntigravitySkill(string(content))
+		err = validateAntigravityWorkflow(string(content))
 		if err != nil {
-			t.Errorf("skill %s failed Antigravity validation: %v", skillID, err)
+			t.Errorf("workflow %s failed Antigravity validation: %v", workflowID, err)
 		}
 
 		// Verify it contains YAML frontmatter with name and description
 		contentStr := string(content)
 		if !hasYAMLField(contentStr, "name") {
-			t.Errorf("skill %s missing 'name' in YAML frontmatter", skillID)
+			t.Errorf("workflow %s missing 'name' in YAML frontmatter", workflowID)
 		}
 		if !hasYAMLField(contentStr, "description") {
-			t.Errorf("skill %s missing 'description' in YAML frontmatter", skillID)
+			t.Errorf("workflow %s missing 'description' in YAML frontmatter", workflowID)
 		}
 	}
 }

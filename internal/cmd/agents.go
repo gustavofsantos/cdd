@@ -12,26 +12,28 @@ import (
 	"cdd/prompts"
 )
 
-// validateAntigravitySkill checks that the skill content has required Antigravity SKILL.md fields
-func validateAntigravitySkill(content string) error {
+// validateAntigravityWorkflow checks that the workflow content has required Antigravity frontmatter
+func validateAntigravityWorkflow(content string) error {
 	if !strings.HasPrefix(content, "---") {
-		return fmt.Errorf("skill content must start with YAML frontmatter (---)")
+		return fmt.Errorf("workflow content must start with YAML frontmatter (---)")
 	}
 
 	// Extract frontmatter
 	endIdx := strings.Index(content[3:], "---")
 	if endIdx == -1 {
-		return fmt.Errorf("skill content must have closing YAML frontmatter (---)")
+		return fmt.Errorf("workflow content must have closing YAML frontmatter (---)")
 	}
 
 	frontmatter := content[3 : 3+endIdx]
 
 	// Check for required fields: name and description
+	// Although Antigravity Workflows documentation might specify different required fields,
+	// for now we enforce name and description as they are present in our prompts.
 	if !strings.Contains(frontmatter, "name:") {
-		return fmt.Errorf("skill frontmatter missing required field: name")
+		return fmt.Errorf("workflow frontmatter missing required field: name")
 	}
 	if !strings.Contains(frontmatter, "description:") {
-		return fmt.Errorf("skill frontmatter missing required field: description")
+		return fmt.Errorf("workflow frontmatter missing required field: description")
 	}
 
 	return nil
@@ -93,7 +95,7 @@ func installSkillsForAllPlatforms(cmd *cobra.Command, fs platform.FileSystem, sk
 	}
 
 	for _, s := range skills {
-		if err := installAntigravitySkill(cmd, fs, s); err != nil {
+		if err := installAntigravityWorkflow(cmd, fs, s); err != nil {
 			cmd.PrintErrf("%v\n", err)
 		}
 	}
@@ -193,50 +195,50 @@ func installSkill(cmd *cobra.Command, fs platform.FileSystem, s skill, baseDir s
 	return nil
 }
 
-func installAntigravitySkill(cmd *cobra.Command, fs platform.FileSystem, s skill) error {
-	// Validate skill content before installation
-	if err := validateAntigravitySkill(s.content); err != nil {
-		return fmt.Errorf("invalid skill content: %w", err)
+func installAntigravityWorkflow(cmd *cobra.Command, fs platform.FileSystem, s skill) error {
+	// Validate workflow content before installation
+	if err := validateAntigravityWorkflow(s.content); err != nil {
+		return fmt.Errorf("invalid workflow content: %w", err)
 	}
 
-	skillDir := filepath.Join(".agent", "skills", s.id)
-	if err := fs.MkdirAll(skillDir, 0755); err != nil {
-		return fmt.Errorf("error creating skill directory %s: %w", skillDir, err)
+	workflowDir := filepath.Join(".agent", "workflows")
+	if err := fs.MkdirAll(workflowDir, 0755); err != nil {
+		return fmt.Errorf("error creating workflow directory %s: %w", workflowDir, err)
 	}
 
-	skillFile := filepath.Join(skillDir, "SKILL.md")
+	workflowFile := filepath.Join(workflowDir, s.id+".md")
 	currentVersion := s.getVersion()
 
 	// Check existing
-	if info, err := fs.Stat(skillFile); err == nil && !info.IsDir() {
-		existing, err := fs.ReadFile(skillFile)
+	if info, err := fs.Stat(workflowFile); err == nil && !info.IsDir() {
+		existing, err := fs.ReadFile(workflowFile)
 		if err == nil {
 			installedVersion := extractVersion(string(existing))
 
 			if installedVersion == currentVersion {
 				if cmd != nil {
-					cmd.Printf("Agent Skill '%s' is up to date (v%s)\n", s.id, installedVersion)
+					cmd.Printf("Antigravity Workflow '%s' is up to date (v%s)\n", s.id, installedVersion)
 				}
 				return nil
 			}
 
 			// Upgrade: backup and overwrite
-			backupFile := skillFile + ".bak"
-			if err := fs.Rename(skillFile, backupFile); err != nil {
-				return fmt.Errorf("error backing up skill %s: %w", s.id, err)
+			backupFile := workflowFile + ".bak"
+			if err := fs.Rename(workflowFile, backupFile); err != nil {
+				return fmt.Errorf("error backing up workflow %s: %w", s.id, err)
 			}
 			if cmd != nil {
-				cmd.Printf("Updated Agent Skill '%s' to v%s. Backup saved to %s\n", s.id, currentVersion, backupFile)
+				cmd.Printf("Updated Antigravity Workflow '%s' to v%s. Backup saved to %s\n", s.id, currentVersion, backupFile)
 			}
 		}
 	}
 
-	if err := fs.WriteFile(skillFile, []byte(s.content), 0644); err != nil {
-		return fmt.Errorf("error writing skill file %s: %w", s.id, err)
+	if err := fs.WriteFile(workflowFile, []byte(s.content), 0644); err != nil {
+		return fmt.Errorf("error writing workflow file %s: %w", s.id, err)
 	}
 
 	if cmd != nil {
-		cmd.Printf("Agent Skill '%s' installed at %s\n", s.id, skillFile)
+		cmd.Printf("Antigravity Workflow '%s' installed at %s\n", s.id, workflowFile)
 	}
 	return nil
 }
@@ -301,7 +303,7 @@ EXAMPLES:
 				// Handle Antigravity target separately
 				if installTarget == "antigravity" {
 					for _, s := range skills {
-						if err := installAntigravitySkill(cmd, fs, s); err != nil {
+						if err := installAntigravityWorkflow(cmd, fs, s); err != nil {
 							cmd.PrintErrf("%v\n", err)
 						}
 					}

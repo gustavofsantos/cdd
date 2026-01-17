@@ -52,10 +52,17 @@ func TestAgentsInstallAntigravity(t *testing.T) {
 		t.Fatalf("Execute() failed: %v", err)
 	}
 
-	// Verify directory creation in .agent/skills
-	skillDir := ".agent/skills/cdd"
-	_, err = fs.Stat(skillDir)
+	// Verify directory creation in .agent/workflows
+	workflowDir := ".agent/workflows"
+	_, err = fs.Stat(workflowDir)
 	if err != nil {
-		t.Fatalf("failed to stat skill directory: %v", err)
+		t.Fatalf("failed to stat workflow directory: %v", err)
+	}
+
+	// Verify workflow file exists
+	workflowFile := ".agent/workflows/cdd.md"
+	_, err = fs.Stat(workflowFile)
+	if err != nil {
+		t.Fatalf("failed to stat workflow file: %v", err)
 	}
 }

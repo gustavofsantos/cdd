@@ -6,7 +6,7 @@ import (
 	"cdd/prompts"
 )
 
-func TestValidateAntigravitySkill(t *testing.T) {
+func TestValidateAntigravityWorkflow(t *testing.T) {
 	tests := []struct {
 		name      string
 		content   string
@@ -14,7 +14,7 @@ func TestValidateAntigravitySkill(t *testing.T) {
 		wantMsg   string
 	}{
 		{
-			name: "valid skill with all required fields",
+			name: "valid workflow with all required fields",
 			content: `---
 name: cdd-system
 description: The Orchestrator that analyzes the plan and delegates to the appropriate Agent Skill.
@@ -27,7 +27,7 @@ Content here`,
 			wantError: false,
 		},
 		{
-			name: "valid skill with minimal fields",
+			name: "valid workflow with minimal fields",
 			content: `---
 name: cdd-analyst
 description: Analyst skill
@@ -73,14 +73,14 @@ Content`,
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			err := validateAntigravitySkill(tt.content)
+			err := validateAntigravityWorkflow(tt.content)
 			if (err != nil) != tt.wantError {
-				t.Errorf("validateAntigravitySkill() error = %v, wantError %v", err, tt.wantError)
+				t.Errorf("validateAntigravityWorkflow() error = %v, wantError %v", err, tt.wantError)
 				return
 			}
 			if tt.wantError && tt.wantMsg != "" && err != nil {
 				if !contains(err.Error(), tt.wantMsg) {
-					t.Errorf("validateAntigravitySkill() error %q, want %q in message", err.Error(), tt.wantMsg)
+					t.Errorf("validateAntigravityWorkflow() error %q, want %q in message", err.Error(), tt.wantMsg)
 				}
 			}
 		})
@@ -111,7 +111,7 @@ func TestValidateAllCDDSkills(t *testing.T) {
 
 	for skillName, content := range skillMap {
 		t.Run(skillName, func(t *testing.T) {
-			err := validateAntigravitySkill(content)
+			err := validateAntigravityWorkflow(content)
 			if err != nil {
 				t.Errorf("CDD skill %q failed validation: %v", skillName, err)
 			}

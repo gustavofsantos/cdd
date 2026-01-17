@@ -17,28 +17,28 @@ func TestAgentsInstallAntigravityE2E(t *testing.T) {
 		t.Fatalf("Execute() failed: %v", err)
 	}
 
-	// Verify all five skills are installed in .agent/skills/
-	expectedSkills := []string{
-		".agent/skills/cdd/SKILL.md",
-		".agent/skills/cdd-analyst/SKILL.md",
-		".agent/skills/cdd-architect/SKILL.md",
-		".agent/skills/cdd-executor/SKILL.md",
-		".agent/skills/cdd-integrator/SKILL.md",
+	// Verify all five workflows are installed in .agent/workflows/
+	expectedWorkflows := []string{
+		".agent/workflows/cdd.md",
+		".agent/workflows/cdd-analyst.md",
+		".agent/workflows/cdd-architect.md",
+		".agent/workflows/cdd-executor.md",
+		".agent/workflows/cdd-integrator.md",
 	}
 
-	for _, skillFile := range expectedSkills {
-		_, err := fs.Stat(skillFile)
+	for _, workflowFile := range expectedWorkflows {
+		_, err := fs.Stat(workflowFile)
 		if err != nil {
-			t.Errorf("failed to stat skill file %s: %v", skillFile, err)
+			t.Errorf("failed to stat workflow file %s: %v", workflowFile, err)
 		}
 
 		// Verify content exists
-		content, err := fs.ReadFile(skillFile)
+		content, err := fs.ReadFile(workflowFile)
 		if err != nil {
-			t.Errorf("failed to read skill file %s: %v", skillFile, err)
+			t.Errorf("failed to read workflow file %s: %v", workflowFile, err)
 		}
 		if len(content) == 0 {
-			t.Errorf("skill file %s is empty", skillFile)
+			t.Errorf("workflow file %s is empty", workflowFile)
 		}
 	}
 
@@ -50,16 +50,16 @@ func TestAgentsInstallAntigravityE2E(t *testing.T) {
 		t.Fatalf("second Execute() failed: %v", err)
 	}
 
-	// Verify skills still exist and are valid
-	for _, skillFile := range expectedSkills {
-		_, err := fs.Stat(skillFile)
+	// Verify workflows still exist and are valid
+	for _, workflowFile := range expectedWorkflows {
+		_, err := fs.Stat(workflowFile)
 		if err != nil {
-			t.Errorf("skill file missing after second install: %v", err)
+			t.Errorf("workflow file missing after second install: %v", err)
 		}
 	}
 }
 
-func TestAgentsInstallAntigravityAllSkillsValid(t *testing.T) {
+func TestAgentsInstallAntigravityAllWorkflowsValid(t *testing.T) {
 	fs := platform.NewMockFileSystem()
 	cmd := NewAgentsCmd(fs)
 
@@ -69,26 +69,25 @@ func TestAgentsInstallAntigravityAllSkillsValid(t *testing.T) {
 		t.Fatalf("Execute() failed: %v", err)
 	}
 
-	// Verify each installed skill passes validation
-	skillDirs := []string{
-		".agent/skills/cdd",
-		".agent/skills/cdd-analyst",
-		".agent/skills/cdd-architect",
-		".agent/skills/cdd-executor",
-		".agent/skills/cdd-integrator",
+	// Verify each installed workflow passes validation
+	workflowFiles := []string{
+		".agent/workflows/cdd.md",
+		".agent/workflows/cdd-analyst.md",
+		".agent/workflows/cdd-architect.md",
+		".agent/workflows/cdd-executor.md",
+		".agent/workflows/cdd-integrator.md",
 	}
 
-	for _, skillDir := range skillDirs {
-		skillFile := skillDir + "/SKILL.md"
-		content, err := fs.ReadFile(skillFile)
+	for _, workflowFile := range workflowFiles {
+		content, err := fs.ReadFile(workflowFile)
 		if err != nil {
-			t.Errorf("failed to read %s: %v", skillFile, err)
+			t.Errorf("failed to read %s: %v", workflowFile, err)
 			continue
 		}
 
-		err = validateAntigravitySkill(string(content))
+		err = validateAntigravityWorkflow(string(content))
 		if err != nil {
-			t.Errorf("skill %s failed validation: %v", skillDir, err)
+			t.Errorf("workflow %s failed validation: %v", workflowFile, err)
 		}
 	}
 }
