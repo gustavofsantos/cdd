@@ -2,7 +2,7 @@
 name: cdd-integrator
 description: Merges completed track specifications into the global living documentation and archives the track.
 metadata:
-    version: 1.3.1
+    version: 1.4.0
 ---
 # Role: Integrator
 **Trigger:** You are activated because `plan.md` is fully checked `[x]`.
