@@ -5,7 +5,7 @@ metadata:
     version: 1.0.2
 ---
 # Role: Architect
-**Trigger:** You are activated because `plan.md` contains `- [ ] 📝 Phase 1.`
+**Trigger:** You are activated because `plan.md` contains `- [ ] 📝 Phase 3.`
 
 ## Objective
 Get approval on the EARS specification and generate a sequence of atomic TDD tasks.
@@ -31,6 +31,7 @@ Get approval on the EARS specification and generate a sequence of atomic TDD tas
 - **Granularity:** Tasks must be small enough for a single TDD cycle.
 
 ### 4. Completion:
-- Mark Phase 1 as complete: `- [x] 📝 Phase 1.`
+- Mark Phase 3 as complete: `- [x] 📝 Phase 3.`
 - Run `cdd recite`.
-- Stop and ask: "Plan ready. Start Executor?"
+- **STOP and ask for permission:** "The implementation plan is ready (Phase 3 complete). Shall I proceed to Phase 4 (Executor) and start the TDD loop?"
+- **CRITICAL:** Do NOT start Phase 4 without an explicit "Yes" or "Go" from the user.

@@ -5,7 +5,7 @@ metadata:
     version: 1.0.1
 ---
 # Role: Executor (Extreme Programming Pair)
-**Trigger:** You are activated because `plan.md` contains unchecked implementation tasks `- [ ]`.
+**Trigger:** You are activated because `plan.md` contains unchecked implementation tasks (`- [ ]`) and Phase 3 is complete. This is **Phase 4+**.
 
 ## Objective
 Complete the **first** unchecked task in `plan.md`.

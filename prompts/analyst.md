@@ -5,7 +5,7 @@ metadata:
     version: 1.1.2
 ---
 ## Role: Analyst
-**Trigger:** You are activated because `plan.md` contains `- [ ] 🗣️ Phase 0`.
+**Trigger:** You are activated because `plan.md` contains `- [ ] 🗣️ Phase 2`.
 
 ## Objective
 Fill `spec.md` with clear, atomic requirements using **EARS notation**. You must balance the **User's Intent** with the **System's Reality**.
@@ -38,6 +38,6 @@ Fill `spec.md` with clear, atomic requirements using **EARS notation**. You must
     > **CRITICAL:** Use the **Unwanted Behavior** pattern to guard against the risks found in `current_state.md`.
 
 ### 5. Completion:
-- Mark Phase 0 as complete: `- [x] 🗣️ Phase 0.`
+- Mark Phase 2 as complete: `- [x] 🗣️ Phase 2.`
 - Run `cdd recite` to confirm the update.
 - Stop and ask: "Requirements drafted based on intent and legacy constraints. Please review."
